@@ -1,224 +1,357 @@
 import React, { useState, useEffect } from "react";
+import { Joyride, STATUS, Step } from "react-joyride";
 
 interface TutorialProps {
   activeTab: string;
-  setActiveTab?: (tab: "menu" | "home" | "build" | "sea" | "leaderboard") => void;
   forceRun?: boolean;
   onTutorialEnd?: () => void;
 }
 
-const TOUR_STEPS = [
-  {
-    target: ".tutorial-start-voyage",
-    tab: "menu",
-    title: "Start Voyage",
-    desc: "Tap here to begin your adventure and enter the game!",
-  },
-  {
-    target: ".tutorial-steps-bar",
-    tab: "home",
-    title: "Daily Steps",
-    desc: "This is your Home tab. Use it to track your real-world progress.",
-  },
-  {
-    target: ".tutorial-quests",
-    tab: "home",
-    title: "Morning Stroll & Quests",
-    desc: "Hit your step targets to claim XP and rewards here every day.",
-  },
-  {
-    target: ".tutorial-build-nav",
-    tab: "build",
-    title: "Ship Build",
-    desc: "Welcome to your shipyard. This is where you modify your flagship!",
-  },
-  {
-    target: ".tutorial-repair",
-    tab: "build",
-    title: "Repair",
-    desc: "Fix hull damage after battles. You cannot sail if your ship is destroyed!",
-  },
-  {
-    target: ".tutorial-sea-nav",
-    tab: "sea",
-    title: "The Sea",
-    desc: "Welcome to the open ocean! Explore and battle here.",
-  },
-  {
-    target: ".tutorial-fleet-nav",
-    tab: "leaderboard",
-    title: "Rank",
-    desc: "Compare your progress against other captains worldwide.",
-  },
-];
-
 export const TutorialOverlay: React.FC<TutorialProps> = ({
   activeTab,
-  setActiveTab,
   forceRun,
   onTutorialEnd,
 }) => {
-  const [isRunning, setIsRunning] = useState(false);
-  const [stepIndex, setStepIndex] = useState(0);
-  const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
+  const [run, setRun] = useState(false);
+  const [steps, setSteps] = useState<Step[]>([]);
 
   useEffect(() => {
-    const hasSeen = localStorage.getItem("seastride_tutorial_complete");
-    if ((!hasSeen || hasSeen === "false") && activeTab === "menu") {
-      setIsRunning(true);
-      setStepIndex(0);
-    } else if (forceRun) {
-      setIsRunning(true);
-      setStepIndex(0);
-    }
-  }, [forceRun]);
+    setRun(false);
 
-  const currentStep = TOUR_STEPS[stepIndex];
-
-  useEffect(() => {
-    if (!isRunning || !currentStep) return;
-
-    if (activeTab !== currentStep.tab && setActiveTab) {
-      setActiveTab(currentStep.tab as any);
-      return; 
-    }
-
-    const updateRect = () => {
-      const el = document.querySelector(currentStep.target);
-      if (el) {
-        setTargetRect(el.getBoundingClientRect());
-        
-        document.querySelectorAll('.tutorial-active-target').forEach(e => {
-          e.classList.remove('tutorial-active-target');
-          (e as HTMLElement).style.zIndex = '';
-        });
-
-        el.classList.add('tutorial-active-target');
-        const compStyle = window.getComputedStyle(el);
-        if (compStyle.position === 'static') {
-           (el as HTMLElement).style.position = 'relative';
-        }
-        (el as HTMLElement).style.zIndex = '10001';
-      } else {
-         // Retry slightly later if not found immediately (due to animations)
-         setTimeout(updateRect, 50);
+    if (activeTab === "menu") {
+      const hasSeen = localStorage.getItem("seastride_tut_menu_v4");
+      if (!hasSeen || forceRun) {
+        setSteps([
+          {
+            target: "body",
+            placement: "center",
+            content: (
+              <div className="font-serif">
+                <h2 className="text-xl font-black text-[#4a2c17] mb-2 uppercase">
+                  Welcome to SeaStride!
+                </h2>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Every real-world step you take powers your pirate fleet. Let's
+                  get started!
+                </p>
+              </div>
+            ),
+            
+          },
+          {
+            target: ".tutorial-start-voyage",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  Start Voyage
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Tap here to begin your adventure and enter the game!
+                </p>
+              </div>
+            ),
+            
+          },
+        ]);
+        setTimeout(() => setRun(true), 800);
       }
-    };
-
-    const timer = setTimeout(updateRect, 100);
-    window.addEventListener("resize", updateRect);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("resize", updateRect);
-      document.querySelectorAll('.tutorial-active-target').forEach(el => {
-        el.classList.remove('tutorial-active-target');
-        (el as HTMLElement).style.zIndex = '';
-      });
-    };
-  }, [isRunning, stepIndex, activeTab, currentStep, setActiveTab]);
-
-  const handleNext = () => {
-    if (stepIndex < TOUR_STEPS.length - 1) {
-      setStepIndex(prev => prev + 1);
-    } else {
-      handleEnd();
+    } else if (activeTab === "home") {
+      const hasSeen = localStorage.getItem("seastride_tut_home_v4");
+      if (!hasSeen || forceRun) {
+        setSteps([
+          {
+            target: ".tutorial-steps-bar",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  Daily Steps
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  This is your Home tab. Use it to track your real-world
+                  progress.
+                </p>
+              </div>
+            ),
+            
+          },
+          {
+            target: ".tutorial-level",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  Level & XP
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Complete quests and walk to earn XP. Leveling up unlocks
+                  stronger ships!
+                </p>
+              </div>
+            ),
+            
+          },
+          {
+            target: ".tutorial-stats",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  Daily Stats
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Monitor your distance, calories burned, and active time.
+                </p>
+              </div>
+            ),
+            
+          },
+          {
+            target: ".tutorial-quests",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  Daily Quests
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Hit your step targets to claim XP and rewards here every day.
+                </p>
+              </div>
+            ),
+            
+          },
+        ]);
+        setTimeout(() => setRun(true), 800);
+      }
+    } else if (activeTab === "build") {
+      const hasSeen = localStorage.getItem("seastride_tut_build_v4");
+      if (!hasSeen || forceRun) {
+        setSteps([
+          {
+            target: ".tutorial-build-nav",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  Ship Build
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Welcome to your shipyard. This is where you modify your
+                  flagship!
+                </p>
+              </div>
+            ),
+            
+          },
+          {
+            target: ".tutorial-energy-bar",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  Energy
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Walking generates Energy. Use it to sail, explore, and battle.
+                </p>
+              </div>
+            ),
+            
+          },
+          {
+            target: ".tutorial-currency",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">Loot</h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Gold Coins and Gems you've collected. Use them to upgrade your
+                  fleet.
+                </p>
+              </div>
+            ),
+            
+          },
+          {
+            target: ".tutorial-repair",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  Repair
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Fix hull damage after battles. You cannot sail if your ship is
+                  destroyed!
+                </p>
+              </div>
+            ),
+            
+          },
+          {
+            target: ".tutorial-upgrades",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  Upgrades
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Improve your ship's cannons, hull, and sails here.
+                </p>
+              </div>
+            ),
+            
+          },
+          {
+            target: ".tutorial-shop",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">Shop</h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Buy supplies, gems, and special items with your hard-earned
+                  gold.
+                </p>
+              </div>
+            ),
+            
+          },
+        ]);
+        setTimeout(() => setRun(true), 1200);
+      }
+    } else if (activeTab === "sea") {
+      const hasSeen = localStorage.getItem("seastride_tut_sea_v4");
+      if (!hasSeen || forceRun) {
+        setSteps([
+          {
+            target: ".tutorial-sea-nav",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  The Sea
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Welcome to the open ocean! Explore and battle here.
+                </p>
+              </div>
+            ),
+            
+          },
+          {
+            target: ".tutorial-sea-view-area",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  Exploration
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Drag to pan the camera. Tap on ships to attack them!
+                </p>
+              </div>
+            ),
+            
+          },
+        ]);
+        setTimeout(() => setRun(true), 1200);
+      }
+    } else if (activeTab === "leaderboard") {
+      const hasSeen = localStorage.getItem("seastride_tut_leaderboard_v4");
+      if (!hasSeen || forceRun) {
+        setSteps([
+          {
+            target: ".tutorial-fleet-nav",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+                  Global Fleet
+                </h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Compare your progress against other captains worldwide.
+                </p>
+              </div>
+            ),
+            
+          },
+          {
+            target: ".tutorial-leaderboard",
+            content: (
+              <div className="font-serif">
+                <h3 className="text-lg font-black text-[#4a2c17] mb-1">Rank</h3>
+                <p className="text-sm text-[#8b5a33] font-bold">
+                  Check out the top rankings by Player Level and Total Coins
+                  Earned.
+                </p>
+              </div>
+            ),
+            
+          },
+        ]);
+        setTimeout(() => setRun(true), 800);
+      }
     }
-  };
+  }, [activeTab, forceRun]);
 
-  const handleBack = () => {
-    if (stepIndex > 0) {
-      setStepIndex(prev => prev - 1);
-    }
-  };
+  const handleJoyrideCallback = (data: any) => {
+    const { status, type, step } = data;
+    const finishedStatuses: string[] = [STATUS.FINISHED, STATUS.SKIPPED];
 
-  const handleEnd = () => {
-    setIsRunning(false);
-    localStorage.setItem("seastride_tutorial_complete", "true");
-    if (onTutorialEnd) onTutorialEnd();
-    
     document.querySelectorAll('.tutorial-active-target').forEach(el => {
-        el.classList.remove('tutorial-active-target');
-        (el as HTMLElement).style.zIndex = '';
+      el.classList.remove('tutorial-active-target');
+      (el as HTMLElement).style.zIndex = '';
     });
-  };
 
-  if (!isRunning || !currentStep) return null;
+    if (type === 'tooltip:update' || type === 'step:before') {
+       const targetEl = document.querySelector(step.target as string);
+       if (targetEl && step.target !== 'body') {
+         targetEl.classList.add('tutorial-active-target');
+         (targetEl as HTMLElement).style.zIndex = '10001';
+         if (window.getComputedStyle(targetEl).position === 'static') {
+            (targetEl as HTMLElement).style.position = 'relative';
+         }
+       }
+    }
+
+    if (finishedStatuses.includes(status)) {
+      setRun(false);
+      localStorage.setItem(`seastride_tut_${activeTab}_v4`, "true");
+      if (onTutorialEnd) onTutorialEnd();
+    }
+  };
 
   return (
-    <div className="fixed inset-0 z-[10000] pointer-events-auto flex items-center justify-center">
-      {/* Dark backdrop overlay */}
-      <div className="absolute inset-0 bg-black/60 transition-opacity" />
-
-      {/* Visual Cue - Bouncing Arrow */}
-      {targetRect && (
-        <div 
-          className="absolute pointer-events-none"
-          style={{
-            top: targetRect.top,
-            left: targetRect.left,
-            width: targetRect.width,
-            height: targetRect.height,
-          }}
-        >
-          {/* Animated bouncing arrow pointing down at the target */}
-          <div className="absolute -top-16 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center">
-             <div className="text-[#facc15] font-black text-[10px] sm:text-xs uppercase mb-1 drop-shadow-md whitespace-nowrap">Look Here</div>
-             <div className="w-0 h-0 border-l-[12px] border-l-transparent border-t-[16px] border-t-[#facc15] border-r-[12px] border-r-transparent filter drop-shadow-md" />
-          </div>
-        </div>
-      )}
-
-      {/* Pop-up Box */}
-      {targetRect && (
-        <div 
-          className="absolute bg-[#f0dec1] border-4 border-[#8b5a33] rounded-2xl shadow-[0_8px_0_#4a2c17] p-4 sm:p-5 w-72 sm:w-80 max-w-[90vw] z-[10002] flex flex-col transition-all duration-300 ease-out"
-          style={{
-            top: (targetRect.bottom + 20 + 200 > window.innerHeight) 
-                  ? Math.max(20, targetRect.top - 220) 
-                  : targetRect.bottom + 30,
-            left: Math.max(10, Math.min(targetRect.left + (targetRect.width/2) - 144, window.innerWidth - 290))
-          }}
-        >
-          <div className="flex justify-between items-start mb-2">
-            <h3 className="text-lg sm:text-xl font-black text-[#4a2c17] uppercase font-serif">
-              {currentStep.title}
-            </h3>
-            <span className="text-[#8b5a33] font-bold text-xs opacity-70">
-              {stepIndex + 1}/{TOUR_STEPS.length}
-            </span>
-          </div>
-          <p className="text-xs sm:text-sm text-[#8b5a33] font-bold font-serif mb-5 leading-relaxed">
-            {currentStep.desc}
-          </p>
-
-          <div className="flex justify-between items-center mt-auto font-serif">
-            <button 
-              onClick={handleEnd}
-              className="text-[#d75448] font-bold text-[10px] sm:text-xs uppercase hover:opacity-80 active:scale-95 transition-transform"
-            >
-              Skip Tutorial
-            </button>
-            <div className="flex gap-2">
-              {stepIndex > 0 && (
-                <button 
-                  onClick={handleBack}
-                  className="text-[#8b5a33] font-bold text-xs sm:text-sm hover:opacity-80 active:scale-95 transition-transform px-2"
-                >
-                  Back
-                </button>
-              )}
-              <button 
-                onClick={handleNext}
-                className="bg-[#93bb44] font-black text-white rounded-xl px-4 py-2 border-b-4 border-[#658627] active:border-b-0 active:translate-y-1 hover:brightness-110 transition-all text-xs sm:text-sm uppercase"
-              >
-                {stepIndex === TOUR_STEPS.length - 1 ? "Finish" : "Next"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+    <Joyride
+      steps={steps}
+      run={run}
+      continuous={true}
+      onEvent={handleJoyrideCallback}
+      styles={( {
+        options: {
+          arrowColor: "#f0dec1",
+          backgroundColor: "#f0dec1",
+          overlayColor: "rgba(0, 0, 0, 0.85)",
+          primaryColor: "#8b5a33",
+          textColor: "#4a2c17",
+          zIndex: 10000,
+        },
+        buttonClose: {
+          display: "none",
+        },
+        buttonNext: {
+          backgroundColor: "#93bb44",
+          fontWeight: "900",
+          borderRadius: "12px",
+          padding: "10px 20px",
+          borderBottom: "4px solid #658627",
+        },
+        buttonBack: {
+          color: "#8b5a33",
+          fontWeight: "bold",
+        },
+        buttonSkip: {
+          color: "#d75448",
+          fontWeight: "bold",
+        },
+        tooltip: {
+          borderRadius: "16px",
+          border: "4px solid #8b5a33",
+          boxShadow: "0 8px 0 #4a2c17",
+        },
+        tooltipContainer: {
+          textAlign: "left",
+        },
+      } as any)}
+    />
   );
 };
-

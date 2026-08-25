@@ -170,7 +170,7 @@ function MainAppContent() {
         {activeModal === "profile" && <ProfileModal onClose={closeModal} />}
 
         {/* Feature Highlight Tutorial */}
-        <TutorialOverlay activeTab={activeTab} setActiveTab={setActiveTab} forceRun={forceRunTutorial} onTutorialEnd={() => setForceRunTutorial(false)} />
+        <TutorialOverlay activeTab={activeTab} forceRun={forceRunTutorial} onTutorialEnd={() => setForceRunTutorial(false)} />
       </div>
     </div>
   );

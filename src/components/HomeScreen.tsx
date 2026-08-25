@@ -349,9 +349,20 @@ export const HomeScreen: React.FC = () => {
 
       {/* Daily Quests */}
       <div className="mt-auto pb-4 tutorial-quests">
-        <h2 className="flex items-center gap-2 text-lg sm:text-xl font-black text-[#4a2c17] mb-3 sm:mb-4 uppercase tracking-widest">
-          <Swords className="w-5 h-5 text-[#4a2c17]" /> DAILY QUEST
-        </h2>
+        <div className="flex flex-col items-center justify-center mb-4 sm:mb-5 mt-2">
+          <h2
+            className="flex items-center justify-center gap-2 text-2xl sm:text-3xl font-black text-white uppercase tracking-widest drop-shadow-md"
+            style={{
+              WebkitTextStroke: "1.5px #4a2c17",
+              textShadow: "0 3px 0 #4a2c17",
+            }}
+          >
+            <Swords className="w-6 h-6 sm:w-7 sm:h-7 text-[#eebb3f]" style={{ filter: "drop-shadow(0 2px 0 #4a2c17)" }} />
+            DAILY QUEST
+            <Swords className="w-6 h-6 sm:w-7 sm:h-7 text-[#eebb3f] scale-x-[-1]" style={{ filter: "drop-shadow(0 2px 0 #4a2c17)" }} />
+          </h2>
+          <div className="h-1 w-24 bg-[#4a2c17] rounded-full mt-2 opacity-50 shadow-sm"></div>
+        </div>
 
         <div
           className={`bg-gradient-to-r from-[#78350f] to-[#451a03] border-2 ${isClaimable ? "border-[#16a34a]" : "border-[#b45309]"} rounded-2xl p-4 sm:p-5 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all relative overflow-hidden`}
