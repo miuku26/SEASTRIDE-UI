@@ -166,8 +166,12 @@ export const HomeScreen: React.FC = () => {
           </div>
 
           <button
-            onClick={() => requestPermission()}
-            className="w-full bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm hover:brightness-110 active:border-b-0 active:translate-y-1 active:scale-95 text-white font-serif font-black text-xs sm:text-sm py-3 px-4 rounded-xl border-b-4 border-[#064e3b] shadow-lg flex items-center justify-center gap-2 uppercase tracking-wider transition-transform cursor-pointer"
+            onClick={async () => {
+              await requestPermission();
+              window.dispatchEvent(new CustomEvent("TUTORIAL_ADVANCE"));
+            }}
+            className="tutorial-allow-pedometer w-full bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm hover:brightness-110 active:border-b-0 active:translate-y-1 active:scale-95 font-serif font-black text-xs sm:text-sm py-3 px-4 rounded-xl shadow-lg flex items-center justify-center gap-2 uppercase tracking-wider transition-transform cursor-pointer relative"
+            style={{ pointerEvents: "auto" }}
           >
             <Compass className="w-4 h-4 text-[#fde68a]" />
             <span>Allow Motion Pedometer</span>

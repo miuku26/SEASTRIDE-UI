@@ -42,6 +42,23 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
   },
   // Home
   {
+    target: ".tutorial-allow-pedometer",
+    _tab: "home",
+    hideFooter: true,
+    disableOverlayClose: true,
+    spotlightClicks: true,
+    content: (
+      <div className="font-serif">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
+          Pedometer Access
+        </h3>
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
+          Click "Allow Motion Pedometer" to unlock your step box! This is required to play.
+        </p>
+      </div>
+    ),
+  },
+  {
     target: ".tutorial-steps-bar",
     _tab: "home",
     content: (
@@ -253,6 +270,7 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
   {
     target: ".tutorial-fleet-tabs",
     _tab: "leaderboard",
+    placement: "bottom",
     content: (
       <div className="font-serif">
         <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
@@ -288,6 +306,14 @@ export const TutorialOverlay: React.FC<TutorialProps> = ({
 }) => {
   const [run, setRun] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
+
+  useEffect(() => {
+    const handleAdvance = () => {
+      setStepIndex((prev) => prev + 1);
+    };
+    window.addEventListener("TUTORIAL_ADVANCE", handleAdvance);
+    return () => window.removeEventListener("TUTORIAL_ADVANCE", handleAdvance);
+  }, []);
 
   // Auto-Trigger on App Load (First-Time User Only)
   useEffect(() => {
