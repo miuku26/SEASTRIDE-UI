@@ -63,8 +63,12 @@ export function MenuScreen({
           className="flex flex-col gap-5 w-full max-w-[280px] sm:max-w-[320px] mb-8"
         >
           <button
-            onClick={onSelectSteps}
+            onClick={() => {
+              onSelectSteps();
+              window.dispatchEvent(new CustomEvent("TUTORIAL_ADVANCE"));
+            }}
             className="tutorial-start-voyage relative group w-full bg-gradient-to-b from-[#fbbf24] to-[#d97706] hover:from-[#fcd34d] hover:to-[#ea580c] rounded-2xl shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),inset_0_-4px_0_rgba(146,64,14,0.8),0_8px_20px_rgba(0,0,0,0.6)] active:scale-[0.96] active:shadow-[inset_0_4px_8px_rgba(0,0,0,0.4),0_4px_10px_rgba(0,0,0,0.4)] border border-[#fde68a] ring-4 ring-[#d97706]/40 ring-offset-4 ring-offset-[#2b1d19] transition-all duration-200 ease-out overflow-hidden py-4 sm:py-5 flex flex-col items-center justify-center"
+            style={{ pointerEvents: "auto" }}
           >
             {/* Glossy top highlight */}
             <div className="absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b from-white/40 to-transparent pointer-events-none" />

@@ -29,6 +29,9 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
   {
     target: ".tutorial-start-voyage",
     _tab: "menu",
+    hideFooter: true,
+    disableOverlayClose: true,
+    spotlightClicks: true,
     content: (
       <div className="font-serif">
         <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
@@ -106,10 +109,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     content: (
       <div className="font-serif">
         <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
-          Today's Booty & Safety
+          Energy Charged
         </h3>
         <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
-          Check your daily gold earnings and step goals here. Keep your shield active!
+          Turn your real-world steps into ship Energy! Hit your daily goal to earn 1 Energy point and power your voyages.
         </p>
       </div>
     ),
@@ -270,7 +273,6 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
   {
     target: ".tutorial-fleet-tabs",
     _tab: "leaderboard",
-    placement: "bottom",
     content: (
       <div className="font-serif">
         <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">

@@ -315,10 +315,10 @@ export const HomeScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* TODAY'S BOOTY & SAFETY Card */}
+      {/* ENERGY CHARGED Card */}
       <div className="tutorial-booty-safety bg-[#4a2c17] border-2 border-[#2b1d19] rounded-2xl p-5 mb-8 shadow-xl">
         <h2 className="text-sm sm:text-base font-black text-amber-100 uppercase tracking-widest mb-4">
-          TODAY'S BOOTY & SAFETY
+          ENERGY CHARGED
         </h2>
 
         <div className="flex justify-between items-center mb-3">
@@ -335,7 +335,7 @@ export const HomeScreen: React.FC = () => {
 
         <div className="flex justify-between items-center mb-2">
           <span className="text-xs sm:text-sm font-bold text-amber-100/90 tracking-wide">
-            Today's Shield Goal
+            Energy Goal
           </span>
           <span className="text-xs sm:text-sm font-bold text-[#fde68a]">
             {totalStepsToday.toLocaleString()} / 10,000 Steps
