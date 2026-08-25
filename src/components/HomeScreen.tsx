@@ -312,7 +312,7 @@ export const HomeScreen: React.FC = () => {
       </div>
 
       {/* TODAY'S BOOTY & SAFETY Card */}
-      <div className="bg-[#4a2c17] border-2 border-[#2b1d19] rounded-2xl p-5 mb-8 shadow-xl">
+      <div className="tutorial-booty-safety bg-[#4a2c17] border-2 border-[#2b1d19] rounded-2xl p-5 mb-8 shadow-xl">
         <h2 className="text-sm sm:text-base font-black text-amber-100 uppercase tracking-widest mb-4">
           TODAY'S BOOTY & SAFETY
         </h2>
@@ -351,11 +351,7 @@ export const HomeScreen: React.FC = () => {
       <div className="mt-auto pb-4 tutorial-quests">
         <div className="flex flex-col items-center justify-center mb-4 sm:mb-5 mt-2">
           <h2
-            className="flex items-center justify-center gap-2 text-2xl sm:text-3xl font-black text-white uppercase tracking-widest drop-shadow-md"
-            style={{
-              WebkitTextStroke: "1.5px #4a2c17",
-              textShadow: "0 3px 0 #4a2c17",
-            }}
+            className="flex items-center justify-center gap-2 text-2xl sm:text-3xl font-black text-amber-100 uppercase tracking-wider drop-shadow-md"
           >
             <Swords className="w-6 h-6 sm:w-7 sm:h-7 text-[#eebb3f]" style={{ filter: "drop-shadow(0 2px 0 #4a2c17)" }} />
             DAILY QUEST
