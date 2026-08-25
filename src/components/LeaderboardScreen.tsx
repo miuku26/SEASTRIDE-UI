@@ -90,7 +90,7 @@ export const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({
       {/* Main Content Area */}
       <div className="tutorial-leaderboard flex-1 overflow-y-auto p-4 sm:p-6 pb-24">
         {/* Tabs */}
-        <div className="flex bg-[#8b5a33] rounded-xl border-4 border-[#4a2c17] p-1.5 mb-6 shadow-inner">
+        <div className="tutorial-fleet-tabs flex bg-[#8b5a33] rounded-xl border-4 border-[#4a2c17] p-1.5 mb-6 shadow-inner">
           <button
             onClick={() => setActiveTab("level")}
             className={`flex-1 py-2 sm:py-3 px-4 text-xs sm:text-sm font-black uppercase tracking-wider rounded-lg transition-all ${
@@ -120,7 +120,7 @@ export const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({
               <Calendar className="w-32 h-32 text-[#facc15]" />
             </div>
 
-            <h2 className="text-sm sm:text-base font-black text-[#4a2c17] uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
+            <h2 className="text-sm sm:text-base font-black text-[#facc15] uppercase tracking-widest mb-4 flex items-center gap-2 relative z-10">
               <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-[#facc15]" /> My
               Weekly Voyage
             </h2>
@@ -129,13 +129,13 @@ export const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({
               {/* Distance Card */}
               <div className="bg-[#1a0f0d] rounded-xl border-2 border-[#4a2c17] p-3 sm:p-4 flex flex-col items-center justify-center text-center shadow-inner relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-2 opacity-10">
-                  <Footprints className="w-10 h-10 text-[#4a2c17]" />
+                  <Footprints className="w-10 h-10 text-white" />
                 </div>
-                <span className="text-[10px] sm:text-xs font-bold text-[#4a2c17]/70 uppercase tracking-wider mb-1 z-10">
+                <span className="text-[10px] sm:text-xs font-black text-[#8b5a33] uppercase tracking-wider mb-1 z-10">
                   Distance This Week
                 </span>
-                <span className="text-xl sm:text-2xl font-black text-[#4a2c17] z-10">
-                  18.6 <span className="text-xs text-[#4a2c17]/70">km</span>
+                <span className="text-xl sm:text-2xl font-black text-[#f0dec1] z-10">
+                  18.6 <span className="text-xs text-[#8b5a33]">km</span>
                 </span>
               </div>
 
@@ -144,7 +144,7 @@ export const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({
                 <div className="absolute top-0 right-0 p-2 opacity-10">
                   <CircleDollarSign className="w-10 h-10 text-[#facc15]" />
                 </div>
-                <span className="text-[10px] sm:text-xs font-bold text-[#8b5a33]/90 uppercase tracking-wider mb-1 z-10">
+                <span className="text-[10px] sm:text-xs font-black text-[#facc15]/90 uppercase tracking-wider mb-1 z-10">
                   Coins Earned This Week
                 </span>
                 <div className="flex items-center gap-1.5 z-10">
@@ -158,7 +158,7 @@ export const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({
 
             {/* Daily Coins Chart */}
             <div className="mt-5 pt-5 border-t-2 border-dashed border-[#4a2c17] relative z-10">
-              <h3 className="text-[10px] sm:text-xs font-black text-[#4a2c17]/90 tracking-widest uppercase mb-4 text-center">
+              <h3 className="text-[10px] sm:text-xs font-black text-[#d1b794] tracking-widest uppercase mb-4 text-center">
                 Daily Coins Earned
               </h3>
               <div className="flex items-end justify-between h-32 gap-1 sm:gap-2">
@@ -200,7 +200,7 @@ export const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({
                         className={`text-[10px] sm:text-xs font-black uppercase ${
                           isMax
                             ? "text-[#facc15]"
-                            : "text-[#4a2c17]/60 group-hover:text-[#4a2c17]"
+                            : "text-[#8b5a33] group-hover:text-[#d1b794]"
                         }`}
                       >
                         {data.day}
@@ -214,35 +214,37 @@ export const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({
         )}
 
         {/* Table Headers */}
-        <div className="flex items-center px-4 mb-2 text-[10px] sm:text-xs font-black text-[#8b5a33] uppercase tracking-widest opacity-80">
-          <div className="w-12 text-center">Rank</div>
-          <div className="flex-1 px-3">Pirate</div>
-          <div className="w-16 text-center">Level</div>
-          <div className="w-24 text-right">Gold</div>
+        <div className="grid grid-cols-[2.5rem_1fr_3.5rem_4.5rem] sm:grid-cols-[4rem_1fr_4.5rem_6.5rem] items-center px-2 sm:px-4 mb-2 text-[clamp(0.65rem,2.5vw,0.85rem)] font-black text-[#8b5a33] uppercase tracking-widest opacity-80 gap-2 sm:gap-4">
+          <div className="text-center">Rank</div>
+          <div className="px-1">Pirate</div>
+          <div className="text-center">Level</div>
+          <div className="text-right">Gold</div>
         </div>
 
         {/* Leaderboard List */}
-        <div className="flex flex-col gap-3">
+        <div className="tutorial-fleet-list flex flex-col gap-2 sm:gap-3">
           {sortedLeaderboard.map((player) => (
             <div
               key={player.id}
-              className={`flex items-center p-3 sm:p-4 rounded-xl border-2 transition-all shadow-md ${
+              className={`grid grid-cols-[2.5rem_1fr_3.5rem_4.5rem] sm:grid-cols-[4rem_1fr_4.5rem_6.5rem] gap-2 sm:gap-4 items-center p-2.5 sm:p-4 rounded-xl border-2 transition-all shadow-md ${
                 player.isCurrentUser
                   ? "bg-[#eebb3f] border-[#b58c27] shadow-[0_0_15px_rgba(250,204,21,0.2)]"
                   : "bg-[#2b1d19] border-[#4a2c17]"
               }`}
             >
               {/* Rank */}
-              <div className="w-12 flex justify-center">
+              <div className="flex justify-center">
                 <span
-                  className={`text-base sm:text-lg font-black ${
+                  className={`font-black text-[clamp(1rem,4vw,1.5rem)] ${
                     player.rank === 1
                       ? "text-[#facc15] drop-shadow-[0_0_8px_rgba(250,204,21,0.6)]"
                       : player.rank === 2
                         ? "text-slate-300 drop-shadow-[0_0_8px_rgba(203,213,225,0.6)]"
                         : player.rank === 3
-                          ? "text-amber-600 drop-shadow-[0_0_8px_rgba(217,119,6,0.6)]"
-                          : "text-[#8b5a33]/70"
+                          ? "text-amber-500 drop-shadow-[0_0_8px_rgba(217,119,6,0.6)]"
+                          : player.isCurrentUser
+                            ? "text-[#8b5a33]"
+                            : "text-[#f0dec1]/70"
                   }`}
                 >
                   #{player.rank}
@@ -250,11 +252,11 @@ export const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({
               </div>
 
               {/* Pirate Avatar & Name */}
-              <div className="flex-1 flex items-center gap-3 px-3 overflow-hidden">
+              <div className="flex items-center gap-2 sm:gap-3 px-1 overflow-hidden">
                 <div
-                  className={`w-10 h-10 rounded-full border-2 flex items-center justify-center flex-shrink-0 bg-[#4a2c17] overflow-hidden ${
+                  className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 flex items-center justify-center flex-shrink-0 bg-[#4a2c17] overflow-hidden ${
                     player.isCurrentUser
-                      ? "border-[#facc15]"
+                      ? "border-white shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                       : "border-[#b45309]"
                   }`}
                 >
@@ -265,13 +267,13 @@ export const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="text-sm">☠️</span>
+                    <span className="text-xs sm:text-sm flex-shrink-0">☠️</span>
                   )}
                 </div>
-                <div className="flex flex-col overflow-hidden">
+                <div className="flex flex-col overflow-hidden min-w-0">
                   <span
-                    className={`font-bold text-sm sm:text-base truncate ${
-                      player.isCurrentUser ? "text-[#facc15]" : "text-[#4a2c17]"
+                    className={`font-black text-[clamp(0.85rem,3.5vw,1.15rem)] truncate ${
+                      player.isCurrentUser ? "text-stone-900" : "text-white"
                     }`}
                   >
                     {player.isCurrentUser && profile?.username
@@ -282,16 +284,16 @@ export const LeaderboardScreen: React.FC<LeaderboardScreenProps> = ({
               </div>
 
               {/* Player Level */}
-              <div className="w-16 text-center">
-                <span className="text-xs sm:text-sm font-bold text-[#4a2c17]/90">
+              <div className="text-center">
+                <span className={`font-extrabold text-[clamp(0.7rem,2.5vw,0.9rem)] sm:text-[clamp(0.85rem,3vw,1rem)] ${player.isCurrentUser ? "text-stone-800" : "text-sky-300"}`}>
                   Lvl {player.level}
                 </span>
               </div>
 
               {/* Gold */}
-              <div className="w-24 flex items-center justify-end gap-1.5 text-right">
-                <CircleDollarSign className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#facc15]" />
-                <span className="text-sm sm:text-base font-black text-[#fbbf24]">
+              <div className="flex items-center justify-end gap-1 text-right overflow-hidden min-w-0">
+                <CircleDollarSign className={`w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0 ${player.isCurrentUser ? "text-stone-800" : "text-[#facc15]"}`} />
+                <span className={`font-black text-[clamp(0.85rem,3.5vw,1.15rem)] truncate ${player.isCurrentUser ? "text-stone-900" : "text-[#fbbf24]"}`}>
                   {player.gold.toLocaleString()}
                 </span>
               </div>

@@ -16,10 +16,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "menu",
     content: (
       <div className="font-serif">
-        <h2 className="text-xl font-black text-[#4a2c17] mb-2 uppercase">
+        <h2 className="text-[clamp(1.15rem,4vw,1.5rem)] font-black text-[#4a2c17] mb-2 uppercase">
           Welcome to SeaStride!
         </h2>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Every real-world step you take powers your pirate fleet. Let's
           get started!
         </p>
@@ -31,10 +31,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "menu",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           Start Voyage
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Tap here to begin your adventure and enter the game!
         </p>
       </div>
@@ -46,10 +46,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "home",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           Daily Steps
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           This is your Home tab. Use it to track your real-world progress.
         </p>
       </div>
@@ -60,10 +60,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "home",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           Level & XP
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Complete quests and walk to earn XP. Leveling up unlocks stronger ships!
         </p>
       </div>
@@ -74,10 +74,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "home",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           Daily Stats
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Monitor your distance, calories burned, and active time.
         </p>
       </div>
@@ -88,10 +88,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "home",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           Today's Booty & Safety
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Check your daily gold earnings and step goals here. Keep your shield active!
         </p>
       </div>
@@ -102,10 +102,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "home",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           Daily Quests
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Hit your step targets to claim XP and rewards here every day.
         </p>
       </div>
@@ -117,10 +117,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "build",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           Ship Build
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Welcome to your shipyard. This is where you modify your flagship!
         </p>
       </div>
@@ -131,10 +131,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "build",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           Energy
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Walking generates Energy. Use it to sail, explore, and battle.
         </p>
       </div>
@@ -145,9 +145,35 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "build",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">Loot</h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">Loot</h3>
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Gold Coins and Gems you've collected. Use them to upgrade your fleet.
+        </p>
+      </div>
+    ),
+  },
+  {
+    target: ".tutorial-shop",
+    _tab: "build",
+    content: (
+      <div className="font-serif">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">Shop</h3>
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
+          Buy supplies, gems, and special items with your hard-earned gold.
+        </p>
+      </div>
+    ),
+  },
+  {
+    target: ".tutorial-upgrades",
+    _tab: "build",
+    content: (
+      <div className="font-serif">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
+          Upgrades
+        </h3>
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
+          Improve your ship's cannons, hull, and sails here.
         </p>
       </div>
     ),
@@ -157,10 +183,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "build",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           Repair
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Fix hull damage after battles. You cannot sail if your ship is destroyed!
         </p>
       </div>
@@ -171,37 +197,11 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "build",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           Raids
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           View your history of battles and loot from other players here.
-        </p>
-      </div>
-    ),
-  },
-  {
-    target: ".tutorial-upgrades",
-    _tab: "build",
-    content: (
-      <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
-          Upgrades
-        </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
-          Improve your ship's cannons, hull, and sails here.
-        </p>
-      </div>
-    ),
-  },
-  {
-    target: ".tutorial-shop",
-    _tab: "build",
-    content: (
-      <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">Shop</h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
-          Buy supplies, gems, and special items with your hard-earned gold.
         </p>
       </div>
     ),
@@ -212,10 +212,10 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "sea",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           The Sea
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Welcome to the open ocean! Explore and battle here.
         </p>
       </div>
@@ -226,11 +226,54 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
     _tab: "sea",
     content: (
       <div className="font-serif">
-        <h3 className="text-lg font-black text-[#4a2c17] mb-1">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
           Exploration
         </h3>
-        <p className="text-sm text-[#8b5a33] font-bold">
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
           Drag to pan the camera. Tap on ships to attack them!
+        </p>
+      </div>
+    ),
+  },
+  // Fleet
+  {
+    target: ".tutorial-fleet-nav",
+    _tab: "leaderboard",
+    content: (
+      <div className="font-serif">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
+          Fleet
+        </h3>
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
+          Check out the global rankings and your weekly performance.
+        </p>
+      </div>
+    ),
+  },
+  {
+    target: ".tutorial-fleet-tabs",
+    _tab: "leaderboard",
+    content: (
+      <div className="font-serif">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
+          Leaderboard Tabs
+        </h3>
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
+          Switch between Player Level and Coins Earned to see different rankings.
+        </p>
+      </div>
+    ),
+  },
+  {
+    target: ".tutorial-fleet-list",
+    _tab: "leaderboard",
+    content: (
+      <div className="font-serif">
+        <h3 className="text-[clamp(1rem,3.5vw,1.25rem)] font-black text-[#4a2c17] mb-1">
+          Top Pirates
+        </h3>
+        <p className="text-[clamp(0.75rem,2.5vw,0.9rem)] text-[#8b5a33] font-bold">
+          See who rules the seas! Compete with others to climb the ranks.
         </p>
       </div>
     ),
@@ -248,7 +291,7 @@ export const TutorialOverlay: React.FC<TutorialProps> = ({
 
   // Auto-Trigger on App Load (First-Time User Only)
   useEffect(() => {
-    const hasSeen = localStorage.getItem("seastride_has_seen_global_tutorial_v5");
+    const hasSeen = localStorage.getItem("seastride_has_seen_global_tutorial_v6");
     if (!hasSeen || forceRun) {
       if (forceRun) setStepIndex(0);
       
@@ -256,7 +299,10 @@ export const TutorialOverlay: React.FC<TutorialProps> = ({
       if (!hasSeen && activeTab !== "menu" && stepIndex === 0) {
          setActiveTab("menu");
       }
-      setTimeout(() => setRun(true), 800);
+      
+      // Auto-trigger without long delay
+      const delay = forceRun ? 400 : 100;
+      setTimeout(() => setRun(true), delay);
     }
   }, [forceRun]);
 
@@ -270,7 +316,6 @@ export const TutorialOverlay: React.FC<TutorialProps> = ({
       document.querySelectorAll('.tutorial-active-target').forEach(el => {
         el.classList.remove('tutorial-active-target');
         (el as HTMLElement).style.zIndex = '';
-        (el as HTMLElement).style.boxShadow = '';
       });
     }
 
@@ -280,8 +325,6 @@ export const TutorialOverlay: React.FC<TutorialProps> = ({
          targetEl.classList.add('tutorial-active-target');
          (targetEl as HTMLElement).style.zIndex = '10001';
          
-         // Highlight cue
-         (targetEl as HTMLElement).style.boxShadow = '0 0 15px 5px rgba(255, 215, 0, 0.6)';
          if (window.getComputedStyle(targetEl).position === 'static') {
             (targetEl as HTMLElement).style.position = 'relative';
          }
@@ -306,7 +349,7 @@ export const TutorialOverlay: React.FC<TutorialProps> = ({
       }
     } else if (finishedStatuses.includes(status as any)) {
       setRun(false);
-      localStorage.setItem("seastride_has_seen_global_tutorial_v5", "true");
+      localStorage.setItem("seastride_has_seen_global_tutorial_v6", "true");
       if (onTutorialEnd) onTutorialEnd();
     }
   };
@@ -344,6 +387,7 @@ export const TutorialOverlay: React.FC<TutorialProps> = ({
           fontWeight: "bold",
         },
         tooltip: {
+          width: "clamp(280px, 90vw, 400px)",
           borderRadius: "16px",
           border: "4px solid #8b5a33",
           boxShadow: "0 8px 0 #4a2c17",

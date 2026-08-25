@@ -264,18 +264,18 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
             {/* Target Raid List Modal Button */}
             <button
               onClick={onOpenAttackModal}
-              className="flex-1 bg-[#b45309] hover:bg-[#d97706] active:scale-95 transition-transform border-b-4 border-r-2 border-[#2b1d19] text-[#fde68a] h-[clamp(44px,10vh,48px)] rounded-xl text-xs sm:text-sm font-black uppercase italic tracking-wider shadow-2xl flex items-center justify-center gap-1 sm:gap-1.5 px-2"
+              className="flex-1 bg-[#d75448] hover:brightness-110 active:scale-95 transition-transform border-b-[3px] border-[#9b3026] text-white h-[clamp(44px,10vh,48px)] rounded-xl text-xs sm:text-sm font-black uppercase italic tracking-wider shadow-sm flex items-center justify-center gap-1 sm:gap-1.5 px-2"
             >
-              <List className="w-4 h-4 sm:w-5 sm:h-5 text-[#facc15]" />
+              <List className="w-4 h-4 sm:w-5 sm:h-5 text-red-200" />
               <span>Raid List</span>
             </button>
             {/* Bomb Random Ship Button */}
             <button
               onClick={handleBombRandomShip}
-              className="flex-1 bg-[#1d4ed8] hover:bg-[#2563eb] active:scale-95 transition-transform border-b-4 border-r-2 border-[#1e3a8a] text-white h-[clamp(44px,10vh,48px)] rounded-xl text-xs sm:text-sm font-black uppercase italic tracking-wider shadow-2xl flex items-center justify-center gap-1 sm:gap-1.5 px-2"
+              className="flex-1 bg-[#34aab2] hover:brightness-110 active:scale-95 transition-transform border-2 sm:border-4 border-[#1e7880] text-white h-[clamp(44px,10vh,48px)] rounded-xl text-xs sm:text-sm font-black uppercase italic tracking-wider shadow-[0_3px_0_#1e7880] flex items-center justify-center gap-1 sm:gap-1.5 px-2"
               title="Randomly target an opponent ship"
             >
-              <Dices className="w-4 h-4 sm:w-5 sm:h-5 text-sky-200" />
+              <Dices className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               <span>Bomb Random</span>
             </button>
           </div>

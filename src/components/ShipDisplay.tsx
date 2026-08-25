@@ -44,11 +44,12 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
   const isLow = shipCondition <= 50;
 
   return (
-    <div className="relative flex flex-col items-center justify-center select-none w-full my-2">
+    <div className={`relative flex flex-col items-center select-none w-full ${isHugeBuildMode ? 'h-full justify-between pb-[env(safe-area-inset-bottom)] pt-2 mb-4' : 'justify-center my-2'}`}>
+      
       {/* Container for Giant Ship - NO BOX, NO BORDER */}
       <div
         onClick={onInspectShip}
-        className="relative cursor-pointer transition-transform hover:scale-105 active:scale-95 duration-300 flex flex-col items-center justify-center"
+        className="relative flex-1 w-full min-h-0 cursor-pointer transition-transform hover:scale-105 active:scale-95 duration-300 flex flex-col items-center justify-center"
       >
         {/* Animated Gamified Pedestal Platform */}
         <div className="absolute -bottom-6 sm:-bottom-8 w-4/5 sm:w-3/4 h-16 sm:h-20 bg-gradient-to-b from-sky-400/40 to-sky-900/60 rounded-[100%] border-t-[3px] border-sky-300/60 shadow-[0_10px_30px_rgba(0,0,0,0.8)] flex items-center justify-center pointer-events-none z-0">
@@ -118,7 +119,7 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
         )}
 
         {/* GIANT SHIP IMAGE - COMPLETELY OPAQUE WITHOUT BORDERS OR BOXES */}
-        <div className="relative w-48 h-48 sm:w-72 sm:h-72 md:w-88 md:h-88 flex items-center justify-center">
+        <div className="relative w-full max-w-[240px] sm:max-w-[320px] md:max-w-[400px] aspect-square flex items-center justify-center">
           <img
             src={shipImg}
             alt={`Lv.${shipLevel} Pirate Flagship`}
@@ -148,44 +149,38 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
             </div>
           )}
         </div>
+      </div>
 
-        {/* SHIP CONDITION & HP STATUS DISPLAY - Gamified XP Bar Style */}
-        <div className="w-full max-w-xs mt-12 px-2 z-20 shrink-0">
-          <div className="relative bg-slate-900/80 border-2 border-slate-700/50 rounded-3xl p-3 shadow-[0_8px_16px_rgba(0,0,0,0.5)] backdrop-blur-md">
-            <div className="flex justify-between items-end mb-2">
-              <div className="flex flex-col">
-                <span className="text-[10px] text-sky-200 font-bold uppercase tracking-widest mb-0.5">Flagship</span>
-                <span className="text-white font-black text-sm flex items-center gap-1 drop-shadow-md">
-                  <span className="text-sky-400">Lv.</span>{shipLevel}
-                </span>
-              </div>
-              <div className="flex flex-col items-end">
-                <span className="text-[10px] text-slate-300 font-bold uppercase tracking-widest mb-0.5">Condition</span>
-                <span className={`font-black text-sm drop-shadow-md ${isCritical ? "text-rose-400 animate-pulse" : isLow ? "text-amber-400" : "text-emerald-400"}`}>
-                  {shipCondition}%
-                </span>
-              </div>
+      {/* SHIP CONDITION & HP STATUS DISPLAY - Compact Gamified HUD */}
+      <div className="w-full max-w-[260px] sm:max-w-xs px-2 z-20 shrink-0 mt-6 sm:mt-10">
+        <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-2.5 shadow-[0_4px_12px_rgba(0,0,0,0.6)] backdrop-blur-md flex flex-col gap-1.5">
+          <div className="flex justify-between items-center px-1">
+            <span className="text-[10px] sm:text-xs text-sky-200 font-bold uppercase tracking-wider flex items-center gap-1">
+              Flagship <span className="text-sky-400 font-black">Lv.{shipLevel}</span>
+            </span>
+            <span className={`text-[10px] sm:text-xs font-black drop-shadow-md ${isCritical ? "text-rose-400 animate-pulse" : isLow ? "text-amber-400" : "text-emerald-400"}`}>
+              Condition: {shipCondition}%
+            </span>
+          </div>
+          
+          {/* Sleek Bar */}
+          <div className="w-full bg-slate-950 h-3.5 sm:h-4 rounded-full border border-slate-800 overflow-hidden relative shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]">
+            <div
+              className={`h-full transition-all duration-500 ease-out relative ${
+                isCritical
+                  ? "bg-gradient-to-r from-rose-700 to-rose-500"
+                  : isLow
+                    ? "bg-gradient-to-r from-amber-600 to-amber-400"
+                    : "bg-gradient-to-r from-cyan-600 to-cyan-400"
+              }`}
+              style={{ width: `${Math.max(0, Math.min(100, shipCondition))}%` }}
+            >
+              {/* Gloss/Glass highlight inside the bar */}
+              <div className="absolute top-0 left-0 right-0 h-[40%] bg-white/20" />
             </div>
-            
-            {/* Chunky Gamified Bar */}
-            <div className="w-full bg-slate-950 h-6 sm:h-8 rounded-full border-[3px] border-slate-800 overflow-hidden relative shadow-[inset_0_2px_8px_rgba(0,0,0,0.8)]">
-              <div
-                className={`h-full transition-all duration-500 ease-out relative ${
-                  isCritical
-                    ? "bg-gradient-to-r from-rose-700 to-rose-500"
-                    : isLow
-                      ? "bg-gradient-to-r from-amber-600 to-amber-400"
-                      : "bg-gradient-to-r from-cyan-600 to-cyan-400"
-                }`}
-                style={{ width: `${Math.max(0, Math.min(100, shipCondition))}%` }}
-              >
-                {/* Gloss/Glass highlight inside the bar */}
-                <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/20" />
-              </div>
-              <span className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-xs font-black text-white font-mono tracking-widest drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">
-                {shipCurrentHp.toLocaleString()} / {shipMaxHp.toLocaleString()} HP
-              </span>
-            </div>
+            <span className="absolute inset-0 flex items-center justify-center text-[9px] sm:text-[10px] font-black text-white font-mono tracking-widest drop-shadow-md leading-none pt-px">
+              {shipCurrentHp.toLocaleString()} / {shipMaxHp.toLocaleString()} HP
+            </span>
           </div>
         </div>
       </div>

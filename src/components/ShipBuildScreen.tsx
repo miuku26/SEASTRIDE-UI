@@ -70,10 +70,6 @@ export const ShipBuildScreen: React.FC<ShipBuildScreenProps> = ({
             <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent rounded-2xl pointer-events-none" />
             <Shield className="w-6 h-6 sm:w-7 sm:h-7 text-white drop-shadow-md" />
             <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-sky-50">Upgrades</span>
-            <div className="flex items-center justify-center gap-0.5 bg-black/30 px-1.5 py-0.5 rounded-full mt-0.5 w-[90%]">
-              <CircleDollarSign className="w-3 h-3 text-[#f0c242]" />
-              <span className="text-[9px] font-bold text-sky-100 truncate">{shipUpgradeCost >= 1000 ? `${(shipUpgradeCost/1000).toFixed(1)}k` : shipUpgradeCost}</span>
-            </div>
           </button>
 
           {/* REPAIR BUTTON */}
@@ -91,16 +87,6 @@ export const ShipBuildScreen: React.FC<ShipBuildScreenProps> = ({
             <span className={`text-[9px] sm:text-[10px] font-black uppercase tracking-wider ${shipCondition >= 100 ? "text-slate-200" : "text-emerald-50"}`}>
               Repair
             </span>
-            <div className="flex items-center justify-center gap-0.5 bg-black/30 px-1.5 py-0.5 rounded-full mt-0.5 w-[90%]">
-              {shipCondition >= 100 ? (
-                <span className="text-[9px] font-bold text-emerald-100">Full</span>
-              ) : (
-                <>
-                  <CircleDollarSign className="w-3 h-3 text-[#f0c242]" />
-                  <span className="text-[9px] font-bold text-emerald-100 truncate">{repairCost}</span>
-                </>
-              )}
-            </div>
           </button>
 
           {/* RAID LOG BUTTON */}
@@ -108,15 +94,15 @@ export const ShipBuildScreen: React.FC<ShipBuildScreenProps> = ({
             onClick={() => openModal("raids")}
             className="tutorial-raids relative group bg-rose-500 hover:bg-rose-400 active:scale-95 transition-all border-b-[4px] border-rose-700 py-2.5 sm:py-3.5 rounded-2xl flex flex-col items-center justify-center gap-1 shadow-[0_4px_10px_rgba(0,0,0,0.5)]"
           >
+            {raidLogs.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-yellow-400 text-yellow-950 text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md border border-rose-600 z-10">
+                {raidLogs.length}
+              </span>
+            )}
             <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent rounded-2xl pointer-events-none" />
             <History className="w-6 h-6 sm:w-7 sm:h-7 text-rose-100 drop-shadow-md" />
-            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-rose-50 relative">
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-rose-50">
               Raids
-              {raidLogs.length > 0 && (
-                <span className="absolute -top-5 -right-5 bg-yellow-400 text-yellow-950 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-md border border-rose-600">
-                  {raidLogs.length}
-                </span>
-              )}
             </span>
           </button>
         </div>

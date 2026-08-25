@@ -50,7 +50,7 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
         <div className="flex items-center justify-between w-full">
           
           {/* Left: Nav & Profile */}
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-1 min-w-0 pr-2">
             <button
               onClick={() => openModal("profile")}
               className="tutorial-profile w-9 h-9 sm:w-11 sm:h-11 bg-[#f0c242] border-2 sm:border-4 border-[#be9325] shadow-[0_4px_0_#be9325] rounded-full flex items-center justify-center shadow-md overflow-hidden flex-shrink-0 hover:scale-105 active:scale-95 transition-transform"
@@ -67,14 +67,16 @@ export const HeaderHUD: React.FC<HeaderHUDProps> = ({
                 <span className="text-lg sm:text-xl">☠️</span>
               )}
             </button>
-            <div className="hidden sm:flex flex-col ml-1">
-              <span className="text-xs font-black text-[#f0dec1] leading-none uppercase tracking-wider">{profile?.username || "Captain"}</span>
-              <span className="text-[10px] text-[#fbbf24] font-bold">Lvl 1</span>
+            <div className="flex flex-col ml-1 flex-1 min-w-0">
+              <span className="text-[clamp(0.65rem,2.5vw,0.75rem)] sm:text-xs font-black text-[#f0dec1] leading-none uppercase tracking-wider truncate">
+                {profile?.username || "Captain"}
+              </span>
+              <span className="text-[clamp(0.55rem,2vw,0.65rem)] sm:text-[10px] text-[#fbbf24] font-bold truncate">Lvl 1</span>
             </div>
           </div>
 
           {/* Right: Settings / Controls */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-shrink-0">
             <button
               onClick={() => openModal("server")}
               className="flex items-center justify-center gap-1 bg-[#34aab2] border-b-[3px] border-[#1e7880] text-white rounded-lg px-2 py-1 sm:px-2.5 sm:py-1.5 text-[10px] sm:text-xs font-bold active:scale-95 transition-transform h-8 sm:h-9"
