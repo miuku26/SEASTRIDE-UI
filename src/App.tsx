@@ -34,7 +34,7 @@ function MainAppContent() {
     "menu" | "home" | "build" | "sea" | "leaderboard"
   >("menu");
   const [activeModal, setActiveModal] = useState<ActiveModal>(null);
-  const [forceRunTutorial, setForceRunTutorial] = useState(false);
+  const [tutorialTargetStep, setTutorialTargetStep] = useState<number | null>(null);
 
   // Auto-start pirate BGM on load & play distinct sounds for buttons
   useEffect(() => {
@@ -122,7 +122,7 @@ function MainAppContent() {
               setActiveTab={setActiveTab}
               openModal={openModal}
               onBackToMenu={() => setActiveTab("menu")}
-              onHelp={() => setForceRunTutorial(true)}
+              onHelp={() => setTutorialTargetStep(2)}
             />
 
             <main className="flex-1 overflow-y-auto relative">
@@ -170,7 +170,7 @@ function MainAppContent() {
         {activeModal === "profile" && <ProfileModal onClose={closeModal} />}
 
         {/* Feature Highlight Tutorial */}
-        <TutorialOverlay activeTab={activeTab} setActiveTab={setActiveTab} forceRun={forceRunTutorial} onTutorialEnd={() => setForceRunTutorial(false)} />
+        <TutorialOverlay activeTab={activeTab} setActiveTab={setActiveTab} forceRunTargetStep={tutorialTargetStep} onTutorialEnd={() => setTutorialTargetStep(null)} />
       </div>
     </div>
   );

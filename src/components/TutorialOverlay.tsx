@@ -4,7 +4,7 @@ import { Joyride, STATUS, Step, EVENTS, ACTIONS } from "react-joyride";
 interface TutorialProps {
   activeTab: string;
   setActiveTab: (tab: "menu" | "home" | "build" | "sea" | "leaderboard") => void;
-  forceRun?: boolean;
+  forceRunTargetStep?: number | null;
   onTutorialEnd?: () => void;
 }
 
@@ -283,7 +283,7 @@ const GLOBAL_STEPS: (Step & { _tab: string })[] = [
 export const TutorialOverlay: React.FC<TutorialProps> = ({
   activeTab,
   setActiveTab,
-  forceRun,
+  forceRunTargetStep,
   onTutorialEnd,
 }) => {
   const [run, setRun] = useState(false);
@@ -292,19 +292,23 @@ export const TutorialOverlay: React.FC<TutorialProps> = ({
   // Auto-Trigger on App Load (First-Time User Only)
   useEffect(() => {
     const hasSeen = localStorage.getItem("seastride_has_seen_global_tutorial_v6");
-    if (!hasSeen || forceRun) {
-      if (forceRun) setStepIndex(0);
+    const isForced = forceRunTargetStep !== undefined && forceRunTargetStep !== null;
+
+    if (!hasSeen || isForced) {
+      const targetIndex = isForced ? forceRunTargetStep : 0;
+      setStepIndex(targetIndex);
       
-      // Ensure we are on the first tab if we are starting fresh
-      if (!hasSeen && activeTab !== "menu" && stepIndex === 0) {
-         setActiveTab("menu");
+      // Ensure we are on the first tab if we are starting fresh, or the target step's tab
+      const targetStep = GLOBAL_STEPS[targetIndex];
+      if (targetStep && activeTab !== targetStep._tab) {
+         setActiveTab(targetStep._tab as any);
       }
       
       // Auto-trigger without long delay
-      const delay = forceRun ? 400 : 100;
+      const delay = isForced ? 400 : 100;
       setTimeout(() => setRun(true), delay);
     }
-  }, [forceRun]);
+  }, [forceRunTargetStep]);
 
   const handleJoyrideCallback = (data: any) => {
     const { action, index, status, type, step } = data;
