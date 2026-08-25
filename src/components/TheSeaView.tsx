@@ -252,56 +252,35 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
   };
 
   return (
-    <div className="relative w-full h-[62dvh] sm:h-[500px] min-h-[380px] rounded-2xl sm:rounded-3xl overflow-hidden border-4 sm:border-8 border-[#2b1d19] shadow-2xl select-none group tutorial-sea-view-area">
-      {/* Cartoonish Ocean Top-Down Image Background */}
-      <img
-        src={ASSETS.topdownOcean}
-        alt="The Sea"
-        referrerPolicy="no-referrer"
-        className="absolute inset-0 w-full h-full object-cover filter brightness-105 saturate-125 scale-105"
-      />
-
+    <div className="relative w-full h-full overflow-hidden select-none group">
       {/* Cartoon Wave Motion Overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(10,30,60,0.3)_100%)] pointer-events-none" />
       <div className="absolute inset-0 bg-sky-400/10 mix-blend-overlay animate-pulse pointer-events-none" />
 
-      {/* Sea Header Bar: Server Info & Bomb Options */}
-      <div className="absolute top-2 sm:top-3 left-2 sm:left-3 right-2 sm:right-3 z-30 flex items-center justify-between gap-1.5 pointer-events-none">
-        {/* Server Name Badge */}
-        <div className="bg-[#2b1d19]/95 border sm:border-2 border-[#b45309] backdrop-blur-md px-2 py-1 sm:px-3 sm:py-1.5 rounded-xl sm:rounded-2xl text-white shadow-xl flex items-center gap-1.5 pointer-events-auto">
-          <span className="text-sm sm:text-lg">🌊</span>
-          <div>
-            <div className="text-[9px] sm:text-[10px] font-black uppercase text-[#fde68a] font-serif leading-none">
-              Mid-Ocean
-            </div>
-            <div className="text-[10px] sm:text-xs font-extrabold text-white leading-tight">
-              {currentServer.name} ({ships.length})
-            </div>
+      {/* Action Controls: Random Bomb & Raid List */}
+      {!selectedShip && !isFiringSalvo && !battleResult && (
+        <div className="absolute bottom-4 sm:bottom-6 left-0 right-0 z-30 px-4 flex justify-center pointer-events-none">
+          <div className="flex items-center gap-2 sm:gap-3 w-full max-w-sm pointer-events-auto">
+            {/* Target Raid List Modal Button */}
+            <button
+              onClick={onOpenAttackModal}
+              className="flex-1 bg-[#b45309] hover:bg-[#d97706] active:scale-95 transition-transform border-b-4 border-r-2 border-[#2b1d19] text-[#fde68a] h-[clamp(44px,10vh,48px)] rounded-xl text-xs sm:text-sm font-black uppercase italic tracking-wider shadow-2xl flex items-center justify-center gap-1 sm:gap-1.5 px-2"
+            >
+              <List className="w-4 h-4 sm:w-5 sm:h-5 text-[#facc15]" />
+              <span>Raid List</span>
+            </button>
+            {/* Bomb Random Ship Button */}
+            <button
+              onClick={handleBombRandomShip}
+              className="flex-1 bg-[#1d4ed8] hover:bg-[#2563eb] active:scale-95 transition-transform border-b-4 border-r-2 border-[#1e3a8a] text-white h-[clamp(44px,10vh,48px)] rounded-xl text-xs sm:text-sm font-black uppercase italic tracking-wider shadow-2xl flex items-center justify-center gap-1 sm:gap-1.5 px-2"
+              title="Randomly target an opponent ship"
+            >
+              <Dices className="w-4 h-4 sm:w-5 sm:h-5 text-sky-200" />
+              <span>Bomb Random</span>
+            </button>
           </div>
         </div>
-
-        {/* Action Controls: Random Bomb & Raid List */}
-        <div className="flex items-center gap-1.5 pointer-events-auto">
-          {/* Bomb Random Ship Button */}
-          <button
-            onClick={handleBombRandomShip}
-            className="bg-[#1d4ed8] hover:bg-[#2563eb] border-b-2 sm:border-b-4 border-r border-[#1e3a8a] text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-black uppercase italic shadow-2xl flex items-center gap-1 active:translate-y-0.5"
-            title="Randomly target an opponent ship"
-          >
-            <Dices className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-sky-200" />
-            <span className="hidden xs:inline">Bomb</span> Random
-          </button>
-
-          {/* Target Raid List Modal Button */}
-          <button
-            onClick={onOpenAttackModal}
-            className="bg-[#b45309] hover:bg-[#d97706] border-b-2 sm:border-b-4 border-r border-[#2b1d19] text-white px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-black uppercase italic shadow-2xl flex items-center gap-1 active:translate-y-0.5"
-          >
-            <List className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#facc15]" />
-            <span>Raid List</span>
-          </button>
-        </div>
-      </div>
+      )}
 
       {/* Sailing Ships Container */}
       <div className="absolute inset-0 z-10 overflow-hidden">

@@ -3,7 +3,7 @@ import { useGame } from "../context/GameContext";
 import { Player, BattleResult } from "../types";
 import { ASSETS, getShipImageForLevel } from "../assets";
 import { useCutoutImage } from "../utils/imageUtils";
-import { Crosshair, X, Sparkles } from "lucide-react";
+import { X, Sparkles } from "lucide-react";
 
 interface AttackModalProps {
   onClose: () => void;
@@ -16,11 +16,6 @@ export const AttackModal: React.FC<AttackModalProps> = ({ onClose }) => {
   const [battleResult, setBattleResult] = useState<BattleResult | null>(null);
 
   const players = currentServer.players;
-
-  const handleRandomSelect = () => {
-    const randomIndex = Math.floor(Math.random() * players.length);
-    setSelectedPlayer(players[randomIndex]);
-  };
 
   const handleLaunchAttack = () => {
     if (!selectedPlayer) return;
@@ -156,18 +151,10 @@ export const AttackModal: React.FC<AttackModalProps> = ({ onClose }) => {
           ) : (
             /* Target Selector Screen */
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-center">
                 <span className="text-xs font-serif font-black uppercase text-[#fde68a]">
                   Select Target Ship ({players.length} Ships In Server)
                 </span>
-
-                <button
-                  onClick={handleRandomSelect}
-                  className="bg-[#1d4ed8] hover:bg-[#2563eb] border-b-2 border-[#1e3a8a] text-white text-xs font-black px-3 py-1 rounded-lg flex items-center gap-1 italic active:translate-y-0.5"
-                >
-                  <Crosshair className="w-3.5 h-3.5 text-white" />
-                  <span>Random Target</span>
-                </button>
               </div>
 
               {/* Player list */}

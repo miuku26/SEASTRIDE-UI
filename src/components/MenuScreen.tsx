@@ -64,17 +64,21 @@ export function MenuScreen({
         >
           <button
             onClick={onSelectSteps}
-            className="tutorial-start-voyage ring-4 ring-[#93bb44]/50 ring-offset-4 ring-offset-[#4a2c17] animate-[pulse_2s_ease-in-out_infinite] w-full h-24 sm:h-28 bg-[#93bb44] hover:brightness-110 border-4 border-[#658627] border-b-[12px] active:border-b-4 active:translate-y-[8px] rounded-2xl flex flex-col items-center justify-center shadow-[0_8px_16px_rgba(0,0,0,0.6)] transition-all overflow-hidden relative group"
+            className="tutorial-start-voyage relative group w-full bg-gradient-to-b from-[#fbbf24] to-[#d97706] hover:from-[#fcd34d] hover:to-[#ea580c] rounded-2xl shadow-[inset_0_2px_4px_rgba(255,255,255,0.6),inset_0_-4px_0_rgba(146,64,14,0.8),0_8px_20px_rgba(0,0,0,0.6)] active:scale-[0.96] active:shadow-[inset_0_4px_8px_rgba(0,0,0,0.4),0_4px_10px_rgba(0,0,0,0.4)] border border-[#fde68a] ring-4 ring-[#d97706]/40 ring-offset-4 ring-offset-[#2b1d19] transition-all duration-200 ease-out overflow-hidden py-4 sm:py-5 flex flex-col items-center justify-center"
           >
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')] opacity-30 mix-blend-overlay"></div>
-            <div className="absolute inset-0 bg-white/10 group-hover:bg-white/20 transition-colors"></div>
-            <div className="flex items-center justify-center gap-3 z-10">
-              <Anchor className="w-8 h-8 sm:w-10 sm:h-10 text-white drop-shadow-md animate-pulse" />
+            {/* Glossy top highlight */}
+            <div className="absolute top-0 inset-x-0 h-1/2 bg-gradient-to-b from-white/40 to-transparent pointer-events-none" />
+            
+            {/* Subtle radial sheen on hover */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+            <div className="flex items-center justify-center gap-3 z-10 relative">
+              <Anchor className="w-6 h-6 sm:w-8 sm:h-8 text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] group-hover:rotate-6 transition-transform duration-300" />
               <div className="flex flex-col items-center">
-                <span className="font-black text-white text-3xl sm:text-4xl tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] uppercase">
+                <span className="font-black text-white text-xl sm:text-2xl tracking-widest drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] uppercase">
                   Start Voyage
                 </span>
-                <span className="text-[#e5f5c9] text-xs sm:text-sm font-bold tracking-widest uppercase mt-1 drop-shadow-md">
+                <span className="text-[#fffbeb] text-[10px] sm:text-xs font-bold tracking-widest uppercase mt-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] opacity-90">
                   Begin Your Adventure
                 </span>
               </div>

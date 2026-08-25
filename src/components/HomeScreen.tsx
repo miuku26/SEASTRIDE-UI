@@ -350,7 +350,7 @@ export const HomeScreen: React.FC = () => {
       {/* Daily Quests */}
       <div className="mt-auto pb-4 tutorial-quests">
         <h2 className="flex items-center gap-2 text-lg sm:text-xl font-black text-[#4a2c17] mb-3 sm:mb-4 uppercase tracking-widest">
-          <Swords className="w-5 h-5 text-[#4a2c17]" /> Daily Quests
+          <Swords className="w-5 h-5 text-[#4a2c17]" /> DAILY QUEST
         </h2>
 
         <div

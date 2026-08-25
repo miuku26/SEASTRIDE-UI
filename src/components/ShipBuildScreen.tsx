@@ -7,9 +7,8 @@ import {
   Shield,
   Wrench,
   ShoppingBag,
-  Globe,
-  Lock,
   History,
+  CircleDollarSign,
 } from "lucide-react";
 
 interface ShipBuildScreenProps {
@@ -29,118 +28,119 @@ interface ShipBuildScreenProps {
 export const ShipBuildScreen: React.FC<ShipBuildScreenProps> = ({
   openModal,
 }) => {
-  const { currentServer, shipCondition, raidLogs } = useGame();
+  const { currentServer, shipCondition, raidLogs, shipLevel } = useGame();
+  
+  const shipUpgradeCost = shipLevel === 1 ? 1000 : 1000 + (shipLevel - 1) * 500;
+  const repairCost = Math.ceil((100 - shipCondition) / 5) * 5;
 
   return (
-    <div className="relative h-full flex-1 p-2 sm:p-3 flex flex-col justify-between overflow-y-auto overflow-x-hidden select-none pb-24 sm:pb-32">
-      {/* Dynamic Background: Cartoon Beach Landscape for Ship Build */}
+    <div className="relative h-full w-full flex flex-col overflow-hidden select-none bg-sky-950">
+      {/* Dynamic Background */}
       <div className="absolute inset-0 z-0">
         <img
           src={ASSETS.beachBg}
           alt="Backdrop"
           referrerPolicy="no-referrer"
-          className="w-full h-full object-cover filter brightness-95 saturate-110"
+          className="w-full h-full object-cover filter brightness-90 saturate-125"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1c0a02]/80 via-transparent to-[#1c0a02]/30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1c0a02]/40 via-transparent to-[#1c0a02]/90" />
       </div>
 
-      {/* Main Container */}
-      <div className="relative z-10 max-w-5xl mx-auto w-full flex flex-col space-y-3 my-auto">
-        <div className="flex flex-col items-center justify-center space-y-4 animate-fade-in w-full">
-          {/* Top Server Quick Info Bar */}
-          <div className="w-full max-w-md bg-[#4a2c17]/90 border-4 border-[#2b1d19] rounded-2xl p-2.5 text-amber-100 shadow-xl backdrop-blur-sm flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {currentServer.type === "global" ? (
-                <div className="p-1.5 bg-[#1e1b4b] border border-[#4338ca] rounded-lg text-sky-400">
-                  <Globe className="w-4 h-4" />
-                </div>
+      {/* Main Layout Container (Row) */}
+      <div className="relative z-10 w-full h-full flex flex-row pb-[env(safe-area-inset-bottom)]">
+        
+        {/* LEFT VERTICAL ACTION SIDEBAR */}
+        <div className="w-[85px] sm:w-[100px] flex flex-col justify-center gap-2.5 sm:gap-4 pl-2 sm:pl-3 z-20 shrink-0 py-4 h-full">
+          
+          {/* SHOP BUTTON */}
+          <button
+            onClick={() => openModal("shop")}
+            className="tutorial-shop relative group bg-indigo-500 hover:bg-indigo-400 active:scale-95 transition-all border-b-[4px] border-indigo-700 py-2.5 sm:py-3.5 rounded-2xl flex flex-col items-center justify-center gap-1 shadow-[0_4px_10px_rgba(0,0,0,0.5)]"
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent rounded-2xl pointer-events-none" />
+            <ShoppingBag className="w-6 h-6 sm:w-7 sm:h-7 text-indigo-100 drop-shadow-md" />
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-indigo-50">Shop</span>
+          </button>
+
+          {/* UPGRADE BUTTON */}
+          <button
+            onClick={() => openModal("upgrades")}
+            className="tutorial-upgrades relative group bg-sky-500 hover:bg-sky-400 active:scale-95 transition-all border-b-[4px] border-sky-700 py-2.5 sm:py-3.5 rounded-2xl flex flex-col items-center justify-center gap-1 shadow-[0_4px_10px_rgba(0,0,0,0.5)]"
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent rounded-2xl pointer-events-none" />
+            <Shield className="w-6 h-6 sm:w-7 sm:h-7 text-white drop-shadow-md" />
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-sky-50">Upgrades</span>
+            <div className="flex items-center justify-center gap-0.5 bg-black/30 px-1.5 py-0.5 rounded-full mt-0.5 w-[90%]">
+              <CircleDollarSign className="w-3 h-3 text-[#f0c242]" />
+              <span className="text-[9px] font-bold text-sky-100 truncate">{shipUpgradeCost >= 1000 ? `${(shipUpgradeCost/1000).toFixed(1)}k` : shipUpgradeCost}</span>
+            </div>
+          </button>
+
+          {/* REPAIR BUTTON */}
+          <button
+            onClick={() => openModal("repair")}
+            disabled={shipCondition >= 100}
+            className={`tutorial-repair relative group transition-all border-b-[4px] py-2.5 sm:py-3.5 rounded-2xl flex flex-col items-center justify-center gap-1 shadow-[0_4px_10px_rgba(0,0,0,0.5)] ${
+              shipCondition >= 100
+                ? "bg-slate-600 border-slate-800 opacity-80"
+                : "bg-emerald-500 hover:bg-emerald-400 active:scale-95 border-emerald-700"
+            }`}
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent rounded-2xl pointer-events-none" />
+            <Wrench className={`w-6 h-6 sm:w-7 sm:h-7 drop-shadow-md ${shipCondition >= 100 ? "text-slate-300" : "text-white"}`} />
+            <span className={`text-[9px] sm:text-[10px] font-black uppercase tracking-wider ${shipCondition >= 100 ? "text-slate-200" : "text-emerald-50"}`}>
+              Repair
+            </span>
+            <div className="flex items-center justify-center gap-0.5 bg-black/30 px-1.5 py-0.5 rounded-full mt-0.5 w-[90%]">
+              {shipCondition >= 100 ? (
+                <span className="text-[9px] font-bold text-emerald-100">Full</span>
               ) : (
-                <div className="p-1.5 bg-[#2b1d19] border border-[#b45309] rounded-lg text-[#facc15]">
-                  <Lock className="w-4 h-4" />
-                </div>
+                <>
+                  <CircleDollarSign className="w-3 h-3 text-[#f0c242]" />
+                  <span className="text-[9px] font-bold text-emerald-100 truncate">{repairCost}</span>
+                </>
               )}
-              <div>
-                <div className="text-[10px] font-bold text-[#fde68a] uppercase font-serif">
-                  {currentServer.name}
-                </div>
-                <div className="text-[10px] text-[#fbbf24] font-mono">
-                  Code: {currentServer.code} • {currentServer.playerCount} Ships
-                </div>
-              </div>
             </div>
-            <button
-              onClick={() => openModal("server")}
-              className="bg-[#1d4ed8] hover:bg-[#2563eb] border-b-2 border-[#1e3a8a] text-white px-2.5 py-1 rounded-lg text-[10px] font-black uppercase italic shadow"
-            >
-              Change Server
-            </button>
+          </button>
+
+          {/* RAID LOG BUTTON */}
+          <button
+            onClick={() => openModal("raids")}
+            className="tutorial-raids relative group bg-rose-500 hover:bg-rose-400 active:scale-95 transition-all border-b-[4px] border-rose-700 py-2.5 sm:py-3.5 rounded-2xl flex flex-col items-center justify-center gap-1 shadow-[0_4px_10px_rgba(0,0,0,0.5)]"
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent rounded-2xl pointer-events-none" />
+            <History className="w-6 h-6 sm:w-7 sm:h-7 text-rose-100 drop-shadow-md" />
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-rose-50 relative">
+              Raids
+              {raidLogs.length > 0 && (
+                <span className="absolute -top-5 -right-5 bg-yellow-400 text-yellow-950 text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-md border border-rose-600">
+                  {raidLogs.length}
+                </span>
+              )}
+            </span>
+          </button>
+        </div>
+
+        {/* RIGHT/CENTER HERO SECTION */}
+        <div className="flex-1 flex flex-col items-center relative min-w-0 pr-2 sm:pr-4 pt-3 h-full">
+          
+          {shipCondition <= 50 && (
+            <div className="absolute top-14 text-[10px] sm:text-[11px] font-bold text-center text-rose-100 bg-rose-900/90 border border-rose-500 px-3 py-1 rounded-full shadow-[0_0_15px_rgba(225,29,72,0.4)] backdrop-blur-sm animate-pulse z-30 shrink-0">
+              ⚠️ Critical Damage!
+            </div>
+          )}
+
+          {/* SHIP DISPLAY CANVAS - Flex 1 allows it to take remaining vertical space */}
+          <div className="flex-1 w-full flex items-center justify-center relative overflow-visible mt-4 pb-12">
+            <ShipDisplay
+              onInspectShip={() => openModal("shipInspect")}
+              isHugeBuildMode={true}
+            />
           </div>
 
-          {/* GIANT SHIP BUILD CANVAS */}
-          <ShipDisplay
-            onInspectShip={() => openModal("shipInspect")}
-            isHugeBuildMode={true}
-          />
-
-          {/* SHIP BUILDING CONTROL HUB */}
-          <div className="tutorial-ship-actions w-full max-w-md space-y-2">
-            {shipCondition <= 50 && (
-              <div className="text-[11px] font-bold text-center text-red-200 bg-red-950/90 border border-red-700 p-2 rounded-xl shadow-lg">
-                ⚠️ Hull damaged ({shipCondition}%). Use Repair in the Shipyard
-                below before setting sail!
-              </div>
-            )}
-
-            {/* Grid of Shipyard Features */}
-            <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-              <button
-                onClick={() => openModal("upgrades")}
-                className="tutorial-upgrades bg-[#b45309] hover:bg-[#d97706] active:translate-y-0.5 border-b-2 sm:border-b-4 border-r-2 border-[#2b1d19] py-2 sm:py-2.5 px-1 sm:px-2 rounded-xl text-center flex flex-col items-center justify-center gap-1 text-white shadow-xl italic font-black uppercase"
-              >
-                <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-[#facc15]" />
-                <span className="text-[9px] sm:text-[10px] truncate w-full">
-                  Upgrades
-                </span>
-              </button>
-
-              <button
-                onClick={() => openModal("repair")}
-                className="tutorial-repair bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm hover:brightness-110 active:border-b-0 active:translate-y-0.5 border-r-2 border-[#064e3b] py-2 sm:py-2.5 px-1 sm:px-2 rounded-xl text-center flex flex-col items-center justify-center gap-1 text-white shadow-xl italic font-black uppercase"
-              >
-                <Wrench className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                <span className="text-[9px] sm:text-[10px] truncate w-full">
-                  Repair
-                </span>
-              </button>
-
-              <button
-                onClick={() => openModal("shop")}
-                className="tutorial-shop bg-[#1d4ed8] hover:bg-[#2563eb] active:translate-y-0.5 border-b-2 sm:border-b-4 border-r-2 border-[#1e3a8a] py-2 sm:py-2.5 px-1 sm:px-2 rounded-xl text-center flex flex-col items-center justify-center gap-1 text-white shadow-xl italic font-black uppercase"
-              >
-                <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 text-sky-300" />
-                <span className="text-[9px] sm:text-[10px] truncate w-full">
-                  Shop
-                </span>
-              </button>
-
-              <button
-                onClick={() => openModal("raids")}
-                className="tutorial-raids bg-[#2b1d19] hover:bg-[#4a2c17] active:translate-y-0.5 border-b-2 sm:border-b-4 border-r-2 border-[#1a0f0d] py-2 sm:py-2.5 px-1 sm:px-2 rounded-xl text-center flex flex-col items-center justify-center gap-1 text-[#fde68a] shadow-xl relative italic font-black uppercase"
-              >
-                <History className="w-4 h-4 sm:w-5 sm:h-5 text-[#facc15]" />
-                <span className="text-[9px] sm:text-[10px] truncate w-full">
-                  Raid Log
-                </span>
-                {raidLogs.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-600 text-white text-[8px] sm:text-[9px] font-black w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center border border-white">
-                    {raidLogs.length}
-                  </span>
-                )}
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
   );
 };
+

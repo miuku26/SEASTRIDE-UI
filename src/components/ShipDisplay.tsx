@@ -50,8 +50,10 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
         onClick={onInspectShip}
         className="relative cursor-pointer transition-transform hover:scale-105 active:scale-95 duration-300 flex flex-col items-center justify-center"
       >
-        {/* Animated Water Reflection & Splash Base */}
-        <div className="absolute -bottom-6 w-3/4 h-12 bg-sky-500/30 rounded-full blur-xl animate-pulse pointer-events-none" />
+        {/* Animated Gamified Pedestal Platform */}
+        <div className="absolute -bottom-6 sm:-bottom-8 w-4/5 sm:w-3/4 h-16 sm:h-20 bg-gradient-to-b from-sky-400/40 to-sky-900/60 rounded-[100%] border-t-[3px] border-sky-300/60 shadow-[0_10px_30px_rgba(0,0,0,0.8)] flex items-center justify-center pointer-events-none z-0">
+           <div className="w-3/4 h-2/3 rounded-[100%] border border-sky-200/30 bg-sky-500/20 shadow-[inset_0_0_20px_rgba(14,165,233,0.5)]" />
+        </div>
 
         {/* Shield Barrier Energy Dome */}
         {shieldLevel > 0 && (
@@ -147,40 +149,43 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
           )}
         </div>
 
-        {/* SHIP CONDITION & HP STATUS DISPLAY */}
-        <div className="w-full max-w-sm bg-[#4a2c17]/95 border-4 border-[#2b1d19] rounded-2xl p-3 shadow-2xl backdrop-blur-sm mt-2 space-y-1.5 text-amber-100">
-          <div className="flex justify-between items-center text-xs font-serif font-black">
-            <span className="text-white flex items-center gap-1">
-              <span>⛵</span> Level {shipLevel} Flagship
-            </span>
-            <span
-              className={`font-mono text-xs px-2 py-0.5 rounded-lg font-black border ${
-                isCritical
-                  ? "bg-red-950 text-red-300 border-red-600 animate-pulse"
-                  : isLow
-                    ? "bg-[#2b1d19] text-[#fde68a] border-[#b45309]"
-                    : "bg-[#064e3b] text-emerald-200 border-[#16a34a]"
-              }`}
-            >
-              {shipCondition}% Condition
-            </span>
-          </div>
-
-          {/* HP Bar */}
-          <div className="w-full bg-[#1a0f0d] h-4 rounded-full border-2 border-[#4a2c17] overflow-hidden relative shadow-inner">
-            <div
-              className={`h-full transition-all duration-300 rounded-full ${
-                isCritical
-                  ? "bg-red-600"
-                  : isLow
-                    ? "bg-amber-500"
-                    : "bg-emerald-500"
-              }`}
-              style={{ width: `${Math.max(0, Math.min(100, shipCondition))}%` }}
-            />
-            <span className="absolute inset-0 flex items-center justify-center text-[10px] font-black text-white font-mono tracking-wider drop-shadow-[0_1px_2px_rgba(0,0,0,1)]">
-              {shipCurrentHp.toLocaleString()} / {shipMaxHp.toLocaleString()} HP
-            </span>
+        {/* SHIP CONDITION & HP STATUS DISPLAY - Gamified XP Bar Style */}
+        <div className="w-full max-w-xs mt-12 px-2 z-20 shrink-0">
+          <div className="relative bg-slate-900/80 border-2 border-slate-700/50 rounded-3xl p-3 shadow-[0_8px_16px_rgba(0,0,0,0.5)] backdrop-blur-md">
+            <div className="flex justify-between items-end mb-2">
+              <div className="flex flex-col">
+                <span className="text-[10px] text-sky-200 font-bold uppercase tracking-widest mb-0.5">Flagship</span>
+                <span className="text-white font-black text-sm flex items-center gap-1 drop-shadow-md">
+                  <span className="text-sky-400">Lv.</span>{shipLevel}
+                </span>
+              </div>
+              <div className="flex flex-col items-end">
+                <span className="text-[10px] text-slate-300 font-bold uppercase tracking-widest mb-0.5">Condition</span>
+                <span className={`font-black text-sm drop-shadow-md ${isCritical ? "text-rose-400 animate-pulse" : isLow ? "text-amber-400" : "text-emerald-400"}`}>
+                  {shipCondition}%
+                </span>
+              </div>
+            </div>
+            
+            {/* Chunky Gamified Bar */}
+            <div className="w-full bg-slate-950 h-6 sm:h-8 rounded-full border-[3px] border-slate-800 overflow-hidden relative shadow-[inset_0_2px_8px_rgba(0,0,0,0.8)]">
+              <div
+                className={`h-full transition-all duration-500 ease-out relative ${
+                  isCritical
+                    ? "bg-gradient-to-r from-rose-700 to-rose-500"
+                    : isLow
+                      ? "bg-gradient-to-r from-amber-600 to-amber-400"
+                      : "bg-gradient-to-r from-cyan-600 to-cyan-400"
+                }`}
+                style={{ width: `${Math.max(0, Math.min(100, shipCondition))}%` }}
+              >
+                {/* Gloss/Glass highlight inside the bar */}
+                <div className="absolute top-0 left-0 right-0 h-1/3 bg-white/20" />
+              </div>
+              <span className="absolute inset-0 flex items-center justify-center text-[10px] sm:text-xs font-black text-white font-mono tracking-widest drop-shadow-[0_2px_2px_rgba(0,0,0,1)]">
+                {shipCurrentHp.toLocaleString()} / {shipMaxHp.toLocaleString()} HP
+              </span>
+            </div>
           </div>
         </div>
       </div>
