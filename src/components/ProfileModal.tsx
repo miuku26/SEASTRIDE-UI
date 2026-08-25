@@ -1,8 +1,16 @@
-import React, { useState, useRef } from 'react';
-import { X, Upload, Check, User, Edit3, Image as ImageIcon, Sparkles } from 'lucide-react';
-import { useGame } from '../context/GameContext';
-import { PIRATE_AVATARS } from '../assets';
-import { soundFx } from '../utils/audio';
+import React, { useState, useRef } from "react";
+import {
+  X,
+  Upload,
+  Check,
+  User,
+  Edit3,
+  Image as ImageIcon,
+  Sparkles,
+} from "lucide-react";
+import { useGame } from "../context/GameContext";
+import { PIRATE_AVATARS } from "../assets";
+import { soundFx } from "../utils/audio";
 
 interface ProfileModalProps {
   onClose: () => void;
@@ -23,7 +31,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        alert('File size is too large! Please select an image under 5MB.');
+        alert("File size is too large! Please select an image under 5MB.");
         return;
       }
       const reader = new FileReader();
@@ -40,7 +48,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     if (!username.trim()) {
-      alert('Username cannot be empty!');
+      alert("Username cannot be empty!");
       return;
     }
 
@@ -59,7 +67,6 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 select-none animate-fadeIn">
       <div className="relative w-full max-w-md bg-[#2b1d19] border-4 sm:border-6 border-[#4a2c17] rounded-2xl shadow-[0_0_50px_rgba(0,0,0,0.9)] overflow-hidden text-amber-100 max-h-[88vh] flex flex-col">
-        
         {/* Header Title Bar */}
         <div className="bg-[#1a0f0d] px-3.5 py-2 border-b-2 sm:border-b-4 border-[#4a2c17] flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -77,8 +84,10 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
         </div>
 
         {/* Modal Form Body */}
-        <form onSubmit={handleSave} className="p-3 sm:p-4 overflow-y-auto space-y-3 flex-1">
-          
+        <form
+          onSubmit={handleSave}
+          className="p-3 sm:p-4 overflow-y-auto space-y-3 flex-1"
+        >
           {/* Main Avatar Preview (Centered Big Circle) */}
           <div className="flex justify-center my-1">
             <div className="relative">
@@ -111,7 +120,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
               <ImageIcon className="w-3.5 h-3.5 text-[#facc15]" />
               Choose Cartoon Pirate Avatar
             </label>
-            
+
             <div className="grid grid-cols-5 gap-1.5">
               {PIRATE_AVATARS.map((avatar) => {
                 const isSelected = avatarUrl === avatar.url;
@@ -125,8 +134,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
                     }}
                     className={`relative rounded-lg overflow-hidden border-2 transition-all p-0.5 bg-[#1a0f0d] aspect-square flex items-center justify-center ${
                       isSelected
-                        ? 'border-[#facc15] ring-2 ring-[#facc15] scale-105 shadow-[0_0_10px_rgba(250,204,21,0.6)]'
-                        : 'border-[#4a2c17] opacity-75 hover:opacity-100 hover:border-[#b45309]'
+                        ? "border-[#facc15] ring-2 ring-[#facc15] scale-105 shadow-[0_0_10px_rgba(250,204,21,0.6)]"
+                        : "border-[#4a2c17] opacity-75 hover:opacity-100 hover:border-[#b45309]"
                     }`}
                     title={avatar.name}
                   >
@@ -207,8 +216,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
               type="submit"
               className={`w-full py-2 px-3 rounded-xl font-black text-xs uppercase italic tracking-wider shadow-xl flex items-center justify-center gap-1.5 border-b-2 border-r transition-all active:translate-y-0.5 ${
                 saveSuccess
-                  ? 'bg-emerald-600 border-emerald-900 text-white'
-                  : 'bg-[#b45309] hover:bg-[#d97706] border-[#2b1d19] text-white'
+                  ? "bg-emerald-600 border-emerald-900 text-white"
+                  : "bg-[#b45309] hover:bg-[#d97706] border-[#2b1d19] text-white"
               }`}
             >
               {saveSuccess ? (
@@ -224,7 +233,6 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
               )}
             </button>
           </div>
-
         </form>
       </div>
     </div>

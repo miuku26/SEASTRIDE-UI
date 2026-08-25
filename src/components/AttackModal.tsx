@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useGame } from '../context/GameContext';
-import { Player, BattleResult } from '../types';
-import { ASSETS, getShipImageForLevel } from '../assets';
-import { useCutoutImage } from '../utils/imageUtils';
-import { Crosshair, X, Sparkles } from 'lucide-react';
+import React, { useState } from "react";
+import { useGame } from "../context/GameContext";
+import { Player, BattleResult } from "../types";
+import { ASSETS, getShipImageForLevel } from "../assets";
+import { useCutoutImage } from "../utils/imageUtils";
+import { Crosshair, X, Sparkles } from "lucide-react";
 
 interface AttackModalProps {
   onClose: () => void;
@@ -38,7 +38,6 @@ export const AttackModal: React.FC<AttackModalProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 select-none">
       <div className="bg-[#4a2c17] border-8 border-[#2b1d19] rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative text-amber-100 flex flex-col max-h-[90vh]">
-        
         {/* Header */}
         <div className="bg-[#2b1d19] border-b-4 border-[#4a2c17] p-3.5 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -63,7 +62,6 @@ export const AttackModal: React.FC<AttackModalProps> = ({ onClose }) => {
 
         {/* Content Area */}
         <div className="p-4 overflow-y-auto space-y-4 flex-1">
-
           {/* If battle result is ready */}
           {battleResult ? (
             <div className="bg-[#2b1d19] border-4 border-[#b45309] rounded-2xl p-5 text-center space-y-4 animate-fade-in shadow-2xl">
@@ -72,24 +70,38 @@ export const AttackModal: React.FC<AttackModalProps> = ({ onClose }) => {
               </div>
 
               <div className="text-xs text-[#fde68a] font-serif">
-                You attacked <span className="font-extrabold text-[#fbbf24]">{battleResult.targetPlayer.name}</span>!
+                You attacked{" "}
+                <span className="font-extrabold text-[#fbbf24]">
+                  {battleResult.targetPlayer.name}
+                </span>
+                !
               </div>
 
               {/* Damage & HP Result */}
               <div className="bg-[#1a0f0d] border-2 border-[#4a2c17] rounded-xl p-3 grid grid-cols-2 gap-2 text-center">
                 <div>
-                  <div className="text-[10px] text-[#fde68a]/80 font-bold uppercase">Damage Dealt</div>
-                  <div className="text-xl font-mono font-black text-red-400">-{battleResult.damageDealt.toLocaleString()} HP</div>
+                  <div className="text-[10px] text-[#fde68a]/80 font-bold uppercase">
+                    Damage Dealt
+                  </div>
+                  <div className="text-xl font-mono font-black text-red-400">
+                    -{battleResult.damageDealt.toLocaleString()} HP
+                  </div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-[#fde68a]/80 font-bold uppercase">Enemy Remaining HP</div>
-                  <div className="text-xl font-mono font-black text-[#fbbf24]">{battleResult.enemyRemainingHpPercent}%</div>
+                  <div className="text-[10px] text-[#fde68a]/80 font-bold uppercase">
+                    Enemy Remaining HP
+                  </div>
+                  <div className="text-xl font-mono font-black text-[#fbbf24]">
+                    {battleResult.enemyRemainingHpPercent}%
+                  </div>
                 </div>
               </div>
 
               {/* Loot Rewards */}
               <div className="bg-[#1a0f0d] border-2 border-[#b45309] rounded-xl p-3 space-y-2">
-                <div className="text-xs font-black uppercase text-[#fde68a] font-serif">Plundered Loot:</div>
+                <div className="text-xs font-black uppercase text-[#fde68a] font-serif">
+                  Plundered Loot:
+                </div>
                 <div className="flex items-center justify-center gap-4">
                   <div className="flex items-center gap-1.5 bg-[#4a2c17] border-2 border-[#b45309] px-3.5 py-1.5 rounded-xl text-[#fbbf24] font-extrabold">
                     <span className="text-lg">🪙</span>
@@ -109,7 +121,8 @@ export const AttackModal: React.FC<AttackModalProps> = ({ onClose }) => {
                   <div className="bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm border-2 border-[#064e3b] p-2.5 rounded-xl flex items-center justify-center gap-2 animate-bounce text-white">
                     <Sparkles className="w-5 h-5 text-[#facc15]" />
                     <span className="text-xs font-black uppercase tracking-wide">
-                      LOOTED CANNON! You stole an enemy Lv{battleResult.lootedCannonLevel} Cannon!
+                      LOOTED CANNON! You stole an enemy Lv
+                      {battleResult.lootedCannonLevel} Cannon!
                     </span>
                   </div>
                 )}
@@ -136,7 +149,9 @@ export const AttackModal: React.FC<AttackModalProps> = ({ onClose }) => {
               <div className="text-xl font-black text-[#fbbf24] font-serif tracking-widest uppercase animate-pulse">
                 💣 FIRING CANNONSALVO... 💣
               </div>
-              <p className="text-xs text-[#fde68a]">Calculating impact damage & looting pirate treasure...</p>
+              <p className="text-xs text-[#fde68a]">
+                Calculating impact damage & looting pirate treasure...
+              </p>
             </div>
           ) : (
             /* Target Selector Screen */
@@ -157,7 +172,7 @@ export const AttackModal: React.FC<AttackModalProps> = ({ onClose }) => {
 
               {/* Player list */}
               <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
-                {players.map(p => (
+                {players.map((p) => (
                   <PlayerTargetItem
                     key={p.id}
                     player={p}
@@ -198,15 +213,18 @@ const PlayerTargetItem: React.FC<{
   onSelect: () => void;
 }> = ({ player: p, isSelected, onSelect }) => {
   const rawShipImg = getShipImageForLevel(p.shipLevel);
-  const shipImg = useCutoutImage(rawShipImg, { mode: 'edge', keepInternalGreenAsBlack: p.shipLevel === 1 });
+  const shipImg = useCutoutImage(rawShipImg, {
+    mode: "edge",
+    keepInternalGreenAsBlack: p.shipLevel === 1,
+  });
 
   return (
     <div
       onClick={onSelect}
       className={`p-2.5 rounded-xl border-2 flex items-center justify-between cursor-pointer transition-all ${
         isSelected
-          ? 'bg-[#2b1d19] border-[#facc15] shadow-lg'
-          : 'bg-[#2b1d19] border-[#b45309] hover:border-[#fde68a]'
+          ? "bg-[#2b1d19] border-[#facc15] shadow-lg"
+          : "bg-[#2b1d19] border-[#b45309] hover:border-[#fde68a]"
       }`}
     >
       <div className="flex items-center gap-3">
@@ -220,10 +238,13 @@ const PlayerTargetItem: React.FC<{
         </div>
 
         <div>
-          <div className="text-sm font-black text-white font-serif">{p.name}</div>
+          <div className="text-sm font-black text-white font-serif">
+            {p.name}
+          </div>
           <div className="text-[10px] text-[#fde68a]/80">{p.title}</div>
           <div className="text-[10px] text-[#fbbf24] font-mono">
-            Ship Lv.{p.shipLevel} • {p.currentHp.toLocaleString()} HP ({p.shipCondition}%)
+            Ship Lv.{p.shipLevel} • {p.currentHp.toLocaleString()} HP (
+            {p.shipCondition}%)
           </div>
         </div>
       </div>
@@ -235,7 +256,7 @@ const PlayerTargetItem: React.FC<{
           </span>
         )}
         <span className="text-xs font-extrabold text-[#fde68a]">
-          {isSelected ? '🎯 Target' : 'Select'}
+          {isSelected ? "🎯 Target" : "Select"}
         </span>
       </div>
     </div>

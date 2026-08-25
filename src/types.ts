@@ -1,4 +1,4 @@
-export type ServerType = 'global' | 'private';
+export type ServerType = "global" | "private";
 
 export interface StepRecord {
   date: string; // YYYY-MM-DD
@@ -35,10 +35,9 @@ export interface Player {
   maxHp: number;
   cannonLevel: number; // We might want to remove this and replace with total damage, but let's just keep as average or max for display.
   cannonCount: number; // For backward compatibility in Player type if needed, or update to show damage.
-  shieldLevel: number; 
+  shieldLevel: number;
   isOnline: boolean;
 }
-
 
 export interface ServerInfo {
   code: string;
@@ -63,9 +62,9 @@ export interface BattleResult {
 export interface RaidLog {
   id: string;
   timestamp: string;
-  type: 'attack' | 'defense';
+  type: "attack" | "defense";
   opponentName: string;
-  outcome: 'victory' | 'defeat' | 'defended';
+  outcome: "victory" | "defeat" | "defended";
   coinsChange: number;
   damage: number;
   cannonLostOrWon?: string;
@@ -75,8 +74,8 @@ export interface Decoration {
   id: string;
   name: string;
   description: string;
-  currency: 'coins' | 'gems';
+  currency: "coins" | "gems";
   price: number;
   icon: string;
-  category: 'flag' | 'figurehead' | 'lantern' | 'effect';
+  category: "flag" | "figurehead" | "lantern" | "effect";
 }

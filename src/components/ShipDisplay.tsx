@@ -1,8 +1,12 @@
-import React from 'react';
-import { useGame } from '../context/GameContext';
-import { getShipImageForLevel, getCannonImageForLevel, getShieldImageForLevel } from '../assets';
-import { useCutoutImage } from '../utils/imageUtils';
-import { Shield, Sparkles, Heart, Wrench, ChevronUp } from 'lucide-react';
+import React from "react";
+import { useGame } from "../context/GameContext";
+import {
+  getShipImageForLevel,
+  getCannonImageForLevel,
+  getShieldImageForLevel,
+} from "../assets";
+import { useCutoutImage } from "../utils/imageUtils";
+import { Shield, Sparkles, Heart, Wrench, ChevronUp } from "lucide-react";
 
 interface ShipDisplayProps {
   onInspectShip?: () => void;
@@ -29,7 +33,10 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
   const rawShieldImg = getShieldImageForLevel(shieldLevel);
 
   // Opaque cutout hooks so ship/items have 0 background and 100% opaque bodies
-  const shipImg = useCutoutImage(rawShipImg, { mode: 'edge', keepInternalGreenAsBlack: shipLevel === 1 });
+  const shipImg = useCutoutImage(rawShipImg, {
+    mode: "edge",
+    keepInternalGreenAsBlack: shipLevel === 1,
+  });
   const cannonImg = useCutoutImage(rawCannonImg);
   const shieldImg = useCutoutImage(rawShieldImg);
 
@@ -56,9 +63,9 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
         )}
 
         {/* SHOP DECORATION OVERLAYS ATTACHED VISUALLY TO SHIP */}
-        
+
         {/* 1. Jolly Roger Flag / Crimson Sails on Top Mast */}
-        {equippedDecorations.includes('dec_jolly_roger') && (
+        {equippedDecorations.includes("dec_jolly_roger") && (
           <div
             className="absolute top-2 left-1/2 -translate-x-1/2 z-30 text-3xl sm:text-4xl animate-bounce drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
             title="Classic Jolly Roger Flag"
@@ -66,7 +73,7 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
             🏴‍☠️
           </div>
         )}
-        {equippedDecorations.includes('dec_spectral_sails') && (
+        {equippedDecorations.includes("dec_spectral_sails") && (
           <div
             className="absolute top-0 right-1/4 z-30 text-3xl sm:text-4xl animate-pulse drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
             title="Blood Red Pirate Sails"
@@ -76,7 +83,7 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
         )}
 
         {/* 2. Kraken Figurehead on Ship Bow (Front) */}
-        {equippedDecorations.includes('dec_kraken_figurehead') && (
+        {equippedDecorations.includes("dec_kraken_figurehead") && (
           <div
             className="absolute top-1/3 left-2 sm:left-4 z-30 text-3xl sm:text-4xl animate-pulse drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
             title="Golden Kraken Figurehead"
@@ -86,7 +93,7 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
         )}
 
         {/* 3. Captain's Parrot on Helm */}
-        {equippedDecorations.includes('dec_parrot_perch') && (
+        {equippedDecorations.includes("dec_parrot_perch") && (
           <div
             className="absolute top-1/2 right-2 sm:right-4 z-30 text-2xl sm:text-3xl animate-bounce drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]"
             title="Captain's Red Parrot"
@@ -96,12 +103,12 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
         )}
 
         {/* 4. Ghost Aura Glow around hull */}
-        {equippedDecorations.includes('dec_ghost_glow') && (
+        {equippedDecorations.includes("dec_ghost_glow") && (
           <div className="absolute inset-0 bg-emerald-400/20 rounded-full blur-lg pointer-events-none animate-pulse z-0" />
         )}
 
         {/* 5. Polished Brass Trim Sparkles */}
-        {equippedDecorations.includes('dec_golden_cannons') && (
+        {equippedDecorations.includes("dec_golden_cannons") && (
           <div className="absolute inset-0 z-20 pointer-events-none flex items-center justify-between px-6">
             <Sparkles className="w-6 h-6 text-[#facc15] animate-spin" />
             <Sparkles className="w-6 h-6 text-[#facc15] animate-ping" />
@@ -115,7 +122,7 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
             alt={`Lv.${shipLevel} Pirate Flagship`}
             referrerPolicy="no-referrer"
             className={`w-full h-full object-contain filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.85)] transition-all ${
-              isCritical ? 'grayscale opacity-60 contrast-125' : ''
+              isCritical ? "grayscale opacity-60 contrast-125" : ""
             }`}
           />
 
@@ -129,7 +136,9 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
                 className="w-5 h-5 sm:w-8 sm:h-8 object-contain"
               />
               <div className="flex flex-col">
-                <span className="text-[8px] sm:text-[10px] text-[#fde68a] font-bold uppercase leading-none">Deck Cannons</span>
+                <span className="text-[8px] sm:text-[10px] text-[#fde68a] font-bold uppercase leading-none">
+                  Deck Cannons
+                </span>
                 <span className="text-[10px] sm:text-xs font-black text-[#fbbf24] font-mono leading-tight">
                   Lv.{cannonLevel} x{cannonCount}
                 </span>
@@ -147,10 +156,10 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
             <span
               className={`font-mono text-xs px-2 py-0.5 rounded-lg font-black border ${
                 isCritical
-                  ? 'bg-red-950 text-red-300 border-red-600 animate-pulse'
+                  ? "bg-red-950 text-red-300 border-red-600 animate-pulse"
                   : isLow
-                  ? 'bg-[#2b1d19] text-[#fde68a] border-[#b45309]'
-                  : 'bg-[#064e3b] text-emerald-200 border-[#16a34a]'
+                    ? "bg-[#2b1d19] text-[#fde68a] border-[#b45309]"
+                    : "bg-[#064e3b] text-emerald-200 border-[#16a34a]"
               }`}
             >
               {shipCondition}% Condition
@@ -162,10 +171,10 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
             <div
               className={`h-full transition-all duration-300 rounded-full ${
                 isCritical
-                  ? 'bg-red-600'
+                  ? "bg-red-600"
                   : isLow
-                  ? 'bg-amber-500'
-                  : 'bg-emerald-500'
+                    ? "bg-amber-500"
+                    : "bg-emerald-500"
               }`}
               style={{ width: `${Math.max(0, Math.min(100, shipCondition))}%` }}
             />
@@ -174,7 +183,6 @@ export const ShipDisplay: React.FC<ShipDisplayProps> = ({
             </span>
           </div>
         </div>
-
       </div>
     </div>
   );

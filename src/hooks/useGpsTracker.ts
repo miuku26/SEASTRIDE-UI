@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from "react";
 
 export interface FootprintPoint {
   id: string;
@@ -26,7 +26,12 @@ export const DEFAULT_COORDS = {
 };
 
 // Calculate Haversine distance in meters between two lat/lng points
-export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+export function calculateDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+): number {
   const R = 6371000; // Earth's radius in meters
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
   const dLon = ((lon2 - lon1) * Math.PI) / 180;
@@ -41,8 +46,15 @@ export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2
 }
 
 // Calculate bearing in degrees from point 1 to point 2
-export function calculateBearing(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const y = Math.sin(((lon2 - lon1) * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180);
+export function calculateBearing(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+): number {
+  const y =
+    Math.sin(((lon2 - lon1) * Math.PI) / 180) *
+    Math.cos((lat2 * Math.PI) / 180);
   const x =
     Math.cos((lat1 * Math.PI) / 180) * Math.sin((lat2 * Math.PI) / 180) -
     Math.sin((lat1 * Math.PI) / 180) *
@@ -71,7 +83,7 @@ export function useGpsTracker(options?: UseGpsTrackerOptions) {
     const initialPoints: FootprintPoint[] = [];
     const baseLat = DEFAULT_COORDS.lat;
     const baseLng = DEFAULT_COORDS.lng;
-    
+
     // 8 initial trail steps leading to captain's current position
     for (let i = 0; i < 8; i++) {
       const angle = (i * 25 * Math.PI) / 180;
@@ -96,7 +108,8 @@ export function useGpsTracker(options?: UseGpsTrackerOptions) {
 
   const [isGpsActive, setIsGpsActive] = useState<boolean>(false);
   const [gpsError, setGpsError] = useState<string | null>(null);
-  const [totalDistanceTraveledMeters, setTotalDistanceTraveledMeters] = useState<number>(140);
+  const [totalDistanceTraveledMeters, setTotalDistanceTraveledMeters] =
+    useState<number>(140);
   const [isSimulatingWalk, setIsSimulatingWalk] = useState<boolean>(false);
 
   const prevLocationRef = useRef<GpsLocation | null>(null);
@@ -106,35 +119,38 @@ export function useGpsTracker(options?: UseGpsTrackerOptions) {
   const simAngleRef = useRef<number>(0);
 
   // Add footprint at coordinate
-  const addFootprint = useCallback((lat: number, lng: number, heading: number) => {
-    stepCountRef.current += 1;
-    const isLeft = stepCountRef.current % 2 === 0;
+  const addFootprint = useCallback(
+    (lat: number, lng: number, heading: number) => {
+      stepCountRef.current += 1;
+      const isLeft = stepCountRef.current % 2 === 0;
 
-    // Slight lateral offset for left vs right foot (~0.4m perpendicular)
-    const perpAngle = (heading + (isLeft ? -90 : 90)) * (Math.PI / 180);
-    const lateralOffset = 0.0000035; // approx 0.35 meters
-    const footLat = lat + Math.cos(perpAngle) * lateralOffset;
-    const footLng = lng + Math.sin(perpAngle) * lateralOffset;
+      // Slight lateral offset for left vs right foot (~0.4m perpendicular)
+      const perpAngle = (heading + (isLeft ? -90 : 90)) * (Math.PI / 180);
+      const lateralOffset = 0.0000035; // approx 0.35 meters
+      const footLat = lat + Math.cos(perpAngle) * lateralOffset;
+      const footLng = lng + Math.sin(perpAngle) * lateralOffset;
 
-    const newPoint: FootprintPoint = {
-      id: `foot_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
-      lat: footLat,
-      lng: footLng,
-      heading,
-      isLeft,
-      timestamp: Date.now(),
-      stepIndex: stepCountRef.current,
-    };
+      const newPoint: FootprintPoint = {
+        id: `foot_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+        lat: footLat,
+        lng: footLng,
+        heading,
+        isLeft,
+        timestamp: Date.now(),
+        stepIndex: stepCountRef.current,
+      };
 
-    setFootprints(prev => {
-      // Keep up to latest 150 footprints for buttery smooth performance
-      const updated = [...prev, newPoint];
-      if (updated.length > 150) {
-        return updated.slice(updated.length - 150);
-      }
-      return updated;
-    });
-  }, []);
+      setFootprints((prev) => {
+        // Keep up to latest 150 footprints for buttery smooth performance
+        const updated = [...prev, newPoint];
+        if (updated.length > 150) {
+          return updated.slice(updated.length - 150);
+        }
+        return updated;
+      });
+    },
+    [],
+  );
 
   // Update position handler
   const handlePositionUpdate = useCallback(
@@ -147,7 +163,7 @@ export function useGpsTracker(options?: UseGpsTrackerOptions) {
           prevLocationRef.current.lat,
           prevLocationRef.current.lng,
           latitude,
-          longitude
+          longitude,
         );
 
         if (dist > 1.2) {
@@ -156,10 +172,10 @@ export function useGpsTracker(options?: UseGpsTrackerOptions) {
             prevLocationRef.current.lat,
             prevLocationRef.current.lng,
             latitude,
-            longitude
+            longitude,
           );
 
-          setTotalDistanceTraveledMeters(prev => prev + dist);
+          setTotalDistanceTraveledMeters((prev) => prev + dist);
           addFootprint(latitude, longitude, calculatedHeading || 0);
 
           if (options?.onStepLogged) {
@@ -174,7 +190,10 @@ export function useGpsTracker(options?: UseGpsTrackerOptions) {
         lng: longitude,
         accuracy: accuracy || 10,
         speed: speed || 0,
-        heading: calculatedHeading !== null ? calculatedHeading : prevLocationRef.current?.heading || 0,
+        heading:
+          calculatedHeading !== null
+            ? calculatedHeading
+            : prevLocationRef.current?.heading || 0,
         timestamp: pos.timestamp,
       };
 
@@ -183,13 +202,13 @@ export function useGpsTracker(options?: UseGpsTrackerOptions) {
       setIsGpsActive(true);
       setGpsError(null);
     },
-    [addFootprint, options]
+    [addFootprint, options],
   );
 
   // Start GPS watching
   const startGpsTracking = useCallback(() => {
-    if (typeof navigator === 'undefined' || !navigator.geolocation) {
-      setGpsError('Geolocation is not supported by this browser.');
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setGpsError("Geolocation is not supported by this browser.");
       return;
     }
 
@@ -199,10 +218,10 @@ export function useGpsTracker(options?: UseGpsTrackerOptions) {
         handlePositionUpdate(pos);
       },
       (err) => {
-        console.warn('GPS initial position warning:', err.message);
+        console.warn("GPS initial position warning:", err.message);
         setGpsError(err.message);
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
     );
 
     // Watch position continuously
@@ -215,20 +234,24 @@ export function useGpsTracker(options?: UseGpsTrackerOptions) {
         handlePositionUpdate(pos);
       },
       (err) => {
-        console.warn('GPS watch error:', err.message);
+        console.warn("GPS watch error:", err.message);
         setGpsError(err.message);
       },
       {
         enableHighAccuracy: true,
         timeout: 15000,
         maximumAge: 1000,
-      }
+      },
     );
     setIsGpsActive(true);
   }, [handlePositionUpdate]);
 
   const stopGpsTracking = useCallback(() => {
-    if (watchIdRef.current !== null && typeof navigator !== 'undefined' && navigator.geolocation) {
+    if (
+      watchIdRef.current !== null &&
+      typeof navigator !== "undefined" &&
+      navigator.geolocation
+    ) {
       navigator.geolocation.clearWatch(watchIdRef.current);
       watchIdRef.current = null;
     }
@@ -236,27 +259,31 @@ export function useGpsTracker(options?: UseGpsTrackerOptions) {
   }, []);
 
   // Step event integration: when user triggers a pedometer step, plot a footprint ahead along heading
-  const logPedometerStep = useCallback((stepHeading?: number) => {
-    const headingToUse = stepHeading !== undefined ? stepHeading : currentLocation.heading || 0;
-    const stepDistance = 0.000007; // approx 0.78 meters in lat/lon
-    const rad = (headingToUse * Math.PI) / 180;
+  const logPedometerStep = useCallback(
+    (stepHeading?: number) => {
+      const headingToUse =
+        stepHeading !== undefined ? stepHeading : currentLocation.heading || 0;
+      const stepDistance = 0.000007; // approx 0.78 meters in lat/lon
+      const rad = (headingToUse * Math.PI) / 180;
 
-    const nextLat = currentLocation.lat + Math.cos(rad) * stepDistance;
-    const nextLng = currentLocation.lng + Math.sin(rad) * stepDistance;
+      const nextLat = currentLocation.lat + Math.cos(rad) * stepDistance;
+      const nextLng = currentLocation.lng + Math.sin(rad) * stepDistance;
 
-    const nextLoc: GpsLocation = {
-      ...currentLocation,
-      lat: nextLat,
-      lng: nextLng,
-      heading: headingToUse,
-      timestamp: Date.now(),
-    };
+      const nextLoc: GpsLocation = {
+        ...currentLocation,
+        lat: nextLat,
+        lng: nextLng,
+        heading: headingToUse,
+        timestamp: Date.now(),
+      };
 
-    setCurrentLocation(nextLoc);
-    prevLocationRef.current = nextLoc;
-    addFootprint(nextLat, nextLng, headingToUse);
-    setTotalDistanceTraveledMeters(prev => prev + 0.78);
-  }, [currentLocation, addFootprint]);
+      setCurrentLocation(nextLoc);
+      prevLocationRef.current = nextLoc;
+      addFootprint(nextLat, nextLng, headingToUse);
+      setTotalDistanceTraveledMeters((prev) => prev + 0.78);
+    },
+    [currentLocation, addFootprint],
+  );
 
   // Simulated GPS Voyage Walk (for instant demonstration & desktop users)
   const toggleSimulateWalk = useCallback(() => {
@@ -271,17 +298,17 @@ export function useGpsTracker(options?: UseGpsTrackerOptions) {
       let angle = simAngleRef.current;
 
       simIntervalRef.current = window.setInterval(() => {
-        angle += (Math.random() * 20 - 8); // Natural winding walk curve
+        angle += Math.random() * 20 - 8; // Natural winding walk curve
         simAngleRef.current = (angle + 360) % 360;
 
-        setCurrentLocation(prev => {
+        setCurrentLocation((prev) => {
           const stepDist = 0.000009; // ~1 meter per step
           const rad = (simAngleRef.current * Math.PI) / 180;
           const nextLat = prev.lat + Math.cos(rad) * stepDist;
           const nextLng = prev.lng + Math.sin(rad) * stepDist;
 
           addFootprint(nextLat, nextLng, simAngleRef.current);
-          setTotalDistanceTraveledMeters(d => d + 1.1);
+          setTotalDistanceTraveledMeters((d) => d + 1.1);
 
           if (options?.onStepLogged) {
             options.onStepLogged(1);

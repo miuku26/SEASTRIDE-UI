@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useGame } from '../context/GameContext';
-import { DECORATIONS } from '../data/decorations';
-import { ShoppingBag, X, Tv, Check, Sparkles, Play } from 'lucide-react';
-import { CurrencyDisplay } from './CurrencyDisplay';
+import React, { useState } from "react";
+import { useGame } from "../context/GameContext";
+import { DECORATIONS } from "../data/decorations";
+import { ShoppingBag, X, Tv, Check, Sparkles, Play } from "lucide-react";
+import { CurrencyDisplay } from "./CurrencyDisplay";
 
 interface ShopModalProps {
   onClose: () => void;
@@ -16,7 +16,7 @@ export const ShopModal: React.FC<ShopModalProps> = ({ onClose }) => {
     equippedDecorations,
     buyDecoration,
     toggleEquipDecoration,
-    watchAdForGems
+    watchAdForGems,
   } = useGame();
 
   const [isWatchingAd, setIsWatchingAd] = useState<boolean>(false);
@@ -27,7 +27,7 @@ export const ShopModal: React.FC<ShopModalProps> = ({ onClose }) => {
     setAdTimer(5);
 
     const interval = setInterval(() => {
-      setAdTimer(prev => {
+      setAdTimer((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
           setIsWatchingAd(false);
@@ -42,7 +42,6 @@ export const ShopModal: React.FC<ShopModalProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 select-none">
       <div className="bg-[#4a2c17] border-8 border-[#2b1d19] rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative text-amber-100 flex flex-col max-h-[90vh]">
-        
         {/* Header */}
         <div className="bg-[#2b1d19] border-b-4 border-[#4a2c17] p-3.5 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -65,7 +64,6 @@ export const ShopModal: React.FC<ShopModalProps> = ({ onClose }) => {
 
         {/* Content */}
         <div className="p-4 overflow-y-auto space-y-4 flex-1">
-          
           {/* Watch Ad Banner for Gems */}
           <div className="bg-[#2b1d19] border-4 border-[#b45309] rounded-2xl p-4 text-center shadow-xl space-y-2">
             <div className="flex items-center justify-center gap-1.5 text-xs font-serif font-black uppercase text-sky-300 tracking-wider">
@@ -104,7 +102,7 @@ export const ShopModal: React.FC<ShopModalProps> = ({ onClose }) => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {DECORATIONS.map(dec => {
+              {DECORATIONS.map((dec) => {
                 const isOwned = ownedDecorations.includes(dec.id);
                 const isEquipped = equippedDecorations.includes(dec.id);
 
@@ -113,10 +111,10 @@ export const ShopModal: React.FC<ShopModalProps> = ({ onClose }) => {
                     key={dec.id}
                     className={`p-3 rounded-2xl border-2 flex flex-col justify-between gap-2 ${
                       isEquipped
-                        ? 'bg-[#2b1d19] border-[#facc15] shadow-lg'
+                        ? "bg-[#2b1d19] border-[#facc15] shadow-lg"
                         : isOwned
-                        ? 'bg-[#2b1d19] border-[#b45309]'
-                        : 'bg-[#2b1d19] border-[#4a2c17]'
+                          ? "bg-[#2b1d19] border-[#b45309]"
+                          : "bg-[#2b1d19] border-[#4a2c17]"
                     }`}
                   >
                     <div className="flex items-start gap-2.5">
@@ -124,14 +122,20 @@ export const ShopModal: React.FC<ShopModalProps> = ({ onClose }) => {
                         {dec.icon}
                       </span>
                       <div>
-                        <div className="text-xs font-black text-white font-serif">{dec.name}</div>
-                        <div className="text-[10px] text-[#fde68a]/80 leading-tight mt-0.5">{dec.description}</div>
+                        <div className="text-xs font-black text-white font-serif">
+                          {dec.name}
+                        </div>
+                        <div className="text-[10px] text-[#fde68a]/80 leading-tight mt-0.5">
+                          {dec.description}
+                        </div>
                       </div>
                     </div>
 
                     <div className="flex justify-between items-center pt-1 border-t border-[#4a2c17]">
                       <span className="text-[10px] font-bold uppercase text-[#fbbf24]">
-                        {dec.currency === 'coins' ? `${dec.price} 🪙` : `${dec.price} 💎`}
+                        {dec.currency === "coins"
+                          ? `${dec.price} 🪙`
+                          : `${dec.price} 💎`}
                       </span>
 
                       {isOwned ? (
@@ -139,16 +143,20 @@ export const ShopModal: React.FC<ShopModalProps> = ({ onClose }) => {
                           onClick={() => toggleEquipDecoration(dec.id)}
                           className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase italic border-b-2 ${
                             isEquipped
-                              ? 'bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm border-[#064e3b] text-white'
-                              : 'bg-[#4a2c17] border-[#2b1d19] text-[#fde68a]'
+                              ? "bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm border-[#064e3b] text-white"
+                              : "bg-[#4a2c17] border-[#2b1d19] text-[#fde68a]"
                           }`}
                         >
-                          {isEquipped && <Check className="w-3 h-3 inline mr-1" />}
-                          <span>{isEquipped ? 'Equipped' : 'Equip'}</span>
+                          {isEquipped && (
+                            <Check className="w-3 h-3 inline mr-1" />
+                          )}
+                          <span>{isEquipped ? "Equipped" : "Equip"}</span>
                         </button>
                       ) : (
                         <button
-                          onClick={() => buyDecoration(dec.id, dec.currency, dec.price)}
+                          onClick={() =>
+                            buyDecoration(dec.id, dec.currency, dec.price)
+                          }
                           className="px-3 py-1 rounded-lg text-[10px] font-black uppercase italic bg-[#b45309] hover:bg-[#d97706] border-b-2 border-[#2b1d19] text-white shadow active:translate-y-0.5"
                         >
                           Buy Item
@@ -160,7 +168,6 @@ export const ShopModal: React.FC<ShopModalProps> = ({ onClose }) => {
               })}
             </div>
           </div>
-
         </div>
       </div>
     </div>

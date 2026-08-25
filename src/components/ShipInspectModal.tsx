@@ -1,8 +1,12 @@
-import React from 'react';
-import { useGame } from '../context/GameContext';
-import { getShipImageForLevel, getCannonImageForLevel, getShieldImageForLevel } from '../assets';
-import { useCutoutImage } from '../utils/imageUtils';
-import { X, Shield, Wrench, Heart } from 'lucide-react';
+import React from "react";
+import { useGame } from "../context/GameContext";
+import {
+  getShipImageForLevel,
+  getCannonImageForLevel,
+  getShieldImageForLevel,
+} from "../assets";
+import { useCutoutImage } from "../utils/imageUtils";
+import { X, Shield, Wrench, Heart } from "lucide-react";
 
 interface ShipInspectModalProps {
   onClose: () => void;
@@ -10,7 +14,11 @@ interface ShipInspectModalProps {
   onOpenUpgrades: () => void;
 }
 
-export const ShipInspectModal: React.FC<ShipInspectModalProps> = ({ onClose, onOpenRepair, onOpenUpgrades }) => {
+export const ShipInspectModal: React.FC<ShipInspectModalProps> = ({
+  onClose,
+  onOpenRepair,
+  onOpenUpgrades,
+}) => {
   const {
     shipLevel,
     shipCondition,
@@ -21,14 +29,16 @@ export const ShipInspectModal: React.FC<ShipInspectModalProps> = ({ onClose, onO
     shieldLevel,
   } = useGame();
 
-  const shipImg = useCutoutImage(getShipImageForLevel(shipLevel), { mode: 'edge', keepInternalGreenAsBlack: shipLevel === 1 });
+  const shipImg = useCutoutImage(getShipImageForLevel(shipLevel), {
+    mode: "edge",
+    keepInternalGreenAsBlack: shipLevel === 1,
+  });
   const cannonImg = useCutoutImage(getCannonImageForLevel(cannonLevel));
   const shieldImg = useCutoutImage(getShieldImageForLevel(shieldLevel));
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 select-none">
       <div className="bg-[#4a2c17] border-8 border-[#2b1d19] rounded-3xl w-full max-w-md overflow-hidden shadow-2xl relative text-amber-100 flex flex-col">
-        
         {/* Header */}
         <div className="bg-[#2b1d19] border-b-4 border-[#4a2c17] p-3.5 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -48,7 +58,6 @@ export const ShipInspectModal: React.FC<ShipInspectModalProps> = ({ onClose, onO
 
         {/* Content */}
         <div className="p-4 space-y-4">
-
           {/* Rendered Ship Display */}
           <div className="bg-[#2b1d19] border-4 border-[#b45309] rounded-2xl p-4 flex flex-col items-center relative overflow-hidden">
             <img
@@ -63,7 +72,8 @@ export const ShipInspectModal: React.FC<ShipInspectModalProps> = ({ onClose, onO
             </div>
 
             <div className="text-xs text-[#fde68a] font-mono mt-0.5">
-              Hull HP: {shipCurrentHp.toLocaleString()} / {shipMaxHp.toLocaleString()} HP
+              Hull HP: {shipCurrentHp.toLocaleString()} /{" "}
+              {shipMaxHp.toLocaleString()} HP
             </div>
           </div>
 
@@ -77,10 +87,10 @@ export const ShipInspectModal: React.FC<ShipInspectModalProps> = ({ onClose, onO
               <span
                 className={`font-mono text-xs px-2.5 py-0.5 rounded-lg font-black ${
                   shipCondition <= 0
-                    ? 'bg-red-950 text-red-300 border border-red-600'
+                    ? "bg-red-950 text-red-300 border border-red-600"
                     : shipCondition <= 50
-                    ? 'bg-[#4a2c17] text-[#fde68a] border border-[#b45309]'
-                    : 'bg-[#064e3b] text-emerald-200 border border-[#16a34a]'
+                      ? "bg-[#4a2c17] text-[#fde68a] border border-[#b45309]"
+                      : "bg-[#064e3b] text-emerald-200 border border-[#16a34a]"
                 }`}
               >
                 {shipCondition}% Condition
@@ -91,10 +101,10 @@ export const ShipInspectModal: React.FC<ShipInspectModalProps> = ({ onClose, onO
               <div
                 className={`h-full transition-all duration-300 rounded-full ${
                   shipCondition <= 0
-                    ? 'bg-red-600'
+                    ? "bg-red-600"
                     : shipCondition <= 50
-                    ? 'bg-[#fbbf24]'
-                    : 'bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm'
+                      ? "bg-[#fbbf24]"
+                      : "bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm"
                 }`}
                 style={{ width: `${shipCondition}%` }}
               />
@@ -111,7 +121,9 @@ export const ShipInspectModal: React.FC<ShipInspectModalProps> = ({ onClose, onO
                 className="w-8 h-8 object-contain"
               />
               <div>
-                <div className="text-[10px] text-[#fde68a]/80 uppercase font-bold">Cannons</div>
+                <div className="text-[10px] text-[#fde68a]/80 uppercase font-bold">
+                  Cannons
+                </div>
                 <div className="text-xs font-black text-white">
                   Lv.{cannonLevel} x{cannonCount} Mounted
                 </div>
@@ -126,9 +138,13 @@ export const ShipInspectModal: React.FC<ShipInspectModalProps> = ({ onClose, onO
                 className="w-8 h-8 object-contain"
               />
               <div>
-                <div className="text-[10px] text-[#fde68a]/80 uppercase font-bold">Shield Aura</div>
+                <div className="text-[10px] text-[#fde68a]/80 uppercase font-bold">
+                  Shield Aura
+                </div>
                 <div className="text-xs font-black text-white">
-                  {shieldLevel > 0 ? `Lv.${shieldLevel} Shield Active` : 'No Shield'}
+                  {shieldLevel > 0
+                    ? `Lv.${shieldLevel} Shield Active`
+                    : "No Shield"}
                 </div>
               </div>
             </div>
@@ -158,7 +174,6 @@ export const ShipInspectModal: React.FC<ShipInspectModalProps> = ({ onClose, onO
               <span>Upgrade Ship</span>
             </button>
           </div>
-
         </div>
       </div>
     </div>

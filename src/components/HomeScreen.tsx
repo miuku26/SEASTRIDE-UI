@@ -1,36 +1,91 @@
-import React, { useState } from 'react';
-import { useGame } from '../context/GameContext';
-import { Footprints, CircleDollarSign, Flame, Compass, ChevronRight, Route, Timer, Swords, Calendar, TrendingUp, Shield, Map as MapIcon, BarChart3 } from 'lucide-react';
-import { usePedometer } from '../hooks/usePedometer';
-import { StepMapView } from './StepMapView';
-import { soundFx } from '../utils/audio';
+import React, { useState } from "react";
+import { useGame } from "../context/GameContext";
+import {
+  Footprints,
+  CircleDollarSign,
+  Flame,
+  Compass,
+  ChevronRight,
+  Route,
+  Timer,
+  Swords,
+  Calendar,
+  TrendingUp,
+  Shield,
+  Map as MapIcon,
+  BarChart3,
+} from "lucide-react";
+import { usePedometer } from "../hooks/usePedometer";
+import { StepMapView } from "./StepMapView";
+import { soundFx } from "../utils/audio";
 
 const DAILY_QUESTS = [
-  { id: 'q1', title: 'Morning Stroll', desc: 'Walk 1,500 steps', target: 1500, xp: 50 },
-  { id: 'q2', title: 'Afternoon Sprint', desc: 'Walk 3,000 steps', target: 3000, xp: 100 },
-  { id: 'q3', title: 'Treasure Hunter', desc: 'Walk 5,000 steps', target: 5000, xp: 150 },
-  { id: 'q4', title: 'Ocean Voyager', desc: 'Walk 10,000 steps', target: 10000, xp: 300 },
+  {
+    id: "q1",
+    title: "Morning Stroll",
+    desc: "Walk 1,500 steps",
+    target: 1500,
+    xp: 50,
+  },
+  {
+    id: "q2",
+    title: "Afternoon Sprint",
+    desc: "Walk 3,000 steps",
+    target: 3000,
+    xp: 100,
+  },
+  {
+    id: "q3",
+    title: "Treasure Hunter",
+    desc: "Walk 5,000 steps",
+    target: 5000,
+    xp: 150,
+  },
+  {
+    id: "q4",
+    title: "Ocean Voyager",
+    desc: "Walk 10,000 steps",
+    target: 10000,
+    xp: 300,
+  },
 ];
 
 export const HomeScreen: React.FC = () => {
-  const { totalStepsToday, addSteps, shipLevel, profile, stepRecords, stepStats, questIndex, questXp, claimedQuests, claimQuest, playerLevel, playerXp } = useGame();
-  
-  const [activeTab, setActiveTab] = useState<'map' | 'chart'>('map');
-  const [chartMode, setChartMode] = useState<'day' | 'week' | 'month'>('week');
+  const {
+    totalStepsToday,
+    addSteps,
+    shipLevel,
+    profile,
+    stepRecords,
+    stepStats,
+    questIndex,
+    questXp,
+    claimedQuests,
+    claimQuest,
+    playerLevel,
+    playerXp,
+  } = useGame();
+
+  const [activeTab, setActiveTab] = useState<"map" | "chart">("map");
+  const [chartMode, setChartMode] = useState<"day" | "week" | "month">("week");
   const [animating, setAnimating] = useState(false);
 
-  const currentQuest = DAILY_QUESTS[Math.min(questIndex, DAILY_QUESTS.length - 1)];
+  const currentQuest =
+    DAILY_QUESTS[Math.min(questIndex, DAILY_QUESTS.length - 1)];
   const isAllQuestsDone = questIndex >= DAILY_QUESTS.length;
   const questProgress = Math.min(totalStepsToday, currentQuest.target);
-  const isClaimable = !isAllQuestsDone && questProgress >= currentQuest.target && !claimedQuests.has(currentQuest.id);
+  const isClaimable =
+    !isAllQuestsDone &&
+    questProgress >= currentQuest.target &&
+    !claimedQuests.has(currentQuest.id);
 
   const handleClaimQuest = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     if (!isClaimable || animating) return;
-    
+
     soundFx.playVictory();
     setAnimating(true);
-    
+
     setTimeout(() => {
       claimQuest(currentQuest.id, currentQuest.xp);
       setTimeout(() => {
@@ -41,29 +96,29 @@ export const HomeScreen: React.FC = () => {
 
   // Chart data calculation
   const dayData = [
-    { label: '6am', steps: 400 },
-    { label: '9am', steps: 1200 },
-    { label: '12pm', steps: 850 },
-    { label: '3pm', steps: 1100 },
-    { label: '6pm', steps: 700 },
-    { label: '9pm', steps: 300 },
+    { label: "6am", steps: 400 },
+    { label: "9am", steps: 1200 },
+    { label: "12pm", steps: 850 },
+    { label: "3pm", steps: 1100 },
+    { label: "6pm", steps: 700 },
+    { label: "9pm", steps: 300 },
   ];
 
-  const weekData = stepRecords.map(r => ({
+  const weekData = stepRecords.map((r) => ({
     label: r.dayOfWeek,
     steps: r.steps,
   }));
 
   const monthData = [
-    { label: 'Wk 1', steps: 48000 },
-    { label: 'Wk 2', steps: 52000 },
-    { label: 'Wk 3', steps: 45000 },
-    { label: 'Wk 4', steps: totalStepsToday + 32000 },
+    { label: "Wk 1", steps: 48000 },
+    { label: "Wk 2", steps: 52000 },
+    { label: "Wk 3", steps: 45000 },
+    { label: "Wk 4", steps: totalStepsToday + 32000 },
   ];
 
-  const activeChart = chartMode === 'day' ? dayData : chartMode === 'week' ? weekData : monthData;
-  const maxChartSteps = Math.max(...activeChart.map(d => d.steps), 1000);
-
+  const activeChart =
+    chartMode === "day" ? dayData : chartMode === "week" ? weekData : monthData;
+  const maxChartSteps = Math.max(...activeChart.map((d) => d.steps), 1000);
 
   // Integrated Pedometer Sensor Hook
   const { permissionStatus, requestPermission } = usePedometer({
@@ -77,7 +132,7 @@ export const HomeScreen: React.FC = () => {
   const distanceKm = (totalStepsToday * 0.0008).toFixed(1);
   const activeTimeMin = Math.round(totalStepsToday * 0.012);
   const goldEarnedToday = Math.floor(totalStepsToday / 100) * 10;
-  
+
   // Mock weekly statistics based on requirements
   const weeklyDistanceKm = 18.6;
   const weeklyGoldEarned = 1450;
@@ -87,7 +142,7 @@ export const HomeScreen: React.FC = () => {
   const maxXp = 500;
 
   // If user hasn't granted motion pedometer permission yet, show permission prompt box only
-  if (permissionStatus !== 'granted') {
+  if (permissionStatus !== "granted") {
     return (
       <div className="p-4 max-w-md mx-auto my-auto text-amber-100 select-none flex-1 flex flex-col justify-center items-center">
         <div className="bg-[#4a2c17] border-2 sm:border-4 border-[#2b1d19] rounded-2xl p-5 sm:p-6 shadow-2xl text-center space-y-4 w-full relative overflow-hidden">
@@ -104,8 +159,9 @@ export const HomeScreen: React.FC = () => {
               Allow Motion Pedometer
             </h3>
             <p className="text-xs sm:text-sm text-amber-100/90 leading-relaxed">
-              SeaStride uses your phone's motion sensor to track physical footsteps while walking.
-              Allow pedometer access to unlock your step box, earn Gold Coins, and voyage the seas!
+              SeaStride uses your phone's motion sensor to track physical
+              footsteps while walking. Allow pedometer access to unlock your
+              step box, earn Gold Coins, and voyage the seas!
             </p>
           </div>
 
@@ -125,59 +181,71 @@ export const HomeScreen: React.FC = () => {
   const circleRadius = 110;
   const circleCircumference = 2 * Math.PI * circleRadius;
   const stepGoal = 10000;
-  const progressOffset = circleCircumference - (circleCircumference * Math.min(totalStepsToday, stepGoal)) / stepGoal;
+  const progressOffset =
+    circleCircumference -
+    (circleCircumference * Math.min(totalStepsToday, stepGoal)) / stepGoal;
 
   return (
     <div className="p-4 sm:p-6 pb-24 sm:pb-32 max-w-2xl mx-auto text-amber-100 select-none flex-1 flex flex-col w-full font-serif">
-      
       {/* Header section */}
       <div className="flex justify-between items-start mb-6">
         <div>
           <p className="text-amber-100/70 text-sm font-medium">Welcome back</p>
-          <h1 className="text-2xl sm:text-3xl font-bold text-amber-100 mt-0.5">{profile?.username || 'Wanderer'}</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-amber-100 mt-0.5">
+            {profile?.username || "Wanderer"}
+          </h1>
         </div>
         <div className="flex items-center gap-1.5 bg-[#2b1d19] border-2 border-[#b45309] rounded-full px-3 py-1.5 shadow-md">
           <Flame className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 fill-orange-500" />
-          <span className="text-sm sm:text-base font-bold text-amber-100">5</span>
+          <span className="text-sm sm:text-base font-bold text-amber-100">
+            5
+          </span>
         </div>
       </div>
 
       {/* Level & XP Progress Card */}
       <div className="tutorial-level bg-[#f0dec1] text-[#4a2c17] border-4 border-[#8b5a33] rounded-2xl p-4 sm:p-5 mb-8 shadow-[0_6px_0_#4a2c17] relative">
         <div className="flex justify-between items-center mb-3">
-          <span className="font-extrabold text-[#4a2c17] tracking-wider text-sm sm:text-base uppercase drop-shadow-sm">LEVEL {playerLevel}</span>
-          <span className="text-sm font-black text-[#8b5a33]">{currentXp} / {maxXp} XP</span>
+          <span className="font-extrabold text-[#4a2c17] tracking-wider text-sm sm:text-base uppercase drop-shadow-sm">
+            LEVEL {playerLevel}
+          </span>
+          <span className="text-sm font-black text-[#8b5a33]">
+            {currentXp} / {maxXp} XP
+          </span>
         </div>
         <div className="w-full bg-[#d1b794] h-3 sm:h-4 rounded-full overflow-hidden border-2 border-[#8b5a33] shadow-inner mt-2">
-          <div 
-             className="bg-[#93bb44] h-full shadow-[inset_0_-4px_rgba(0,0,0,0.2)] transition-all duration-500 rounded-full"
-             style={{ width: `${(currentXp / maxXp) * 100}%` }} 
-           />
+          <div
+            className="bg-[#93bb44] h-full shadow-[inset_0_-4px_rgba(0,0,0,0.2)] transition-all duration-500 rounded-full"
+            style={{ width: `${(currentXp / maxXp) * 100}%` }}
+          />
         </div>
       </div>
 
       {/* Steps Circle Hero */}
       <div className="flex justify-center mb-10 sm:mb-12 relative">
         <div className="relative w-64 h-64 sm:w-72 sm:h-72">
-          <svg viewBox="0 0 256 256" className="w-full h-full transform -rotate-90 filter drop-shadow-xl">
-            <circle 
-              cx="128" 
-              cy="128" 
-              r={circleRadius} 
-              stroke="#1c0a02" 
-              strokeWidth="16" 
-              fill="transparent" 
+          <svg
+            viewBox="0 0 256 256"
+            className="w-full h-full transform -rotate-90 filter drop-shadow-xl"
+          >
+            <circle
+              cx="128"
+              cy="128"
+              r={circleRadius}
+              stroke="#1c0a02"
+              strokeWidth="16"
+              fill="transparent"
             />
-            <circle 
-              cx="128" 
-              cy="128" 
-              r={circleRadius} 
-              stroke="#16a34a" 
-              strokeWidth="16" 
-              fill="transparent" 
-              strokeDasharray={circleCircumference} 
-              strokeDashoffset={progressOffset} 
-              strokeLinecap="round" 
+            <circle
+              cx="128"
+              cy="128"
+              r={circleRadius}
+              stroke="#16a34a"
+              strokeWidth="16"
+              fill="transparent"
+              strokeDasharray={circleCircumference}
+              strokeDashoffset={progressOffset}
+              strokeLinecap="round"
               className="transition-all duration-1000 ease-out"
             />
           </svg>
@@ -187,7 +255,9 @@ export const HomeScreen: React.FC = () => {
             <span className="text-5xl sm:text-6xl font-black text-[#fbbf24] tracking-tight drop-shadow-lg">
               {totalStepsToday.toLocaleString()}
             </span>
-            <span className="text-sm sm:text-base font-bold text-[#fde68a] mt-2 uppercase tracking-widest opacity-80">Goal: 10,000</span>
+            <span className="text-sm sm:text-base font-bold text-[#fde68a] mt-2 uppercase tracking-widest opacity-80">
+              Goal: 10,000
+            </span>
           </div>
         </div>
       </div>
@@ -204,7 +274,9 @@ export const HomeScreen: React.FC = () => {
           </div>
           <div className="font-black text-[#4a2c17] text-xl sm:text-3xl drop-shadow-md flex items-baseline gap-1 relative z-10">
             {distanceKm}
-            <span className="text-[10px] sm:text-xs text-[#8b5a33] font-black uppercase">km</span>
+            <span className="text-[10px] sm:text-xs text-[#8b5a33] font-black uppercase">
+              km
+            </span>
           </div>
         </div>
         <div className="bg-[#f0dec1] text-[#4a2c17] border-4 border-[#8b5a33] rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center text-center shadow-[0_4px_0_#4a2c17] relative overflow-hidden group hover:translate-y-[-2px] transition-all">
@@ -217,7 +289,9 @@ export const HomeScreen: React.FC = () => {
           </div>
           <div className="font-black text-[#4a2c17] text-xl sm:text-3xl drop-shadow-md flex items-baseline gap-1 relative z-10">
             {caloriesBurned}
-            <span className="text-[10px] sm:text-xs text-[#8b5a33] font-black uppercase">kcal</span>
+            <span className="text-[10px] sm:text-xs text-[#8b5a33] font-black uppercase">
+              kcal
+            </span>
           </div>
         </div>
         <div className="bg-[#f0dec1] text-[#4a2c17] border-4 border-[#8b5a33] rounded-2xl p-3 sm:p-4 flex flex-col items-center justify-center text-center shadow-[0_4px_0_#4a2c17] relative overflow-hidden group hover:translate-y-[-2px] transition-all">
@@ -230,15 +304,19 @@ export const HomeScreen: React.FC = () => {
           </div>
           <div className="font-black text-[#4a2c17] text-xl sm:text-3xl drop-shadow-md flex items-baseline gap-1 relative z-10">
             {activeTimeMin}
-            <span className="text-[10px] sm:text-xs text-[#8b5a33] font-black uppercase">min</span>
+            <span className="text-[10px] sm:text-xs text-[#8b5a33] font-black uppercase">
+              min
+            </span>
           </div>
         </div>
       </div>
 
       {/* TODAY'S BOOTY & SAFETY Card */}
       <div className="bg-[#4a2c17] border-2 border-[#2b1d19] rounded-2xl p-5 mb-8 shadow-xl">
-        <h2 className="text-sm sm:text-base font-black text-amber-100 uppercase tracking-widest mb-4">TODAY'S BOOTY & SAFETY</h2>
-        
+        <h2 className="text-sm sm:text-base font-black text-amber-100 uppercase tracking-widest mb-4">
+          TODAY'S BOOTY & SAFETY
+        </h2>
+
         <div className="flex justify-between items-center mb-3">
           <div className="flex items-center gap-2 text-amber-100/90 font-bold text-xs sm:text-sm tracking-wide">
             <CircleDollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-[#facc15]" />
@@ -252,74 +330,100 @@ export const HomeScreen: React.FC = () => {
         <hr className="border-t-2 border-dashed border-[#b45309]/50 my-4" />
 
         <div className="flex justify-between items-center mb-2">
-          <span className="text-xs sm:text-sm font-bold text-amber-100/90 tracking-wide">Today's Shield Goal</span>
-          <span className="text-xs sm:text-sm font-bold text-[#fde68a]">{totalStepsToday.toLocaleString()} / 10,000 Steps</span>
+          <span className="text-xs sm:text-sm font-bold text-amber-100/90 tracking-wide">
+            Today's Shield Goal
+          </span>
+          <span className="text-xs sm:text-sm font-bold text-[#fde68a]">
+            {totalStepsToday.toLocaleString()} / 10,000 Steps
+          </span>
         </div>
         <div className="w-full bg-[#1a0f0d] h-3 sm:h-4 rounded-full overflow-hidden border border-[#2b1d19] shadow-inner">
-          <div 
+          <div
             className="bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm h-full shadow-[0_0_10px_#16a34a] transition-all duration-500"
-            style={{ width: `${Math.min(100, (totalStepsToday / stepGoal) * 100)}%` }} 
+            style={{
+              width: `${Math.min(100, (totalStepsToday / stepGoal) * 100)}%`,
+            }}
           />
         </div>
       </div>
 
       {/* Daily Quests */}
-      <div className="mt-auto pb-4">
+      <div className="mt-auto pb-4 tutorial-quests">
         <h2 className="flex items-center gap-2 text-lg sm:text-xl font-black text-[#4a2c17] mb-3 sm:mb-4 uppercase tracking-widest">
           <Swords className="w-5 h-5 text-[#4a2c17]" /> Daily Quests
         </h2>
-        
-        <div 
-          className={`bg-gradient-to-r from-[#78350f] to-[#451a03] border-2 ${isClaimable ? 'border-[#16a34a]' : 'border-[#b45309]'} rounded-2xl p-4 sm:p-5 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all relative overflow-hidden`}
+
+        <div
+          className={`bg-gradient-to-r from-[#78350f] to-[#451a03] border-2 ${isClaimable ? "border-[#16a34a]" : "border-[#b45309]"} rounded-2xl p-4 sm:p-5 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all relative overflow-hidden`}
         >
           {/* Progress Bar (Background) */}
           {!isAllQuestsDone && (
-            <div 
+            <div
               className="absolute left-0 top-0 bottom-0 bg-[#f0c242] border-b-4 border-[#be9325] text-white/10 transition-all duration-500 ease-in-out"
-              style={{ width: `${(questProgress / currentQuest.target) * 100}%` }}
+              style={{
+                width: `${(questProgress / currentQuest.target) * 100}%`,
+              }}
             />
           )}
 
-          <div className={`absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent ${isClaimable && !animating ? 'animate-[shimmer_1.5s_infinite]' : ''}`} />
-          
-          <div className={`flex items-center gap-3 sm:gap-4 relative z-10 transition-all duration-300 ${animating ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
-            <div className={`bg-[#8b5a33] p-3 sm:p-4 rounded-xl border-2 ${isClaimable ? 'border-[#658627]' : 'border-[#4a2c17]'} shadow-[0_4px_0_#4a2c17]`}>
-              <Compass className={`w-6 h-6 sm:w-7 sm:h-7 ${isClaimable ? 'text-white' : 'text-[#f0c242]'} drop-shadow-md`} />
+          <div
+            className={`absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent ${isClaimable && !animating ? "animate-[shimmer_1.5s_infinite]" : ""}`}
+          />
+
+          <div
+            className={`flex items-center gap-3 sm:gap-4 relative z-10 transition-all duration-300 ${animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}`}
+          >
+            <div
+              className={`bg-[#8b5a33] p-3 sm:p-4 rounded-xl border-2 ${isClaimable ? "border-[#658627]" : "border-[#4a2c17]"} shadow-[0_4px_0_#4a2c17]`}
+            >
+              <Compass
+                className={`w-6 h-6 sm:w-7 sm:h-7 ${isClaimable ? "text-white" : "text-[#f0c242]"} drop-shadow-md`}
+              />
             </div>
             <div>
               <h3 className="font-black text-[#4a2c17] text-base sm:text-lg tracking-wide">
-                {isAllQuestsDone ? 'All Quests Completed!' : currentQuest.title}
+                {isAllQuestsDone ? "All Quests Completed!" : currentQuest.title}
               </h3>
               <p className="text-xs sm:text-sm text-[#8b5a33] mt-0.5 font-bold">
-                {isAllQuestsDone ? 'Come back tomorrow for more quests.' : currentQuest.desc}
+                {isAllQuestsDone
+                  ? "Come back tomorrow for more quests."
+                  : currentQuest.desc}
               </p>
-              
+
               {!isAllQuestsDone && (
                 <div className="inline-flex items-center gap-1.5 bg-[#eebb3f] border-2 border-[#b58c27] px-2.5 py-1 rounded-md mt-2 shadow-sm">
-                  <span className="text-[10px] sm:text-xs font-black text-[#4a2c17] uppercase tracking-wider">Reward:</span>
-                  <span className="text-[10px] sm:text-xs font-black text-[#4a2c17]">+{currentQuest.xp} XP</span>
+                  <span className="text-[10px] sm:text-xs font-black text-[#4a2c17] uppercase tracking-wider">
+                    Reward:
+                  </span>
+                  <span className="text-[10px] sm:text-xs font-black text-[#4a2c17]">
+                    +{currentQuest.xp} XP
+                  </span>
                 </div>
               )}
             </div>
           </div>
-          
+
           {!isAllQuestsDone && (
-            <div 
+            <div
               onClick={isClaimable ? handleClaimQuest : undefined}
               className={`
                 transition-all duration-300 relative z-10 flex items-center justify-center rounded-full border
-                ${isClaimable 
-                  ? 'bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm border-[#22c55e] cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 hover:scale-105 hover:brightness-110 active:scale-95 animate-pulse shadow-[0_0_15px_rgba(34,197,94,0.4)] p-2' 
-                  : 'bg-gray-800/80 border-gray-600 opacity-60 cursor-not-allowed px-3 py-1.5 grayscale'
+                ${
+                  isClaimable
+                    ? "bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm border-[#22c55e] cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 hover:scale-105 hover:brightness-110 active:scale-95 animate-pulse shadow-[0_0_15px_rgba(34,197,94,0.4)] p-2"
+                    : "bg-gray-800/80 border-gray-600 opacity-60 cursor-not-allowed px-3 py-1.5 grayscale"
                 }
-                ${animating ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}
+                ${animating ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}
               `}
             >
               {isClaimable ? (
-                <span className="text-[10px] sm:text-xs font-black text-white px-1 sm:px-2 drop-shadow-md">CLAIM</span>
+                <span className="text-[10px] sm:text-xs font-black text-white px-1 sm:px-2 drop-shadow-md">
+                  CLAIM
+                </span>
               ) : (
                 <span className="text-[10px] sm:text-xs font-black text-gray-300 whitespace-nowrap tracking-wide">
-                  {questProgress.toLocaleString()} / {currentQuest.target.toLocaleString()}
+                  {questProgress.toLocaleString()} /{" "}
+                  {currentQuest.target.toLocaleString()}
                 </span>
               )}
             </div>
@@ -330,22 +434,22 @@ export const HomeScreen: React.FC = () => {
       {/* VIEW SWITCHER TABS: Map View vs Step Charts */}
       <div className="flex items-center justify-center gap-1.5 bg-[#2b1d19] border-2 sm:border-3 border-[#4a2c17] rounded-xl p-1 shadow-lg mt-6">
         <button
-          onClick={() => setActiveTab('map')}
+          onClick={() => setActiveTab("map")}
           className={`flex-1 py-1.5 px-2 rounded-lg font-serif font-black text-[11px] sm:text-xs uppercase italic flex items-center justify-center gap-1.5 transition-all shadow-md ${
-            activeTab === 'map'
-              ? 'bg-[#b45309] border border-[#facc15] text-white'
-              : 'bg-[#4a2c17] text-[#fde68a] hover:bg-[#92400e]'
+            activeTab === "map"
+              ? "bg-[#b45309] border border-[#facc15] text-white"
+              : "bg-[#4a2c17] text-[#fde68a] hover:bg-[#92400e]"
           }`}
         >
           <MapIcon className="w-3.5 h-3.5 text-[#facc15]" />
           <span>Footprint Voyage Map</span>
         </button>
         <button
-          onClick={() => setActiveTab('chart')}
+          onClick={() => setActiveTab("chart")}
           className={`flex-1 py-1.5 px-2 rounded-lg font-serif font-black text-[11px] sm:text-xs uppercase italic flex items-center justify-center gap-1.5 transition-all shadow-md ${
-            activeTab === 'chart'
-              ? 'bg-[#b45309] border border-[#facc15] text-white'
-              : 'bg-[#4a2c17] text-[#fde68a] hover:bg-[#92400e]'
+            activeTab === "chart"
+              ? "bg-[#b45309] border border-[#facc15] text-white"
+              : "bg-[#4a2c17] text-[#fde68a] hover:bg-[#92400e]"
           }`}
         >
           <BarChart3 className="w-3.5 h-3.5 text-sky-300" />
@@ -354,7 +458,7 @@ export const HomeScreen: React.FC = () => {
       </div>
 
       {/* MODE 1: FOOTPRINT GPS MAP VIEW */}
-      {activeTab === 'map' ? (
+      {activeTab === "map" ? (
         <div className="w-full flex-1 flex flex-col mt-4">
           <StepMapView />
         </div>
@@ -366,14 +470,14 @@ export const HomeScreen: React.FC = () => {
               <span>📊</span> Step Activity History
             </h2>
             <div className="flex bg-[#2b1d19] border border-[#b45309] rounded-md p-0.5">
-              {(['day', 'week', 'month'] as const).map(mode => (
+              {(["day", "week", "month"] as const).map((mode) => (
                 <button
                   key={mode}
                   onClick={() => setChartMode(mode)}
                   className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase transition-colors ${
                     chartMode === mode
-                      ? 'bg-[#b45309] text-white shadow'
-                      : 'text-[#fde68a]/70 hover:text-white'
+                      ? "bg-[#b45309] text-white shadow"
+                      : "text-[#fde68a]/70 hover:text-white"
                   }`}
                 >
                   {mode}
@@ -385,11 +489,19 @@ export const HomeScreen: React.FC = () => {
           {/* Visual Bar Chart */}
           <div className="h-32 sm:h-44 bg-[#2b1d19] border border-[#b45309] rounded-lg p-2 flex items-end justify-between gap-1.5 pt-4">
             {activeChart.map((item, idx) => {
-              const heightPercent = Math.min(100, Math.max(12, (item.steps / maxChartSteps) * 100));
+              const heightPercent = Math.min(
+                100,
+                Math.max(12, (item.steps / maxChartSteps) * 100),
+              );
               return (
-                <div key={idx} className="flex-1 flex flex-col items-center h-full justify-end group">
+                <div
+                  key={idx}
+                  className="flex-1 flex flex-col items-center h-full justify-end group"
+                >
                   <span className="text-[8px] sm:text-[9px] font-mono text-[#fde68a] mb-0.5 opacity-80 group-hover:opacity-100 font-bold">
-                    {item.steps >= 1000 ? `${(item.steps / 1000).toFixed(1)}k` : item.steps}
+                    {item.steps >= 1000
+                      ? `${(item.steps / 1000).toFixed(1)}k`
+                      : item.steps}
                   </span>
                   <div className="w-full max-w-[24px] bg-[#1a0f0d] rounded-t-md h-full flex items-end overflow-hidden p-0.5 border border-[#4a2c17]">
                     <div

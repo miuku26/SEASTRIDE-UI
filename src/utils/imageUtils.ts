@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const transparentCache = new Map<string, string>();
 
@@ -8,10 +8,14 @@ const transparentCache = new Map<string, string>();
  */
 export function processCutoutImage(
   src: string,
-  options: { threshold?: number; mode?: 'white' | 'edge'; keepInternalGreenAsBlack?: boolean } = {}
+  options: {
+    threshold?: number;
+    mode?: "white" | "edge";
+    keepInternalGreenAsBlack?: boolean;
+  } = {},
 ): Promise<string> {
   const threshold = options.threshold ?? 220;
-  const mode = options.mode ?? 'white';
+  const mode = options.mode ?? "white";
   const keepInternalGreenAsBlack = options.keepInternalGreenAsBlack ?? true;
   const cacheKey = `${src}_${mode}_${threshold}_${keepInternalGreenAsBlack}`;
 
@@ -21,13 +25,13 @@ export function processCutoutImage(
 
   return new Promise((resolve) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous';
+    img.crossOrigin = "anonymous";
     img.onload = () => {
       try {
-        const canvas = document.createElement('canvas');
+        const canvas = document.createElement("canvas");
         canvas.width = img.width;
         canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext("2d");
         if (!ctx) {
           resolve(src);
           return;
@@ -42,7 +46,8 @@ export function processCutoutImage(
         const bgB = data[2];
 
         // Auto-detect green screen background from top-left pixel
-        const isGreenScreen = (bgG > bgR + 25 && bgG > bgB + 25) || mode === 'edge';
+        const isGreenScreen =
+          (bgG > bgR + 25 && bgG > bgB + 25) || mode === "edge";
 
         if (isGreenScreen) {
           const W = canvas.width;
@@ -57,7 +62,11 @@ export function processCutoutImage(
             const pr = data[idx4];
             const pg = data[idx4 + 1];
             const pb = data[idx4 + 2];
-            const dist = Math.sqrt(Math.pow(pr - bgR, 2) + Math.pow(pg - bgG, 2) + Math.pow(pb - bgB, 2));
+            const dist = Math.sqrt(
+              Math.pow(pr - bgR, 2) +
+                Math.pow(pg - bgG, 2) +
+                Math.pow(pb - bgB, 2),
+            );
             return (pg > pr + 12 && pg > pb + 12) || dist < 65;
           };
 
@@ -77,7 +86,7 @@ export function processCutoutImage(
             }
           }
           for (let y = 0; y < H; y++) {
-            let idx4 = (y * W) * 4;
+            let idx4 = y * W * 4;
             let idx = y * W;
             if (!isBg[idx] && isGreenCandidate(idx4)) {
               isBg[idx] = 1;
@@ -164,7 +173,10 @@ export function processCutoutImage(
             } else {
               const avg = (r + g + b) / 3;
               if (avg > threshold - 15) {
-                const alpha = Math.max(0, 255 - ((avg - (threshold - 15)) / 15) * 255);
+                const alpha = Math.max(
+                  0,
+                  255 - ((avg - (threshold - 15)) / 15) * 255,
+                );
                 data[i + 3] = Math.round(alpha);
               } else {
                 data[i + 3] = 255; // 100% OPAQUE ship/item
@@ -174,11 +186,11 @@ export function processCutoutImage(
         }
 
         ctx.putImageData(imgData, 0, 0);
-        const dataUrl = canvas.toDataURL('image/png');
+        const dataUrl = canvas.toDataURL("image/png");
         transparentCache.set(cacheKey, dataUrl);
         resolve(dataUrl);
       } catch (e) {
-        console.error('Cutout processing failed:', e);
+        console.error("Cutout processing failed:", e);
         resolve(src);
       }
     };
@@ -193,10 +205,16 @@ export function processCutoutImage(
  */
 export function useCutoutImage(
   src: string,
-  options: { threshold?: number; mode?: 'white' | 'edge'; keepInternalGreenAsBlack?: boolean } = {}
+  options: {
+    threshold?: number;
+    mode?: "white" | "edge";
+    keepInternalGreenAsBlack?: boolean;
+  } = {},
 ): string {
-  const cacheKey = `${src}_${options.mode || 'white'}_${options.threshold || 220}_${options.keepInternalGreenAsBlack ?? true}`;
-  const [cutoutUrl, setCutoutUrl] = useState<string>(transparentCache.get(cacheKey) || src);
+  const cacheKey = `${src}_${options.mode || "white"}_${options.threshold || 220}_${options.keepInternalGreenAsBlack ?? true}`;
+  const [cutoutUrl, setCutoutUrl] = useState<string>(
+    transparentCache.get(cacheKey) || src,
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -220,14 +238,20 @@ export function useCutoutImage(
 /**
  * Pre-warm cutout processing for a list of image URLs.
  */
-export function preloadCutouts(srcs: string[], options: { threshold?: number; mode?: 'white' | 'edge'; keepInternalGreenAsBlack?: boolean } = {}): void {
+export function preloadCutouts(
+  srcs: string[],
+  options: {
+    threshold?: number;
+    mode?: "white" | "edge";
+    keepInternalGreenAsBlack?: boolean;
+  } = {},
+): void {
   srcs.forEach((src) => {
     if (src) {
-      const cacheKey = `${src}_${options.mode || 'white'}_${options.threshold || 220}_${options.keepInternalGreenAsBlack ?? true}`;
+      const cacheKey = `${src}_${options.mode || "white"}_${options.threshold || 220}_${options.keepInternalGreenAsBlack ?? true}`;
       if (!transparentCache.has(cacheKey)) {
         processCutoutImage(src, options);
       }
     }
   });
 }
-

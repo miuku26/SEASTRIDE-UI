@@ -1,27 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { GameProvider } from './context/GameContext';
-import { HeaderHUD } from './components/HeaderHUD';
-import { HomeScreen } from './components/HomeScreen';
-import { GameScreen } from './components/GameScreen';
-import { MenuScreen } from './components/MenuScreen';
-import { UpgradesModal } from './components/UpgradesModal';
-import { ShopModal } from './components/ShopModal';
-import { ServerModal } from './components/ServerModal';
-import { RepairModal } from './components/RepairModal';
-import { RaidHistoryModal } from './components/RaidHistoryModal';
-import { AttackModal } from './components/AttackModal';
-import { ShipInspectModal } from './components/ShipInspectModal';
-import { ProfileModal } from './components/ProfileModal';
-import { soundFx } from './utils/audio';
-import { LeaderboardScreen } from './components/LeaderboardScreen';
-import { BottomNavigation } from './components/BottomNavigation';
-import { TutorialOverlay } from './components/TutorialOverlay';
+import React, { useState, useEffect } from "react";
+import { GameProvider } from "./context/GameContext";
+import { HeaderHUD } from "./components/HeaderHUD";
+import { HomeScreen } from "./components/HomeScreen";
+import { ShipBuildScreen } from "./components/ShipBuildScreen";
+import { TheSeaScreen } from "./components/TheSeaScreen";
+import { MenuScreen } from "./components/MenuScreen";
+import { UpgradesModal } from "./components/UpgradesModal";
+import { ShopModal } from "./components/ShopModal";
+import { ServerModal } from "./components/ServerModal";
+import { RepairModal } from "./components/RepairModal";
+import { RaidHistoryModal } from "./components/RaidHistoryModal";
+import { AttackModal } from "./components/AttackModal";
+import { ShipInspectModal } from "./components/ShipInspectModal";
+import { ProfileModal } from "./components/ProfileModal";
+import { soundFx } from "./utils/audio";
+import { LeaderboardScreen } from "./components/LeaderboardScreen";
+import { BottomNavigation } from "./components/BottomNavigation";
+import { TutorialOverlay } from "./components/TutorialOverlay";
 
-type ActiveModal = 'upgrades' | 'shop' | 'server' | 'repair' | 'raids' | 'attack' | 'shipInspect' | 'profile' | null;
+type ActiveModal =
+  | "upgrades"
+  | "shop"
+  | "server"
+  | "repair"
+  | "raids"
+  | "attack"
+  | "shipInspect"
+  | "profile"
+  | null;
 
 function MainAppContent() {
-  const [activeTab, setActiveTab] = useState<'menu' | 'home' | 'game' | 'leaderboard'>('menu');
+  const [activeTab, setActiveTab] = useState<
+    "menu" | "home" | "build" | "sea" | "leaderboard"
+  >("menu");
   const [activeModal, setActiveModal] = useState<ActiveModal>(null);
+  const [forceRunTutorial, setForceRunTutorial] = useState(false);
 
   // Auto-start pirate BGM on load & play distinct sounds for buttons
   useEffect(() => {
@@ -35,20 +48,23 @@ function MainAppContent() {
       soundFx.startBgm();
       const target = e.target as HTMLElement | null;
       if (target) {
-        const button = target.closest('button, [role="button"]') as HTMLElement | null;
+        const button = target.closest(
+          'button, [role="button"]',
+        ) as HTMLElement | null;
         if (button) {
-          const ariaLabel = button.getAttribute('aria-label')?.toLowerCase() || '';
-          const title = button.getAttribute('title')?.toLowerCase() || '';
-          const text = button.innerText?.trim() || '';
+          const ariaLabel =
+            button.getAttribute("aria-label")?.toLowerCase() || "";
+          const title = button.getAttribute("title")?.toLowerCase() || "";
+          const text = button.innerText?.trim() || "";
 
           const isCloseButton =
-            ariaLabel.includes('close') ||
-            title.includes('close') ||
-            text === '✕' ||
-            text === '×' ||
-            text.toLowerCase().includes('close') ||
-            button.querySelector('svg.lucide-x') !== null ||
-            button.classList.contains('close-btn');
+            ariaLabel.includes("close") ||
+            title.includes("close") ||
+            text === "✕" ||
+            text === "×" ||
+            text.toLowerCase().includes("close") ||
+            button.querySelector("svg.lucide-x") !== null ||
+            button.classList.contains("close-btn");
 
           if (isCloseButton) {
             soundFx.playClose();
@@ -59,18 +75,18 @@ function MainAppContent() {
       }
     };
 
-    window.addEventListener('pointerdown', handleFirstUserInteraction);
-    window.addEventListener('touchstart', handleFirstUserInteraction);
-    window.addEventListener('mousedown', handleFirstUserInteraction);
-    window.addEventListener('keydown', handleFirstUserInteraction);
-    window.addEventListener('click', handleGlobalButtonClick, true);
+    window.addEventListener("pointerdown", handleFirstUserInteraction);
+    window.addEventListener("touchstart", handleFirstUserInteraction);
+    window.addEventListener("mousedown", handleFirstUserInteraction);
+    window.addEventListener("keydown", handleFirstUserInteraction);
+    window.addEventListener("click", handleGlobalButtonClick, true);
 
     return () => {
-      window.removeEventListener('pointerdown', handleFirstUserInteraction);
-      window.removeEventListener('touchstart', handleFirstUserInteraction);
-      window.removeEventListener('mousedown', handleFirstUserInteraction);
-      window.removeEventListener('keydown', handleFirstUserInteraction);
-      window.removeEventListener('click', handleGlobalButtonClick, true);
+      window.removeEventListener("pointerdown", handleFirstUserInteraction);
+      window.removeEventListener("touchstart", handleFirstUserInteraction);
+      window.removeEventListener("mousedown", handleFirstUserInteraction);
+      window.removeEventListener("keydown", handleFirstUserInteraction);
+      window.removeEventListener("click", handleGlobalButtonClick, true);
     };
   }, []);
 
@@ -92,32 +108,42 @@ function MainAppContent() {
 
       {/* Mobile / Desktop Frame Container */}
       <div className="w-full max-w-md sm:max-w-2xl bg-[#4a2c17] border-0 sm:border-8 border-[#2b1d19] sm:rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden h-full max-h-[100dvh] sm:max-h-[850px] flex flex-col relative z-10">
-        
         {/* Main View Area */}
-        {activeTab === 'menu' ? (
-          <MenuScreen 
-            onSelectSteps={() => setActiveTab('home')}
-            onSelectGame={() => setActiveTab('game')}
-            onSelectLeaderboard={() => setActiveTab('leaderboard')}
+        {activeTab === "menu" ? (
+          <MenuScreen
+            onSelectSteps={() => setActiveTab("home")}
+            onSelectGame={() => setActiveTab("build")}
+            onSelectLeaderboard={() => setActiveTab("leaderboard")}
           />
         ) : (
           <div className="flex flex-col h-full overflow-hidden">
             <HeaderHUD
-              activeTab={activeTab as 'home' | 'game'}
-              setActiveTab={(tab: 'home' | 'game') => setActiveTab(tab)}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
               openModal={openModal}
-              onBackToMenu={() => setActiveTab('menu')}
+              onBackToMenu={() => setActiveTab("menu")}
+              onHelp={() => setForceRunTutorial(true)}
             />
-            
+
             <main className="flex-1 overflow-y-auto relative">
-              {activeTab === 'home' && <HomeScreen />}
-              {activeTab === 'game' && <GameScreen openModal={openModal} />}
-              {activeTab === 'leaderboard' && <LeaderboardScreen onBack={() => setActiveTab('menu')} />}
+              {activeTab === "home" && <HomeScreen />}
+              {activeTab === "build" && (
+                <ShipBuildScreen openModal={openModal} />
+              )}
+              {activeTab === "sea" && (
+                <TheSeaScreen
+                  openModal={openModal as any}
+                  onSwitchToBuild={() => setActiveTab("build")}
+                />
+              )}
+              {activeTab === "leaderboard" && (
+                <LeaderboardScreen onBack={() => setActiveTab("menu")} />
+              )}
             </main>
 
-            <BottomNavigation 
-              activeTab={activeTab as 'home' | 'game' | 'leaderboard'} 
-              setActiveTab={setActiveTab} 
+            <BottomNavigation
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
             />
           </div>
         )}
@@ -128,23 +154,23 @@ function MainAppContent() {
         </footer>
 
         {/* Interactive Modals */}
-        {activeModal === 'upgrades' && <UpgradesModal onClose={closeModal} />}
-        {activeModal === 'shop' && <ShopModal onClose={closeModal} />}
-        {activeModal === 'server' && <ServerModal onClose={closeModal} />}
-        {activeModal === 'repair' && <RepairModal onClose={closeModal} />}
-        {activeModal === 'raids' && <RaidHistoryModal onClose={closeModal} />}
-        {activeModal === 'attack' && <AttackModal onClose={closeModal} />}
-        {activeModal === 'shipInspect' && (
+        {activeModal === "upgrades" && <UpgradesModal onClose={closeModal} />}
+        {activeModal === "shop" && <ShopModal onClose={closeModal} />}
+        {activeModal === "server" && <ServerModal onClose={closeModal} />}
+        {activeModal === "repair" && <RepairModal onClose={closeModal} />}
+        {activeModal === "raids" && <RaidHistoryModal onClose={closeModal} />}
+        {activeModal === "attack" && <AttackModal onClose={closeModal} />}
+        {activeModal === "shipInspect" && (
           <ShipInspectModal
             onClose={closeModal}
-            onOpenRepair={() => openModal('repair')}
-            onOpenUpgrades={() => openModal('upgrades')}
+            onOpenRepair={() => openModal("repair")}
+            onOpenUpgrades={() => openModal("upgrades")}
           />
         )}
-        {activeModal === 'profile' && <ProfileModal onClose={closeModal} />}
-        
+        {activeModal === "profile" && <ProfileModal onClose={closeModal} />}
+
         {/* Feature Highlight Tutorial */}
-        <TutorialOverlay activeTab={activeTab} />
+        <TutorialOverlay activeTab={activeTab} forceRun={forceRunTutorial} onTutorialEnd={() => setForceRunTutorial(false)} />
       </div>
     </div>
   );

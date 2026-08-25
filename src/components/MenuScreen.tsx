@@ -1,9 +1,9 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Volume2, VolumeX, Anchor } from 'lucide-react';
-import { ASSETS } from '../assets';
-import { useCutoutImage } from '../utils/imageUtils';
-import { useGame } from '../context/GameContext';
+import React from "react";
+import { motion } from "motion/react";
+import { Volume2, VolumeX, Anchor } from "lucide-react";
+import { ASSETS } from "../assets";
+import { useCutoutImage } from "../utils/imageUtils";
+import { useGame } from "../context/GameContext";
 
 interface MenuScreenProps {
   onSelectSteps: () => void;
@@ -11,14 +11,18 @@ interface MenuScreenProps {
   onSelectLeaderboard: () => void;
 }
 
-export function MenuScreen({ onSelectSteps, onSelectGame, onSelectLeaderboard }: MenuScreenProps) {
-  const transparentLogo = useCutoutImage(ASSETS.logo, { mode: 'edge' });
+export function MenuScreen({
+  onSelectSteps,
+  onSelectGame,
+  onSelectLeaderboard,
+}: MenuScreenProps) {
+  const transparentLogo = useCutoutImage(ASSETS.logo, { mode: "edge" });
   const { isMuted, toggleMute } = useGame();
 
   return (
     <div className="absolute inset-0 w-full h-full z-50 flex flex-col items-center justify-center overflow-hidden">
       {/* Background Image */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: `url(${ASSETS.menuBg})` }}
       />
@@ -37,29 +41,28 @@ export function MenuScreen({ onSelectSteps, onSelectGame, onSelectLeaderboard }:
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center w-full px-4 pt-8 pb-16 sm:pb-24 h-full justify-between">
-        
         {/* Logo Section - Increased Size & Responsive */}
-        <motion.div 
+        <motion.div
           initial={{ scale: 0.8, opacity: 0, y: -20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          transition={{ type: 'spring', bounce: 0.5, duration: 0.8 }}
+          transition={{ type: "spring", bounce: 0.5, duration: 0.8 }}
           className="w-full flex justify-center drop-shadow-2xl flex-1 items-center"
         >
-          <img 
-            src={transparentLogo} 
-            alt="SeaStride Logo" 
-            className="w-full max-w-[85%] sm:max-w-[90%] md:max-w-2xl h-auto object-contain max-h-[50vh]" 
+          <img
+            src={transparentLogo}
+            alt="SeaStride Logo"
+            className="w-full max-w-[85%] sm:max-w-[90%] md:max-w-2xl h-auto object-contain max-h-[50vh]"
           />
         </motion.div>
 
         {/* Start Voyage Button */}
-        <motion.div 
+        <motion.div
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
           className="flex flex-col gap-5 w-full max-w-[280px] sm:max-w-[320px] mb-8"
         >
-          <button 
+          <button
             onClick={onSelectSteps}
             className="tutorial-start-voyage ring-4 ring-[#93bb44]/50 ring-offset-4 ring-offset-[#4a2c17] animate-[pulse_2s_ease-in-out_infinite] w-full h-24 sm:h-28 bg-[#93bb44] hover:brightness-110 border-4 border-[#658627] border-b-[12px] active:border-b-4 active:translate-y-[8px] rounded-2xl flex flex-col items-center justify-center shadow-[0_8px_16px_rgba(0,0,0,0.6)] transition-all overflow-hidden relative group"
           >

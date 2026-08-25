@@ -1,13 +1,15 @@
-import React from 'react';
-import { ArrowLeft } from 'lucide-react';
+import React from "react";
+import { ArrowLeft } from "lucide-react";
 
 interface BackToSeaStrideProps {
   onClick: () => void;
 }
 
-export const BackToSeaStride: React.FC<BackToSeaStrideProps> = ({ onClick }) => {
+export const BackToSeaStride: React.FC<BackToSeaStrideProps> = ({
+  onClick,
+}) => {
   return (
-    <button 
+    <button
       onClick={onClick}
       className="p-1.5 sm:p-2 bg-[#4a2c17] hover:bg-[#92400e] border-2 border-[#b45309] rounded-lg text-[#fde68a] active:scale-95 transition-transform shadow-md"
     >

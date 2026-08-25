@@ -1,19 +1,31 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 export function useCompassHeading() {
   const [heading, setHeading] = useState<number>(0);
   const [hasCompassSensor, setHasCompassSensor] = useState<boolean>(false);
-  const [cardinalDirection, setCardinalDirection] = useState<string>('N');
+  const [cardinalDirection, setCardinalDirection] = useState<string>("N");
 
   const headingRef = useRef<number>(0);
 
   const getCardinal = (deg: number): string => {
     const normalized = ((deg % 360) + 360) % 360;
     const directions = [
-      'N', 'NNE', 'NE', 'ENE', 
-      'E', 'ESE', 'SE', 'SSE', 
-      'S', 'SSW', 'SW', 'WSW', 
-      'W', 'WNW', 'NW', 'NNW'
+      "N",
+      "NNE",
+      "NE",
+      "ENE",
+      "E",
+      "ESE",
+      "SE",
+      "SSE",
+      "S",
+      "SSW",
+      "SW",
+      "WSW",
+      "W",
+      "WNW",
+      "NW",
+      "NNW",
     ];
     const index = Math.round(normalized / 22.5) % 16;
     return directions[index];
@@ -24,8 +36,13 @@ export function useCompassHeading() {
       let compassHeading: number | null = null;
 
       // iOS WebKit compass heading
-      if ('webkitCompassHeading' in event && typeof (event as unknown as { webkitCompassHeading: number }).webkitCompassHeading === 'number') {
-        compassHeading = (event as unknown as { webkitCompassHeading: number }).webkitCompassHeading;
+      if (
+        "webkitCompassHeading" in event &&
+        typeof (event as unknown as { webkitCompassHeading: number })
+          .webkitCompassHeading === "number"
+      ) {
+        compassHeading = (event as unknown as { webkitCompassHeading: number })
+          .webkitCompassHeading;
       } else if (event.alpha !== null && event.alpha !== undefined) {
         // Android / standard compass
         compassHeading = 360 - event.alpha;
@@ -40,15 +57,27 @@ export function useCompassHeading() {
       }
     };
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('deviceorientation', handleOrientation, true);
-      window.addEventListener('deviceorientationabsolute' as unknown as string, handleOrientation as unknown as EventListener, true);
+    if (typeof window !== "undefined") {
+      window.addEventListener("deviceorientation", handleOrientation, true);
+      window.addEventListener(
+        "deviceorientationabsolute" as unknown as string,
+        handleOrientation as unknown as EventListener,
+        true,
+      );
     }
 
     return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('deviceorientation', handleOrientation, true);
-        window.removeEventListener('deviceorientationabsolute' as unknown as string, handleOrientation as unknown as EventListener, true);
+      if (typeof window !== "undefined") {
+        window.removeEventListener(
+          "deviceorientation",
+          handleOrientation,
+          true,
+        );
+        window.removeEventListener(
+          "deviceorientationabsolute" as unknown as string,
+          handleOrientation as unknown as EventListener,
+          true,
+        );
       }
     };
   }, []);

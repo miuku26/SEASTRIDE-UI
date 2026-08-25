@@ -1,9 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useGame } from '../context/GameContext';
-import { ASSETS, getShipImageForLevel, getCannonImageForLevel, getShieldImageForLevel } from '../assets';
-import { useCutoutImage } from '../utils/imageUtils';
-import { Player, BattleResult } from '../types';
-import { Crosshair, Shield, Zap, Sparkles, ChevronRight, Eye, Dices, List } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { useGame } from "../context/GameContext";
+import {
+  ASSETS,
+  getShipImageForLevel,
+  getCannonImageForLevel,
+  getShieldImageForLevel,
+} from "../assets";
+import { useCutoutImage } from "../utils/imageUtils";
+import { Player, BattleResult } from "../types";
+import {
+  Crosshair,
+  Shield,
+  Zap,
+  Sparkles,
+  ChevronRight,
+  Eye,
+  Dices,
+  List,
+} from "lucide-react";
 
 interface SailingShip {
   id: string;
@@ -72,9 +86,9 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
 
     // 1. Add Player's own flagship
     list.push({
-      id: 'player_flagship',
-      name: 'Your Flagship',
-      title: 'Captain',
+      id: "player_flagship",
+      name: "Your Flagship",
+      title: "Captain",
       isPlayer: true,
       x: 45 + (Math.random() * 10 - 5),
       y: 50 + (Math.random() * 10 - 5),
@@ -101,10 +115,10 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
       const speed = 0.03 + Math.random() * 0.04;
 
       const decs: string[] = [];
-      if (idx % 2 === 0) decs.push('dec_jolly_roger');
-      if (idx % 3 === 0) decs.push('dec_kraken_figurehead');
-      if (p.shipCondition < 30) decs.push('dec_ghost_glow');
-      if (idx === 1) decs.push('dec_golden_cannons');
+      if (idx % 2 === 0) decs.push("dec_jolly_roger");
+      if (idx % 3 === 0) decs.push("dec_kraken_figurehead");
+      if (p.shipCondition < 30) decs.push("dec_ghost_glow");
+      if (idx === 1) decs.push("dec_golden_cannons");
 
       list.push({
         id: p.id,
@@ -129,7 +143,17 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
 
     setShips(list);
     shipsRef.current = list;
-  }, [currentServer, shipLevel, shipCondition, shipCurrentHp, shipMaxHp, cannonLevel, cannonCount, shieldLevel, equippedDecorations]);
+  }, [
+    currentServer,
+    shipLevel,
+    shipCondition,
+    shipCurrentHp,
+    shipMaxHp,
+    cannonLevel,
+    cannonCount,
+    shieldLevel,
+    equippedDecorations,
+  ]);
 
   // Optimized Physics loop with throttled React state flushing (12 FPS state update + CSS interpolation = 60 FPS silky smooth visuals with 80% lower CPU load)
   useEffect(() => {
@@ -195,7 +219,7 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
 
   // Handler for Bomb Random Ship
   const handleBombRandomShip = () => {
-    const enemyShips = ships.filter(s => !s.isPlayer && s.playerData);
+    const enemyShips = ships.filter((s) => !s.isPlayer && s.playerData);
     if (enemyShips.length === 0) return;
     const randomIndex = Math.floor(Math.random() * enemyShips.length);
     const target = enemyShips[randomIndex];
@@ -206,11 +230,13 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
   const handleFireBombOnShip = (targetShip: SailingShip) => {
     if (!targetShip.playerData) return;
     if (energy < 1) {
-      alert('Not enough Energy! You need 1 Energy to launch a Bomb raid.');
+      alert("Not enough Energy! You need 1 Energy to launch a Bomb raid.");
       return;
     }
     if (shipCondition <= 50) {
-      alert('Ship condition is too low (<= 50%)! Repair your ship before entering battle.');
+      alert(
+        "Ship condition is too low (<= 50%)! Repair your ship before entering battle.",
+      );
       return;
     }
 
@@ -226,8 +252,7 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
   };
 
   return (
-    <div className="relative w-full h-[62dvh] sm:h-[500px] min-h-[380px] rounded-2xl sm:rounded-3xl overflow-hidden border-4 sm:border-8 border-[#2b1d19] shadow-2xl select-none group">
-      
+    <div className="relative w-full h-[62dvh] sm:h-[500px] min-h-[380px] rounded-2xl sm:rounded-3xl overflow-hidden border-4 sm:border-8 border-[#2b1d19] shadow-2xl select-none group tutorial-sea-view-area">
       {/* Cartoonish Ocean Top-Down Image Background */}
       <img
         src={ASSETS.topdownOcean}
@@ -242,13 +267,16 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
 
       {/* Sea Header Bar: Server Info & Bomb Options */}
       <div className="absolute top-2 sm:top-3 left-2 sm:left-3 right-2 sm:right-3 z-30 flex items-center justify-between gap-1.5 pointer-events-none">
-        
         {/* Server Name Badge */}
         <div className="bg-[#2b1d19]/95 border sm:border-2 border-[#b45309] backdrop-blur-md px-2 py-1 sm:px-3 sm:py-1.5 rounded-xl sm:rounded-2xl text-white shadow-xl flex items-center gap-1.5 pointer-events-auto">
           <span className="text-sm sm:text-lg">🌊</span>
           <div>
-            <div className="text-[9px] sm:text-[10px] font-black uppercase text-[#fde68a] font-serif leading-none">Mid-Ocean</div>
-            <div className="text-[10px] sm:text-xs font-extrabold text-white leading-tight">{currentServer.name} ({ships.length})</div>
+            <div className="text-[9px] sm:text-[10px] font-black uppercase text-[#fde68a] font-serif leading-none">
+              Mid-Ocean
+            </div>
+            <div className="text-[10px] sm:text-xs font-extrabold text-white leading-tight">
+              {currentServer.name} ({ships.length})
+            </div>
           </div>
         </div>
 
@@ -273,7 +301,6 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
             <span>Raid List</span>
           </button>
         </div>
-
       </div>
 
       {/* Sailing Ships Container */}
@@ -301,7 +328,9 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
           <div className="text-2xl font-black text-[#fbbf24] font-serif uppercase tracking-wider animate-pulse">
             💣 FIRING CANNON SALVO! 💣
           </div>
-          <p className="text-xs text-[#fde68a]">Bombarding target ship on the high seas...</p>
+          <p className="text-xs text-[#fde68a]">
+            Bombarding target ship on the high seas...
+          </p>
         </div>
       )}
 
@@ -314,22 +343,36 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
             </div>
 
             <div className="text-xs text-[#fde68a] font-serif">
-              You attacked <span className="font-extrabold text-[#fbbf24]">{battleResult.targetPlayer.name}</span>!
+              You attacked{" "}
+              <span className="font-extrabold text-[#fbbf24]">
+                {battleResult.targetPlayer.name}
+              </span>
+              !
             </div>
 
             <div className="bg-[#1a0f0d] border-2 border-[#4a2c17] rounded-xl p-3 grid grid-cols-2 gap-2 text-center">
               <div>
-                <div className="text-[10px] text-[#fde68a]/80 font-bold uppercase">Damage Dealt</div>
-                <div className="text-lg font-mono font-black text-red-400">-{battleResult.damageDealt.toLocaleString()} HP</div>
+                <div className="text-[10px] text-[#fde68a]/80 font-bold uppercase">
+                  Damage Dealt
+                </div>
+                <div className="text-lg font-mono font-black text-red-400">
+                  -{battleResult.damageDealt.toLocaleString()} HP
+                </div>
               </div>
               <div>
-                <div className="text-[10px] text-[#fde68a]/80 font-bold uppercase">Enemy Remaining</div>
-                <div className="text-lg font-mono font-black text-[#fbbf24]">{battleResult.enemyRemainingHpPercent}% HP</div>
+                <div className="text-[10px] text-[#fde68a]/80 font-bold uppercase">
+                  Enemy Remaining
+                </div>
+                <div className="text-lg font-mono font-black text-[#fbbf24]">
+                  {battleResult.enemyRemainingHpPercent}% HP
+                </div>
               </div>
             </div>
 
             <div className="bg-[#1a0f0d] border-2 border-[#b45309] rounded-xl p-3 space-y-2">
-              <div className="text-xs font-black uppercase text-[#fde68a] font-serif">Plundered Loot:</div>
+              <div className="text-xs font-black uppercase text-[#fde68a] font-serif">
+                Plundered Loot:
+              </div>
               <div className="flex items-center justify-center gap-3">
                 <div className="flex items-center gap-1 bg-[#4a2c17] border-2 border-[#b45309] px-3 py-1 rounded-xl text-[#fbbf24] font-black text-xs">
                   <span>🪙</span>
@@ -347,7 +390,9 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
               {battleResult.cannonLooted && (
                 <div className="bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm border-2 border-[#064e3b] p-2 rounded-xl flex items-center justify-center gap-1.5 text-white text-[10px] font-black uppercase">
                   <Sparkles className="w-4 h-4 text-[#facc15]" />
-                  <span>Stole enemy Lv{battleResult.lootedCannonLevel} Cannon!</span>
+                  <span>
+                    Stole enemy Lv{battleResult.lootedCannonLevel} Cannon!
+                  </span>
                 </div>
               )}
             </div>
@@ -370,10 +415,13 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
         <div className="absolute bottom-4 left-4 right-4 z-40 max-w-md mx-auto bg-[#4a2c17] border-4 border-[#2b1d19] rounded-2xl p-3 shadow-2xl text-amber-100 animate-fade-in">
           <div className="flex justify-between items-center border-b-2 border-[#b45309] pb-1.5 mb-2">
             <div className="flex items-center gap-2">
-              <span className="text-2xl">{selectedShip.isPlayer ? '⛵' : '🏴‍☠️'}</span>
+              <span className="text-2xl">
+                {selectedShip.isPlayer ? "⛵" : "🏴‍☠️"}
+              </span>
               <div>
                 <div className="text-xs font-serif font-black text-white">
-                  {selectedShip.name} {selectedShip.isPlayer && '(Your Flagship)'}
+                  {selectedShip.name}{" "}
+                  {selectedShip.isPlayer && "(Your Flagship)"}
                 </div>
                 <div className="text-[10px] text-[#fde68a]/80 font-mono">
                   {selectedShip.title} • Lv.{selectedShip.shipLevel} Vessel
@@ -391,11 +439,17 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
 
           <div className="grid grid-cols-2 gap-2 text-xs font-mono mb-2">
             <div className="bg-[#1a0f0d] p-1.5 rounded-xl border border-[#4a2c17]">
-              <div className="text-[9px] text-[#fde68a]/80 font-bold uppercase">Condition</div>
-              <div className="text-xs font-black text-[#fbbf24]">{selectedShip.shipCondition}% HP</div>
+              <div className="text-[9px] text-[#fde68a]/80 font-bold uppercase">
+                Condition
+              </div>
+              <div className="text-xs font-black text-[#fbbf24]">
+                {selectedShip.shipCondition}% HP
+              </div>
             </div>
             <div className="bg-[#1a0f0d] p-1.5 rounded-xl border border-[#4a2c17]">
-              <div className="text-[9px] text-[#fde68a]/80 font-bold uppercase">Mounted Cannons</div>
+              <div className="text-[9px] text-[#fde68a]/80 font-bold uppercase">
+                Mounted Cannons
+              </div>
               <div className="text-xs font-black text-amber-200">
                 Lv.{selectedShip.cannonLevel} x{selectedShip.cannonCount}
               </div>
@@ -426,135 +480,148 @@ export const TheSeaView: React.FC<TheSeaViewProps> = ({
           )}
         </div>
       )}
-
     </div>
   );
 };
 
 // Individual Sailing Ship Component on the Ocean
-const ShipOnSeaItem = React.memo(({ ship, isSelected, onClick, onFireBomb }: {
-  ship: SailingShip;
-  isSelected: boolean;
-  onClick: () => void;
-  onFireBomb: () => void;
-}) => {
-  const shipRawImg = getShipImageForLevel(ship.shipLevel);
-  const cannonRawImg = getCannonImageForLevel(ship.cannonLevel);
-  const shieldRawImg = getShieldImageForLevel(ship.shieldLevel);
+const ShipOnSeaItem = React.memo(
+  ({
+    ship,
+    isSelected,
+    onClick,
+    onFireBomb,
+  }: {
+    ship: SailingShip;
+    isSelected: boolean;
+    onClick: () => void;
+    onFireBomb: () => void;
+  }) => {
+    const shipRawImg = getShipImageForLevel(ship.shipLevel);
+    const cannonRawImg = getCannonImageForLevel(ship.cannonLevel);
+    const shieldRawImg = getShieldImageForLevel(ship.shieldLevel);
 
-  // Opaque Cutout Hooks so images are completely solid with 0 background
-  const shipImg = useCutoutImage(shipRawImg, { mode: 'edge', keepInternalGreenAsBlack: ship.shipLevel === 1 });
-  const cannonImg = useCutoutImage(cannonRawImg);
-  const shieldImg = useCutoutImage(shieldRawImg);
+    // Opaque Cutout Hooks so images are completely solid with 0 background
+    const shipImg = useCutoutImage(shipRawImg, {
+      mode: "edge",
+      keepInternalGreenAsBlack: ship.shipLevel === 1,
+    });
+    const cannonImg = useCutoutImage(cannonRawImg);
+    const shieldImg = useCutoutImage(shieldRawImg);
 
-  // Angle heading direction from velocity
-  const angleDeg = (Math.atan2(ship.vy, ship.vx) * 180) / Math.PI;
+    // Angle heading direction from velocity
+    const angleDeg = (Math.atan2(ship.vy, ship.vx) * 180) / Math.PI;
 
-  return (
-    <div
-      onClick={onClick}
-      style={{
-        left: `${ship.x}%`,
-        top: `${ship.y}%`,
-        transform: 'translate(-50%, -50%)',
-        transition: 'left 80ms linear, top 80ms linear',
-      }}
-      className={`absolute cursor-pointer transition-transform duration-300 group z-20 ${
-        isSelected ? 'scale-110 z-30' : 'hover:scale-105'
-      }`}
-    >
-      {/* Light Water Ripple Base */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-cyan-400/20 rounded-full animate-pulse pointer-events-none" />
-
-      {/* Name Tag & HP Bar above ship */}
-      <div className="absolute -top-8 sm:-top-10 left-1/2 -translate-x-1/2 whitespace-nowrap flex flex-col items-center pointer-events-none z-30">
-        <div
-          className={`px-1.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-black font-serif shadow-lg border ${
-            ship.isPlayer
-              ? 'bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm border-[#064e3b] text-white'
-              : isSelected
-              ? 'bg-[#b45309] border-[#facc15] text-[#fde68a]'
-              : 'bg-[#2b1d19]/90 border-[#4a2c17] text-white'
-          }`}
-        >
-          {ship.name}
-        </div>
-
-        {/* Mini HP Bar */}
-        <div className="w-10 sm:w-14 bg-[#1a0f0d] h-1 sm:h-1.5 rounded-full overflow-hidden border border-[#4a2c17] mt-0.5">
-          <div
-            className={`h-full ${
-              ship.shipCondition <= 30
-                ? 'bg-red-500'
-                : ship.shipCondition <= 60
-                ? 'bg-amber-400'
-                : 'bg-emerald-400'
-            }`}
-            style={{ width: `${ship.shipCondition}%` }}
-          />
-        </div>
-      </div>
-
-      {/* TARGET LOCK & BOMB BUTTON FOLLOWING THIS TARGET SHIP DIRECTLY ON THE SEA */}
-      {isSelected && !ship.isPlayer && (
-        <div className="absolute -top-14 sm:-top-16 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center animate-bounce pointer-events-auto">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onFireBomb();
-            }}
-            className="bg-red-600 hover:bg-red-500 text-white font-black text-[9px] sm:text-[11px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xl border-2 border-[#facc15] shadow-[0_0_15px_rgba(220,38,38,0.9)] uppercase italic whitespace-nowrap flex items-center gap-1 active:scale-95"
-          >
-            <span>💣 BOMB!</span>
-          </button>
-          <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-6 border-t-[#facc15]" />
-        </div>
-      )}
-
-      {/* Rotating Ship Graphic according to sailing heading */}
+    return (
       <div
-        className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center transition-transform duration-500"
-        style={{ transform: `rotate(${angleDeg + 90}deg)` }}
+        onClick={onClick}
+        style={{
+          left: `${ship.x}%`,
+          top: `${ship.y}%`,
+          transform: "translate(-50%, -50%)",
+          transition: "left 80ms linear, top 80ms linear",
+        }}
+        className={`absolute cursor-pointer transition-transform duration-300 group z-20 ${
+          isSelected ? "scale-110 z-30" : "hover:scale-105"
+        }`}
       >
-        {/* Target Crosshair Circle around selected ship */}
-        {isSelected && (
-          <div className="absolute -inset-2 rounded-full border-2 border-dashed border-red-500 animate-spin pointer-events-none z-10" />
-        )}
+        {/* Light Water Ripple Base */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 bg-cyan-400/20 rounded-full animate-pulse pointer-events-none" />
 
-        {/* Shield Barrier if active */}
-        {ship.shieldLevel > 0 && (
-          <div className="absolute -inset-2 rounded-full border-2 border-cyan-400 bg-cyan-400/20 shadow-[0_0_12px_rgba(0,210,255,0.6)] animate-pulse pointer-events-none z-10" />
-        )}
+        {/* Name Tag & HP Bar above ship */}
+        <div className="absolute -top-8 sm:-top-10 left-1/2 -translate-x-1/2 whitespace-nowrap flex flex-col items-center pointer-events-none z-30">
+          <div
+            className={`px-1.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-black font-serif shadow-lg border ${
+              ship.isPlayer
+                ? "bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm border-[#064e3b] text-white"
+                : isSelected
+                  ? "bg-[#b45309] border-[#facc15] text-[#fde68a]"
+                  : "bg-[#2b1d19]/90 border-[#4a2c17] text-white"
+            }`}
+          >
+            {ship.name}
+          </div>
 
-        {/* Decorations Overlays */}
-        {ship.equippedDecorations.includes('dec_jolly_roger') && (
-          <span className="absolute top-0 right-1 text-[10px] sm:text-xs z-30">🏴‍☠️</span>
-        )}
-        {ship.equippedDecorations.includes('dec_kraken_figurehead') && (
-          <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs z-30">🦑</span>
-        )}
-        {ship.equippedDecorations.includes('dec_ghost_glow') && (
-          <div className="absolute inset-0 bg-emerald-400/30 rounded-full blur-sm pointer-events-none" />
-        )}
-        {ship.equippedDecorations.includes('dec_golden_cannons') && (
-          <Sparkles className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#facc15] animate-spin" />
-        )}
+          {/* Mini HP Bar */}
+          <div className="w-10 sm:w-14 bg-[#1a0f0d] h-1 sm:h-1.5 rounded-full overflow-hidden border border-[#4a2c17] mt-0.5">
+            <div
+              className={`h-full ${
+                ship.shipCondition <= 30
+                  ? "bg-red-500"
+                  : ship.shipCondition <= 60
+                    ? "bg-amber-400"
+                    : "bg-emerald-400"
+              }`}
+              style={{ width: `${ship.shipCondition}%` }}
+            />
+          </div>
+        </div>
 
-        {/* Completely Opaque Cutout Ship Image */}
-        <img
-          src={shipImg}
-          alt={ship.name}
-          referrerPolicy="no-referrer"
-          className="w-full h-full object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
-        />
-
-        {/* Mounted Cannon badges */}
-        {ship.cannonCount > 0 && (
-          <div className="absolute -bottom-1 -right-1 bg-[#1a0f0d] border border-[#b45309] rounded p-0.5 text-[8px] font-black text-[#fbbf24] z-20">
-            x{ship.cannonCount}
+        {/* TARGET LOCK & BOMB BUTTON FOLLOWING THIS TARGET SHIP DIRECTLY ON THE SEA */}
+        {isSelected && !ship.isPlayer && (
+          <div className="absolute -top-14 sm:-top-16 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center animate-bounce pointer-events-auto">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onFireBomb();
+              }}
+              className="bg-red-600 hover:bg-red-500 text-white font-black text-[9px] sm:text-[11px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xl border-2 border-[#facc15] shadow-[0_0_15px_rgba(220,38,38,0.9)] uppercase italic whitespace-nowrap flex items-center gap-1 active:scale-95"
+            >
+              <span>💣 BOMB!</span>
+            </button>
+            <div className="w-0 h-0 border-l-4 border-l-transparent border-r-4 border-r-transparent border-t-6 border-t-[#facc15]" />
           </div>
         )}
+
+        {/* Rotating Ship Graphic according to sailing heading */}
+        <div
+          className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 flex items-center justify-center transition-transform duration-500"
+          style={{ transform: `rotate(${angleDeg + 90}deg)` }}
+        >
+          {/* Target Crosshair Circle around selected ship */}
+          {isSelected && (
+            <div className="absolute -inset-2 rounded-full border-2 border-dashed border-red-500 animate-spin pointer-events-none z-10" />
+          )}
+
+          {/* Shield Barrier if active */}
+          {ship.shieldLevel > 0 && (
+            <div className="absolute -inset-2 rounded-full border-2 border-cyan-400 bg-cyan-400/20 shadow-[0_0_12px_rgba(0,210,255,0.6)] animate-pulse pointer-events-none z-10" />
+          )}
+
+          {/* Decorations Overlays */}
+          {ship.equippedDecorations.includes("dec_jolly_roger") && (
+            <span className="absolute top-0 right-1 text-[10px] sm:text-xs z-30">
+              🏴‍☠️
+            </span>
+          )}
+          {ship.equippedDecorations.includes("dec_kraken_figurehead") && (
+            <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[10px] sm:text-xs z-30">
+              🦑
+            </span>
+          )}
+          {ship.equippedDecorations.includes("dec_ghost_glow") && (
+            <div className="absolute inset-0 bg-emerald-400/30 rounded-full blur-sm pointer-events-none" />
+          )}
+          {ship.equippedDecorations.includes("dec_golden_cannons") && (
+            <Sparkles className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#facc15] animate-spin" />
+          )}
+
+          {/* Completely Opaque Cutout Ship Image */}
+          <img
+            src={shipImg}
+            alt={ship.name}
+            referrerPolicy="no-referrer"
+            className="w-full h-full object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
+          />
+
+          {/* Mounted Cannon badges */}
+          {ship.cannonCount > 0 && (
+            <div className="absolute -bottom-1 -right-1 bg-[#1a0f0d] border border-[#b45309] rounded p-0.5 text-[8px] font-black text-[#fbbf24] z-20">
+              x{ship.cannonCount}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);

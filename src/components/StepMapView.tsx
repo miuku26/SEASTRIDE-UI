@@ -1,34 +1,64 @@
-import React, { useEffect, useRef, useState } from 'react';
-import L from 'leaflet';
-import { CompassRose } from './CompassRose';
-import { useCompassHeading } from '../hooks/useCompassHeading';
-import { useGpsTracker, FootprintPoint } from '../hooks/useGpsTracker';
-import { Footprints, Navigation, Compass, MapPin, Play, Square, RotateCcw, Crosshair, Sparkles, Shield, Award } from 'lucide-react';
-import { useGame } from '../context/GameContext';
+import React, { useEffect, useRef, useState } from "react";
+import L from "leaflet";
+import { CompassRose } from "./CompassRose";
+import { useCompassHeading } from "../hooks/useCompassHeading";
+import { useGpsTracker, FootprintPoint } from "../hooks/useGpsTracker";
+import {
+  Footprints,
+  Navigation,
+  Compass,
+  MapPin,
+  Play,
+  Square,
+  RotateCcw,
+  Crosshair,
+  Sparkles,
+  Shield,
+  Award,
+} from "lucide-react";
+import { useGame } from "../context/GameContext";
 
 interface StepMapViewProps {
   onStepLogged?: (steps: number) => void;
 }
 
 // Generate SVG string for Left and Right Pirate Footprints
-function getFootprintSvg(isLeft: boolean, angleDeg: number, isLatest: boolean = false): string {
-  const footFill = isLatest ? '#b45309' : '#78350f';
-  const strokeColor = isLatest ? '#facc15' : '#451a03';
-  const glow = isLatest ? 'drop-shadow(0px 0px 4px #fbbf24)' : 'drop-shadow(0px 1px 2px rgba(0,0,0,0.5))';
+function getFootprintSvg(
+  isLeft: boolean,
+  angleDeg: number,
+  isLatest: boolean = false,
+): string {
+  const footFill = isLatest ? "#b45309" : "#78350f";
+  const strokeColor = isLatest ? "#facc15" : "#451a03";
+  const glow = isLatest
+    ? "drop-shadow(0px 0px 4px #fbbf24)"
+    : "drop-shadow(0px 1px 2px rgba(0,0,0,0.5))";
 
   // Left vs Right footprint curve
   const solePath = isLeft
-    ? 'M 10 24 C 7 24 5 19 6 14 C 7 9 9 7 11 7 C 13 7 14 9 14 14 C 14 19 13 24 10 24 Z'
-    : 'M 10 24 C 13 24 15 19 14 14 C 13 9 11 7 9 7 C 7 7 6 9 6 14 C 6 19 7 24 10 24 Z';
+    ? "M 10 24 C 7 24 5 19 6 14 C 7 9 9 7 11 7 C 13 7 14 9 14 14 C 14 19 13 24 10 24 Z"
+    : "M 10 24 C 13 24 15 19 14 14 C 13 9 11 7 9 7 C 7 7 6 9 6 14 C 6 19 7 24 10 24 Z";
 
   const heelPath = isLeft
-    ? 'M 10 32 C 7 32 6 28 7 26 C 8 25 12 25 13 26 C 14 28 13 32 10 32 Z'
-    : 'M 10 32 C 13 32 14 28 13 26 C 12 25 8 25 7 26 C 6 28 7 32 10 32 Z';
+    ? "M 10 32 C 7 32 6 28 7 26 C 8 25 12 25 13 26 C 14 28 13 32 10 32 Z"
+    : "M 10 32 C 13 32 14 28 13 26 C 12 25 8 25 7 26 C 6 28 7 32 10 32 Z";
 
   // Small toe indents
   const toes = isLeft
-    ? '<circle cx="6" cy="4" r="1.3" fill="' + footFill + '" /><circle cx="9" cy="3.2" r="1.4" fill="' + footFill + '" /><circle cx="12" cy="4" r="1.3" fill="' + footFill + '" />'
-    : '<circle cx="14" cy="4" r="1.3" fill="' + footFill + '" /><circle cx="11" cy="3.2" r="1.4" fill="' + footFill + '" /><circle cx="8" cy="4" r="1.3" fill="' + footFill + '" />';
+    ? '<circle cx="6" cy="4" r="1.3" fill="' +
+      footFill +
+      '" /><circle cx="9" cy="3.2" r="1.4" fill="' +
+      footFill +
+      '" /><circle cx="12" cy="4" r="1.3" fill="' +
+      footFill +
+      '" />'
+    : '<circle cx="14" cy="4" r="1.3" fill="' +
+      footFill +
+      '" /><circle cx="11" cy="3.2" r="1.4" fill="' +
+      footFill +
+      '" /><circle cx="8" cy="4" r="1.3" fill="' +
+      footFill +
+      '" />';
 
   return `
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 36" width="22" height="34" style="transform: rotate(${angleDeg}deg); filter: ${glow};">
@@ -43,7 +73,7 @@ function getFootprintSvg(isLeft: boolean, angleDeg: number, isLatest: boolean = 
 function createFootprintIcon(point: FootprintPoint, isLatest: boolean = false) {
   const svgHtml = getFootprintSvg(point.isLeft, point.heading, isLatest);
   return L.divIcon({
-    className: 'custom-footprint-marker',
+    className: "custom-footprint-marker",
     html: svgHtml,
     iconSize: [22, 34],
     iconAnchor: [11, 17],
@@ -53,7 +83,7 @@ function createFootprintIcon(point: FootprintPoint, isLatest: boolean = false) {
 // Custom Leaflet DivIcon for Current Captain Location
 function createCaptainMarkerIcon(heading: number) {
   return L.divIcon({
-    className: 'custom-captain-marker',
+    className: "custom-captain-marker",
     html: `
       <div style="position: relative; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;">
         <div style="position: absolute; inset: 0; background: rgba(250, 204, 21, 0.35); border-radius: 50%; animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;"></div>
@@ -95,7 +125,9 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
   });
 
   const [followCaptain, setFollowCaptain] = useState<boolean>(true);
-  const [mapStyle, setMapStyle] = useState<'parchment' | 'standard'>('parchment');
+  const [mapStyle, setMapStyle] = useState<"parchment" | "standard">(
+    "parchment",
+  );
 
   // Initialize Leaflet Map instance
   useEffect(() => {
@@ -112,10 +144,13 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
     });
 
     // Add OpenStreetMap Standard Layer (OSM tile layer)
-    const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; OpenStreetMap contributors',
-    });
+    const osmLayer = L.tileLayer(
+      "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors",
+      },
+    );
     osmLayer.addTo(map);
 
     // Create LayerGroup for Footprints & Polyline for trail
@@ -123,11 +158,11 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
     footprintLayerGroupRef.current = footprintGroup;
 
     const polyline = L.polyline([], {
-      color: '#b45309',
+      color: "#b45309",
       weight: 3,
       opacity: 0.75,
-      dashArray: '4, 8',
-      lineCap: 'round',
+      dashArray: "4, 8",
+      lineCap: "round",
     }).addTo(map);
     pathPolylineRef.current = polyline;
 
@@ -141,7 +176,7 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
     mapInstanceRef.current = map;
 
     // User drag breaks auto-follow mode
-    map.on('dragstart', () => {
+    map.on("dragstart", () => {
       setFollowCaptain(false);
     });
 
@@ -177,10 +212,18 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
   useEffect(() => {
     if (!captainMarkerRef.current || !mapInstanceRef.current) return;
 
-    captainMarkerRef.current.setLatLng([currentLocation.lat, currentLocation.lng]);
-    captainMarkerRef.current.setIcon(createCaptainMarkerIcon(heading || currentLocation.heading || 0));
+    captainMarkerRef.current.setLatLng([
+      currentLocation.lat,
+      currentLocation.lng,
+    ]);
+    captainMarkerRef.current.setIcon(
+      createCaptainMarkerIcon(heading || currentLocation.heading || 0),
+    );
 
-    if (currentLocation.heading !== null && currentLocation.heading !== undefined) {
+    if (
+      currentLocation.heading !== null &&
+      currentLocation.heading !== undefined
+    ) {
       setGpsHeading(currentLocation.heading);
     }
 
@@ -196,9 +239,13 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
   const handleRecenter = () => {
     setFollowCaptain(true);
     if (mapInstanceRef.current) {
-      mapInstanceRef.current.setView([currentLocation.lat, currentLocation.lng], 17, {
-        animate: true,
-      });
+      mapInstanceRef.current.setView(
+        [currentLocation.lat, currentLocation.lng],
+        17,
+        {
+          animate: true,
+        },
+      );
     }
   };
 
@@ -223,10 +270,8 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
 
   return (
     <div className="relative w-full h-[62dvh] sm:h-[480px] min-h-[360px] rounded-xl sm:rounded-2xl overflow-hidden border-2 sm:border-4 border-[#2b1d19] shadow-2xl flex flex-col select-none group bg-[#1a0f0d]">
-      
       {/* Top Map Header & Live Telemetry HUD */}
       <div className="absolute top-2 left-2 right-2 z-30 flex items-center justify-between gap-1.5 pointer-events-none">
-        
         {/* Left Telemetry Card */}
         <div className="bg-[#2b1d19]/95 border border-[#b45309] backdrop-blur-md px-2.5 py-1 rounded-xl text-amber-100 shadow-xl flex items-center gap-2 pointer-events-auto">
           <div className="w-6 h-6 bg-[#4a2c17] rounded-lg flex items-center justify-center text-amber-300 border border-[#ca8a04]">
@@ -234,11 +279,14 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
           </div>
           <div>
             <div className="text-[8px] sm:text-[9px] font-mono uppercase text-[#fde68a] leading-none flex items-center gap-1">
-              <span className={`w-1.5 h-1.5 rounded-full ${isGpsActive ? 'bg-emerald-400 animate-ping' : 'bg-amber-400'}`} />
-              <span>{isGpsActive ? 'GPS Trace Live' : 'Pedometer Map'}</span>
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${isGpsActive ? "bg-emerald-400 animate-ping" : "bg-amber-400"}`}
+              />
+              <span>{isGpsActive ? "GPS Trace Live" : "Pedometer Map"}</span>
             </div>
             <div className="text-[10px] sm:text-xs font-black text-white font-mono leading-tight">
-              {footprints.length} Footprints • {(totalDistanceTraveledMeters / 1000).toFixed(2)} km
+              {footprints.length} Footprints •{" "}
+              {(totalDistanceTraveledMeters / 1000).toFixed(2)} km
             </div>
           </div>
         </div>
@@ -249,8 +297,8 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
             onClick={toggleSimulateWalk}
             className={`px-2 py-1 rounded-lg text-[10px] font-black uppercase italic shadow flex items-center gap-1 border-b-2 transition-all ${
               isSimulatingWalk
-                ? 'bg-red-700 hover:bg-red-600 text-white border-red-950 animate-pulse'
-                : 'bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm hover:brightness-110 active:border-b-0 active:translate-y-1 text-white border-[#064e3b]'
+                ? "bg-red-700 hover:bg-red-600 text-white border-red-950 animate-pulse"
+                : "bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm hover:brightness-110 active:border-b-0 active:translate-y-1 text-white border-[#064e3b]"
             }`}
             title="Simulate realistic physical walking path with footprints"
           >
@@ -268,33 +316,39 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
           </button>
 
           <button
-            onClick={() => setMapStyle(s => s === 'parchment' ? 'standard' : 'parchment')}
+            onClick={() =>
+              setMapStyle((s) => (s === "parchment" ? "standard" : "parchment"))
+            }
             className="bg-[#4a2c17] hover:bg-[#92400e] text-[#fde68a] border border-[#b45309] px-2 py-1 rounded-lg text-[9px] sm:text-[10px] font-bold uppercase shadow"
             title="Toggle Vintage Parchment Filter"
           >
-            {mapStyle === 'parchment' ? '📜 Parchment' : '🗺️ Standard'}
+            {mapStyle === "parchment" ? "📜 Parchment" : "🗺️ Standard"}
           </button>
         </div>
       </div>
 
       {/* ROTATING COMPASS ROSE OVERLAY (Top-Right / Reacts to Device Orientation & GPS Heading) */}
       <div className="absolute top-12 right-2 sm:top-14 sm:right-3 z-30 pointer-events-auto">
-        <CompassRose heading={heading} cardinalDirection={cardinalDirection} size="sm" />
+        <CompassRose
+          heading={heading}
+          cardinalDirection={cardinalDirection}
+          size="sm"
+        />
       </div>
 
       {/* LEAFLET OPENSTREETMAP CANVAS */}
       <div
         ref={mapContainerRef}
         className={`w-full h-full relative z-10 transition-all duration-300 ${
-          mapStyle === 'parchment'
-            ? 'filter sepia-[0.45] hue-rotate-[-20deg] contrast-[1.12] brightness-[0.96] saturate-[1.25]'
-            : ''
+          mapStyle === "parchment"
+            ? "filter sepia-[0.45] hue-rotate-[-20deg] contrast-[1.12] brightness-[0.96] saturate-[1.25]"
+            : ""
         }`}
-        style={{ minHeight: '100%' }}
+        style={{ minHeight: "100%" }}
       />
 
       {/* Vintage Map Parchment Paper Texture & Vignette Overlay */}
-      {mapStyle === 'parchment' && (
+      {mapStyle === "parchment" && (
         <div className="absolute inset-0 z-20 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_40%,rgba(69,26,3,0.35)_100%)] shadow-inner" />
       )}
 
@@ -304,8 +358,8 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
           onClick={handleRecenter}
           className={`p-2 rounded-xl border-2 shadow-xl flex items-center justify-center transition-all ${
             followCaptain
-              ? 'bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm border-[#064e3b] text-white'
-              : 'bg-[#2b1d19] border-[#b45309] text-[#fde68a] hover:bg-[#4a2c17]'
+              ? "bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm border-[#064e3b] text-white"
+              : "bg-[#2b1d19] border-[#b45309] text-[#fde68a] hover:bg-[#4a2c17]"
           }`}
           title="Center on Captain"
         >
@@ -351,7 +405,8 @@ export const StepMapView: React.FC<StepMapViewProps> = () => {
         <div className="flex items-center gap-1.5 truncate">
           <MapPin className="w-3 h-3 text-[#facc15] flex-shrink-0" />
           <span className="truncate">
-            Lat: {currentLocation.lat.toFixed(5)}° • Lng: {currentLocation.lng.toFixed(5)}°
+            Lat: {currentLocation.lat.toFixed(5)}° • Lng:{" "}
+            {currentLocation.lng.toFixed(5)}°
           </span>
         </div>
 

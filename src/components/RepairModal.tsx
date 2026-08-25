@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useGame } from '../context/GameContext';
-import { Wrench, X, RefreshCw, AlertTriangle, ShieldCheck } from 'lucide-react';
-import { CurrencyDisplay } from './CurrencyDisplay';
+import React, { useState } from "react";
+import { useGame } from "../context/GameContext";
+import { Wrench, X, RefreshCw, AlertTriangle, ShieldCheck } from "lucide-react";
+import { CurrencyDisplay } from "./CurrencyDisplay";
 
 interface RepairModalProps {
   onClose: () => void;
@@ -31,7 +31,6 @@ export const RepairModal: React.FC<RepairModalProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 select-none">
       <div className="bg-[#4a2c17] border-8 border-[#2b1d19] rounded-3xl w-full max-w-md overflow-hidden shadow-2xl relative text-amber-100 flex flex-col">
-        
         {/* Header */}
         <div className="bg-[#2b1d19] border-b-4 border-[#4a2c17] p-3.5 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -54,7 +53,6 @@ export const RepairModal: React.FC<RepairModalProps> = ({ onClose }) => {
 
         {/* Content */}
         <div className="p-4 space-y-4">
-          
           {/* Status Banner */}
           <div className="bg-[#2b1d19] border-4 border-[#b45309] rounded-2xl p-4 text-center space-y-2">
             <div className="text-xs font-serif font-black uppercase text-[#fde68a]">
@@ -70,10 +68,10 @@ export const RepairModal: React.FC<RepairModalProps> = ({ onClose }) => {
               <div
                 className={`h-full transition-all duration-300 rounded-full ${
                   shipCondition <= 0
-                    ? 'bg-red-600'
+                    ? "bg-red-600"
                     : shipCondition <= 50
-                    ? 'bg-[#fbbf24]'
-                    : 'bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm'
+                      ? "bg-[#fbbf24]"
+                      : "bg-[#93bb44] border-b-4 border-[#658627] text-white shadow-sm"
                 }`}
                 style={{ width: `${shipCondition}%` }}
               />
@@ -86,7 +84,8 @@ export const RepairModal: React.FC<RepairModalProps> = ({ onClose }) => {
               </div>
             ) : shipCondition <= 50 ? (
               <div className="text-xs font-bold text-[#fde68a] bg-[#4a2c17] p-2 rounded-xl border border-[#b45309]">
-                ⚠️ Condition is &le; 50%. Raids disabled until repaired above 50%!
+                ⚠️ Condition is &le; 50%. Raids disabled until repaired above
+                50%!
               </div>
             ) : (
               <div className="text-xs font-bold text-emerald-200 bg-[#064e3b]/80 p-2 rounded-xl border border-[#16a34a] flex items-center justify-center gap-1">
@@ -100,7 +99,8 @@ export const RepairModal: React.FC<RepairModalProps> = ({ onClose }) => {
           {shipCondition === 0 ? (
             <div className="space-y-3 bg-[#2b1d19] p-3.5 rounded-xl border-2 border-[#b45309] text-center">
               <p className="text-xs text-[#fde68a]">
-                Rebuild increases condition from 0% to 5% so you can perform standard repairs.
+                Rebuild increases condition from 0% to 5% so you can perform
+                standard repairs.
               </p>
               <button
                 onClick={rebuildShip}
@@ -123,7 +123,7 @@ export const RepairModal: React.FC<RepairModalProps> = ({ onClose }) => {
                 max={Math.max(5, maxRepairPossible)}
                 step={5}
                 value={repairAmount}
-                onChange={e => setRepairAmount(Number(e.target.value))}
+                onChange={(e) => setRepairAmount(Number(e.target.value))}
                 className="w-full accent-[#fbbf24] cursor-pointer"
               />
 
@@ -138,7 +138,10 @@ export const RepairModal: React.FC<RepairModalProps> = ({ onClose }) => {
 
                 <button
                   onClick={handleFullRepair}
-                  disabled={maxRepairPossible <= 0 || coins < Math.ceil(maxRepairPossible / 5) * 5}
+                  disabled={
+                    maxRepairPossible <= 0 ||
+                    coins < Math.ceil(maxRepairPossible / 5) * 5
+                  }
                   className="bg-[#b45309] hover:bg-[#d97706] border-b-4 border-r-2 border-[#2b1d19] text-white font-black py-2.5 rounded-xl text-xs uppercase italic shadow-md active:translate-y-0.5"
                 >
                   Full Repair 100%
@@ -150,7 +153,6 @@ export const RepairModal: React.FC<RepairModalProps> = ({ onClose }) => {
               </p>
             </div>
           )}
-
         </div>
       </div>
     </div>

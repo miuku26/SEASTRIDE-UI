@@ -11,24 +11,35 @@ class SoundManager {
 
   private initCtx() {
     if (!this.ctx) {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext })
+          .webkitAudioContext;
       if (AudioCtx) {
         this.ctx = new AudioCtx();
         this.bgmGain = this.ctx.createGain();
         // Bright, balanced BGM volume
-        this.bgmGain.gain.setValueAtTime(this.isMuted ? 0 : 0.36, this.ctx.currentTime);
+        this.bgmGain.gain.setValueAtTime(
+          this.isMuted ? 0 : 0.36,
+          this.ctx.currentTime,
+        );
         this.bgmGain.connect(this.ctx.destination);
 
         // Resume listener when audio context changes state from suspended to running
         this.ctx.onstatechange = () => {
-          if (this.ctx && this.ctx.state === 'running' && this.isBgmPlaying && !this.bgmTimeoutId) {
+          if (
+            this.ctx &&
+            this.ctx.state === "running" &&
+            this.isBgmPlaying &&
+            !this.bgmTimeoutId
+          ) {
             this.nextBarTime = this.ctx.currentTime + 0.05;
             this.scheduleBgmLoop();
           }
         };
       }
     }
-    if (this.ctx && this.ctx.state === 'suspended') {
+    if (this.ctx && this.ctx.state === "suspended") {
       this.ctx.resume().catch(() => {});
     }
   }
@@ -36,7 +47,10 @@ class SoundManager {
   public toggleMute(): boolean {
     this.isMuted = !this.isMuted;
     if (this.bgmGain && this.ctx) {
-      this.bgmGain.gain.setValueAtTime(this.isMuted ? 0 : 0.36, this.ctx.currentTime);
+      this.bgmGain.gain.setValueAtTime(
+        this.isMuted ? 0 : 0.36,
+        this.ctx.currentTime,
+      );
     }
     if (!this.isMuted && !this.isBgmPlaying) {
       this.startBgm();
@@ -55,7 +69,7 @@ class SoundManager {
 
     this.isBgmPlaying = true;
     if (this.ctx) {
-      if (this.ctx.state === 'suspended') {
+      if (this.ctx.state === "suspended") {
         this.ctx.resume().catch(() => {});
       }
       this.nextBarTime = this.ctx.currentTime + 0.05;
@@ -83,7 +97,11 @@ class SoundManager {
 
     // Schedule audio up to 2 seconds ahead
     while (this.nextBarTime < this.ctx.currentTime + 2.0) {
-      this.playMarinersJigBar(this.currentBar, this.nextBarTime, eighthNoteDuration);
+      this.playMarinersJigBar(
+        this.currentBar,
+        this.nextBarTime,
+        eighthNoteDuration,
+      );
       this.nextBarTime += barDuration;
       this.currentBar = (this.currentBar + 1) % 16; // 16-Bar / 32-Measure Blueprint Loop
     }
@@ -91,18 +109,46 @@ class SoundManager {
     this.bgmTimeoutId = window.setTimeout(this.scheduleBgmLoop, 250);
   };
 
-  private playMarinersJigBar(barIndex: number, barStartTime: number, e: number) {
+  private playMarinersJigBar(
+    barIndex: number,
+    barStartTime: number,
+    e: number,
+  ) {
     if (!this.ctx || !this.bgmGain) return;
 
     // Frequencies (G Major Scale Blueprint)
     // Low Bass
-    const C2 = 65.41, D2 = 73.42, E2 = 82.41, Fsharp2 = 92.50, G2 = 98.00, A2 = 110.00;
+    const C2 = 65.41,
+      D2 = 73.42,
+      E2 = 82.41,
+      Fsharp2 = 92.5,
+      G2 = 98.0,
+      A2 = 110.0;
     // Mid Rhythm Chords
-    const C3 = 130.81, D3 = 146.83, E3 = 164.81, Fsharp3 = 185.00, G3 = 196.00, A3 = 220.00, B3 = 246.94;
+    const C3 = 130.81,
+      D3 = 146.83,
+      E3 = 164.81,
+      Fsharp3 = 185.0,
+      G3 = 196.0,
+      A3 = 220.0,
+      B3 = 246.94;
     // Melody Octaves
-    const C4 = 261.63, D4 = 293.66, E4 = 329.63, Fsharp4 = 369.99, G4 = 392.00, A4 = 440.00, B4 = 493.88;
-    const C5 = 523.25, D5 = 587.33, E5 = 659.25, Fsharp5 = 739.99, G5 = 783.99, A5 = 880.00, B5 = 987.77;
-    const C6 = 1046.50, D6 = 1174.66;
+    const C4 = 261.63,
+      D4 = 293.66,
+      E4 = 329.63,
+      Fsharp4 = 369.99,
+      G4 = 392.0,
+      A4 = 440.0,
+      B4 = 493.88;
+    const C5 = 523.25,
+      D5 = 587.33,
+      E5 = 659.25,
+      Fsharp5 = 739.99,
+      G5 = 783.99,
+      A5 = 880.0,
+      B5 = 987.77;
+    const C6 = 1046.5,
+      D6 = 1174.66;
 
     // --- BLUEPRINT CHORD PROGRESSIONS ---
     // Bars 1-4: G - D/F# - Em - C
@@ -110,25 +156,25 @@ class SoundManager {
     // Bars 9-12 (Peak): Am - D/F# - G - C
     // Bars 13-16 (Reset): G - D/F# - Em - C (Turnaround)
     const chordMap: { root: number; triad: [number, number, number] }[] = [
-      { root: G2, triad: [G3, B3, D4] },       // Bar 0 (G)
+      { root: G2, triad: [G3, B3, D4] }, // Bar 0 (G)
       { root: Fsharp2, triad: [Fsharp3, A3, D4] }, // Bar 1 (D/F#)
-      { root: E2, triad: [E3, G3, B3] },       // Bar 2 (Em)
-      { root: C2, triad: [C3, E3, G3] },       // Bar 3 (C)
+      { root: E2, triad: [E3, G3, B3] }, // Bar 2 (Em)
+      { root: C2, triad: [C3, E3, G3] }, // Bar 3 (C)
 
-      { root: G2, triad: [G3, B3, D4] },       // Bar 4 (G)
+      { root: G2, triad: [G3, B3, D4] }, // Bar 4 (G)
       { root: Fsharp2, triad: [Fsharp3, A3, D4] }, // Bar 5 (D/F#)
-      { root: E2, triad: [E3, G3, B3] },       // Bar 6 (Em)
-      { root: C2, triad: [C3, E3, G3] },       // Bar 7 (C)
+      { root: E2, triad: [E3, G3, B3] }, // Bar 6 (Em)
+      { root: C2, triad: [C3, E3, G3] }, // Bar 7 (C)
 
-      { root: A2, triad: [A3, C4, E4] },       // Bar 8 (Am)
+      { root: A2, triad: [A3, C4, E4] }, // Bar 8 (Am)
       { root: Fsharp2, triad: [Fsharp3, A3, D4] }, // Bar 9 (D/F#)
-      { root: G2, triad: [G3, B3, D4] },       // Bar 10 (G)
-      { root: C2, triad: [C3, E3, G3] },       // Bar 11 (C)
+      { root: G2, triad: [G3, B3, D4] }, // Bar 10 (G)
+      { root: C2, triad: [C3, E3, G3] }, // Bar 11 (C)
 
-      { root: G2, triad: [G3, B3, D4] },       // Bar 12 (G)
+      { root: G2, triad: [G3, B3, D4] }, // Bar 12 (G)
       { root: Fsharp2, triad: [Fsharp3, A3, D4] }, // Bar 13 (D/F#)
-      { root: E2, triad: [E3, G3, B3] },       // Bar 14 (Em)
-      { root: D2, triad: [D3, Fsharp3, C4] },  // Bar 15 (D7 turnaround resolving back to Bar 0 G)
+      { root: E2, triad: [E3, G3, B3] }, // Bar 14 (Em)
+      { root: D2, triad: [D3, Fsharp3, C4] }, // Bar 15 (D7 turnaround resolving back to Bar 0 G)
     ];
 
     // --- MELODY PATTERNS (FIDDLE & ACCORDION) ---
@@ -198,8 +244,11 @@ class SoundManager {
         const bassTime = barStartTime + subIdx * e;
         const bOsc = this.ctx.createOscillator();
         const bGain = this.ctx.createGain();
-        bOsc.type = 'triangle';
-        bOsc.frequency.setValueAtTime(subIdx === 0 ? currentChord.root : currentChord.root * 1.5, bassTime);
+        bOsc.type = "triangle";
+        bOsc.frequency.setValueAtTime(
+          subIdx === 0 ? currentChord.root : currentChord.root * 1.5,
+          bassTime,
+        );
 
         bGain.gain.setValueAtTime(0.18, bassTime);
         bGain.gain.exponentialRampToValueAtTime(0.005, bassTime + e * 1.8);
@@ -221,10 +270,10 @@ class SoundManager {
         const gGain = this.ctx.createGain();
         const gFilter = this.ctx.createBiquadFilter();
 
-        gOsc.type = 'sawtooth';
+        gOsc.type = "sawtooth";
         gOsc.frequency.setValueAtTime(triadNote, strumTime);
 
-        gFilter.type = 'bandpass';
+        gFilter.type = "bandpass";
         gFilter.frequency.setValueAtTime(2200, strumTime);
 
         gGain.gain.setValueAtTime(0.07, strumTime);
@@ -248,7 +297,7 @@ class SoundManager {
       const gain = this.ctx.createGain();
       const filter = this.ctx.createBiquadFilter();
 
-      osc.type = 'sawtooth';
+      osc.type = "sawtooth";
       osc.frequency.setValueAtTime(freq, noteTime);
 
       // Fiddle vibrato on held/peak notes
@@ -257,7 +306,7 @@ class SoundManager {
         osc.frequency.linearRampToValueAtTime(freq, noteTime + e * 0.8);
       }
 
-      filter.type = 'lowpass';
+      filter.type = "lowpass";
       filter.frequency.setValueAtTime(barIndex >= 8 ? 2600 : 2000, noteTime);
 
       // Higher volume during Peak section (Bars 9-12)
@@ -283,19 +332,19 @@ class SoundManager {
       const gain = this.ctx.createGain();
       const filter = this.ctx.createBiquadFilter();
 
-      osc1.type = 'sawtooth';
-      osc2.type = 'triangle';
+      osc1.type = "sawtooth";
+      osc2.type = "triangle";
 
       osc1.frequency.setValueAtTime(freq, noteTime);
       osc2.frequency.setValueAtTime(freq * 1.0035, noteTime); // Jolly accordion reed chorus
 
-      filter.type = 'lowpass';
+      filter.type = "lowpass";
       filter.frequency.setValueAtTime(1700, noteTime);
 
       // Accordion prominent during Bars 5-8 (The Hook)
       const vol = barIndex >= 4 && barIndex <= 7 ? 0.13 : 0.08;
       gain.gain.setValueAtTime(vol, noteTime);
-      gain.gain.exponentialRampToValueAtTime(0.004, noteTime + e * 0.90);
+      gain.gain.exponentialRampToValueAtTime(0.004, noteTime + e * 0.9);
 
       osc1.connect(filter);
       osc2.connect(filter);
@@ -304,8 +353,8 @@ class SoundManager {
 
       osc1.start(noteTime);
       osc2.start(noteTime);
-      osc1.stop(noteTime + e * 0.90);
-      osc2.stop(noteTime + e * 0.90);
+      osc1.stop(noteTime + e * 0.9);
+      osc2.stop(noteTime + e * 0.9);
     });
 
     // --- 4. PERCUSSION: FOOT STOMPS (Deep Stomp-STOMP on Downbeats) ---
@@ -323,11 +372,11 @@ class SoundManager {
 
       const sOsc = this.ctx.createOscillator();
       const sGain = this.ctx.createGain();
-      sOsc.type = 'sine';
+      sOsc.type = "sine";
       sOsc.frequency.setValueAtTime(140, stompTime);
       sOsc.frequency.exponentialRampToValueAtTime(30, stompTime + 0.18);
 
-      const stompVol = barIndex >= 8 && barIndex <= 11 ? 0.28 : 0.20;
+      const stompVol = barIndex >= 8 && barIndex <= 11 ? 0.28 : 0.2;
       sGain.gain.setValueAtTime(stompVol, stompTime);
       sGain.gain.exponentialRampToValueAtTime(0.001, stompTime + 0.18);
 
@@ -354,18 +403,19 @@ class SoundManager {
       const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
       const data = buffer.getChannelData(0);
       for (let k = 0; k < bufferSize; k++) {
-        data[k] = (Math.random() * 2 - 1) * Math.exp(-k / (this.ctx.sampleRate * 0.01));
+        data[k] =
+          (Math.random() * 2 - 1) * Math.exp(-k / (this.ctx.sampleRate * 0.01));
       }
 
       const noise = this.ctx.createBufferSource();
       noise.buffer = buffer;
 
       const filter = this.ctx.createBiquadFilter();
-      filter.type = 'bandpass';
+      filter.type = "bandpass";
       filter.frequency.setValueAtTime(1500, clapTime);
 
       const cGain = this.ctx.createGain();
-      cGain.gain.setValueAtTime(0.10, clapTime);
+      cGain.gain.setValueAtTime(0.1, clapTime);
       cGain.gain.exponentialRampToValueAtTime(0.001, clapTime + 0.05);
 
       noise.connect(filter);
@@ -382,7 +432,7 @@ class SoundManager {
       const wOsc = this.ctx.createOscillator();
       const wGain = this.ctx.createGain();
 
-      wOsc.type = 'sine';
+      wOsc.type = "sine";
       wOsc.frequency.setValueAtTime(woodIdx % 2 === 0 ? 1400 : 900, wTime);
       wOsc.frequency.exponentialRampToValueAtTime(600, wTime + 0.025);
 
@@ -406,14 +456,16 @@ class SoundManager {
       const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
       const data = buffer.getChannelData(0);
       for (let k = 0; k < bufferSize; k++) {
-        data[k] = (Math.random() * 2 - 1) * Math.exp(-k / (this.ctx.sampleRate * 0.008));
+        data[k] =
+          (Math.random() * 2 - 1) *
+          Math.exp(-k / (this.ctx.sampleRate * 0.008));
       }
 
       const noise = this.ctx.createBufferSource();
       noise.buffer = buffer;
 
       const filter = this.ctx.createBiquadFilter();
-      filter.type = 'highpass';
+      filter.type = "highpass";
       filter.frequency.setValueAtTime(6000, tTime); // Bright metal jingle
 
       const tGain = this.ctx.createGain();
@@ -432,7 +484,7 @@ class SoundManager {
       const kTime = barStartTime;
       const kOsc = this.ctx.createOscillator();
       const kGain = this.ctx.createGain();
-      kOsc.type = 'triangle';
+      kOsc.type = "triangle";
       kOsc.frequency.setValueAtTime(320, kTime);
       kOsc.frequency.exponentialRampToValueAtTime(80, kTime + 0.06);
 
@@ -456,9 +508,12 @@ class SoundManager {
 
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-    osc.type = 'triangle';
+    osc.type = "triangle";
     osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.08);
+    osc.frequency.exponentialRampToValueAtTime(
+      880,
+      this.ctx.currentTime + 0.08,
+    );
 
     gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
@@ -482,7 +537,7 @@ class SoundManager {
     // Pitch-drop wooden thump oscillator
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
-    osc.type = 'sawtooth';
+    osc.type = "sawtooth";
     osc.frequency.setValueAtTime(650, now);
     osc.frequency.exponentialRampToValueAtTime(220, now + 0.12);
 
@@ -490,7 +545,7 @@ class SoundManager {
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
 
     const filter = this.ctx.createBiquadFilter();
-    filter.type = 'lowpass';
+    filter.type = "lowpass";
     filter.frequency.setValueAtTime(1200, now);
 
     osc.connect(filter);
@@ -503,7 +558,7 @@ class SoundManager {
     // Second wooden click burst
     const clickOsc = this.ctx.createOscillator();
     const clickGain = this.ctx.createGain();
-    clickOsc.type = 'triangle';
+    clickOsc.type = "triangle";
     clickOsc.frequency.setValueAtTime(320, now + 0.04);
     clickOsc.frequency.exponentialRampToValueAtTime(110, now + 0.14);
 
@@ -528,14 +583,14 @@ class SoundManager {
     const osc2 = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
 
-    osc1.type = 'sine';
-    osc2.type = 'sine';
+    osc1.type = "sine";
+    osc2.type = "sine";
 
     osc1.frequency.setValueAtTime(987.77, now); // B5
     osc1.frequency.setValueAtTime(1318.51, now + 0.08); // E6
 
     osc2.frequency.setValueAtTime(1318.51, now);
-    osc2.frequency.setValueAtTime(1760.00, now + 0.08);
+    osc2.frequency.setValueAtTime(1760.0, now + 0.08);
 
     gain.gain.setValueAtTime(0.2, now);
     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
@@ -557,11 +612,11 @@ class SoundManager {
     if (!this.isBgmPlaying) this.startBgm();
 
     const now = this.ctx.currentTime;
-    
+
     // Low boom oscillator
     const osc = this.ctx.createOscillator();
     const oscGain = this.ctx.createGain();
-    osc.type = 'sawtooth';
+    osc.type = "sawtooth";
     osc.frequency.setValueAtTime(150, now);
     osc.frequency.exponentialRampToValueAtTime(30, now + 0.6);
 
@@ -585,7 +640,7 @@ class SoundManager {
     noise.buffer = buffer;
 
     const filter = this.ctx.createBiquadFilter();
-    filter.type = 'lowpass';
+    filter.type = "lowpass";
     filter.frequency.setValueAtTime(800, now);
     filter.frequency.linearRampToValueAtTime(100, now + 0.5);
 
@@ -605,13 +660,13 @@ class SoundManager {
     this.initCtx();
     if (!this.ctx) return;
 
-    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+    const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
     const now = this.ctx.currentTime;
 
     notes.forEach((freq, idx) => {
       const osc = this.ctx!.createOscillator();
       const gain = this.ctx!.createGain();
-      osc.type = 'triangle';
+      osc.type = "triangle";
       osc.frequency.setValueAtTime(freq, now + idx * 0.1);
 
       gain.gain.setValueAtTime(0.2, now + idx * 0.1);
@@ -634,7 +689,7 @@ class SoundManager {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
 
-    osc.type = 'sine';
+    osc.type = "sine";
     osc.frequency.setValueAtTime(300, now);
     osc.frequency.exponentialRampToValueAtTime(900, now + 0.35);
 
